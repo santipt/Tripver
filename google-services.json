@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "981235195781",
+    "project_id": "loginreactnative-5e2ae",
+    "storage_bucket": "loginreactnative-5e2ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981235195781:android:84815431dcdc913afaaeec",
+        "android_client_info": {
+          "package_name": "com.loginreact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981235195781-bo9h8hercclg5klb1f8a5c6q7ohf8cgf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmY9LRkvJiy3nLjr4wVUuQovczFRYv2pI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981235195781-bo9h8hercclg5klb1f8a5c6q7ohf8cgf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

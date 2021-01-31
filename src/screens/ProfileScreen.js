@@ -3,6 +3,8 @@ import { StyleSheet, View, SafeAreaView, Text, Button, TouchableOpacity } from '
 import { Avatar, Card } from 'react-native-elements';
 import * as Colors from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+import LongButton from '../components/atoms/LongButton'
+
 
 export default function ProfileScreen({ navigation }) {
 
@@ -57,11 +59,9 @@ export default function ProfileScreen({ navigation }) {
                     <Text style={styles.text}>
                         The idea with React Native Elements is more about component structure than actual design.
                     </Text>
-                    <TouchableOpacity style={styles.button_container} onPress={() =>
-                        navigation.navigate('EditProfile')
-                    }>
-                        <Text style={styles.button_text}>Edit profile</Text>
-                    </TouchableOpacity>
+                    <LongButton style={styles.edit_button} title="Edit profile" onPress={() =>
+                        navigation.navigate('EditProfile')}>
+                    </LongButton>
                 </Card>
             </View>
         </SafeAreaView>
@@ -95,13 +95,15 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     card_container: {
-        position: 'relative',
         alignSelf: 'center',
         position: 'absolute',
-        bottom: 10
+        bottom: 50,
     },
     card: {
         borderRadius: 14,
+        marginRight: '2%',
+        marginLeft: '2%',
+        height: '107%'
     },
     title: {
         fontWeight: 'bold',
@@ -111,16 +113,8 @@ const styles = StyleSheet.create({
     text: {
         marginBottom: 15
     },
-    button_container: {
-        backgroundColor: Colors.SECONDARY,
-        borderRadius: 30,
-        padding: 10,
-    },
-    button_text: {
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'white',
+    edit_button: {
+        bottom: '-12%',
     },
     settings_icon: {
         flexWrap: 'wrap-reverse',

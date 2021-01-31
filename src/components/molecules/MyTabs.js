@@ -24,7 +24,7 @@ export default function MyTabs() {
           options={{
             tabBarButton: CustomTabButton,
             tabBarIcon: ({ color }) => (
-              <FontAwesomeIcon icon={faHeart} color={color} />),
+              <FontAwesomeIcon icon={faHeart} color={color} size={20} />),
           }}
   
         />
@@ -34,7 +34,7 @@ export default function MyTabs() {
           options={{
             tabBarButton: CustomTabButton,
             tabBarIcon: ({ color }) => (
-              <FontAwesomeIcon icon={faCompass} color={color} />)
+              <FontAwesomeIcon icon={faCompass} color={color} size={20}/>)
           }}
         />
         <Tab.Screen
@@ -45,7 +45,7 @@ export default function MyTabs() {
             tabBarBadge: '',
             tabBarBadgeStyle: [{backgroundColor:Colors.SECONDARY, top:5, left:-1}, {transform: [{ scale: 0.6 }]}],
             tabBarIcon: ({ color }) => (
-              <FontAwesomeIcon icon={faCommentAlt} color={color} />),
+              <FontAwesomeIcon icon={faCommentAlt} color={color} size={20}/>),
           }}
         />
         <Tab.Screen
@@ -54,7 +54,7 @@ export default function MyTabs() {
           options={{
             tabBarButton: CustomTabButton,
             tabBarIcon: ({ color }) => (
-              <FontAwesomeIcon icon={faUser} color={color} />)
+              <FontAwesomeIcon icon={faUser} color={color} size={20}/>)
           }}
         />
       </Tab.Navigator>

@@ -6,14 +6,14 @@ import Loading from '../components/atoms/Loading';
 
 import { AuthContext } from './AuthProvider';
 import AuthStack from './AuthStack';
-import HomeStack from './HomeStack';
-
-import MyTabs from '../components/molecules/MyTabs';
+import MainStack from './MainStack';
 
 export default function Routes() {
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
+
+ 
 
   useEffect(() => {
     return kitty.onCurrentUserChanged((currentUser) => {
@@ -30,10 +30,9 @@ export default function Routes() {
   if (loading) {
     return <Loading />;
   }
-
   return (
     <NavigationContainer>
-       {user ? <MyTabs /> : <AuthStack />}
+        {user ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }

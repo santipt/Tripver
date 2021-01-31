@@ -15,14 +15,14 @@ export default function ProfileScreen({ navigation }) {
                     name='settings'
                     color='white'
                     size={30}
-                    //onPress={() => navigation.push('Details')}
+                    onPress={() => navigation.navigate('Root', { screen: 'Settings' })}
                 />
             </View>
             <View style={styles.header}>
                 <Avatar
                     size="xlarge"
-                    width={120}
-                    height={120}
+                    width={styles.profile_picture.width}
+                    height={styles.profile_picture.height}
                     rounded
                     source={require("../assets/images/profile_picture.jpg")}
                     imageProps={{ resizeMode: 'cover' }} // Rescaling the image
@@ -37,22 +37,31 @@ export default function ProfileScreen({ navigation }) {
                     <Text style={styles.title}>
                         Description
                     </Text>
-                    <Text style={{ marginBottom: 30 }}>
+                    <Text style={styles.text}>
+                        The idea with React Native Elements is more about component structure than actual design.
+                        The idea with React Native Elements is more about component structure than actual design.
+                    </Text>
+                    <Text style={styles.title}>
+                        Hobbies
+                    </Text>
+                    <Text style={styles.text}>
                         The idea with React Native Elements is more about component structure than actual design.
                     </Text>
                     <Text style={styles.title}>
                         Languages
                     </Text>
-                    <Text style={{ marginBottom: 30 }}>
+                    <Text style={styles.text}>
                         The idea with React Native Elements is more about component structure than actual design.
                     </Text>
                     <Text style={styles.title}>
                         Countries
                     </Text>
-                    <Text style={{ marginBottom: 30 }}>
+                    <Text style={styles.text}>
                         The idea with React Native Elements is more about component structure than actual design.
                     </Text>
-                    <TouchableOpacity style={styles.button_container}>
+                    <TouchableOpacity style={styles.button_container} onPress={() =>
+                        navigation.navigate('Root', { screen: 'EditProfile' })
+                    }>
                         <Text style={styles.button_text}>Edit profile</Text>
                     </TouchableOpacity>
                 </Card>
@@ -70,36 +79,38 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         alignContent: 'space-around',
-        marginTop: 20,
         marginLeft: 20,
     },
     profile_picture: {
-        width: 100,
-        height: 100
+        width: 90,
+        height: 90
     },
     profile_name: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 25,
+        fontSize: 18,
         marginLeft: 20,
     },
     city: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 15,
         marginLeft: 20,
     },
     card_container: {
+        position: 'relative',
+        alignSelf: 'center',
         position: 'absolute',
-        bottom: 10,
-        alignSelf: 'flex-end'
+        bottom: 10
     },
     card: {
         borderRadius: 14,
-        margin: 10,
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 15,
+        marginBottom: 5
+    },
+    text: {
         marginBottom: 15
     },
     button_container: {
@@ -109,13 +120,13 @@ const styles = StyleSheet.create({
     },
     button_text: {
         textAlign: 'center',
-        fontSize: 23,
+        fontSize: 18,
         fontWeight: 'bold',
         color: 'white',
     },
     settings_icon: {
         flexWrap: 'wrap-reverse',
-        marginTop: 40,
-        marginRight: 20,
+        marginTop: 15,
+        marginRight: 15,
     }
 });

@@ -1,26 +1,36 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import MyTabs from '../components/molecules/MyTabs';
+import MyTabsScreen from '../screens/MyTabsScreen';
 
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-const Stack = createStackNavigator();
-
-function Root() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-      <Stack.Screen name="Settings" component={SettingsScreen}/>
-    </Stack.Navigator>
-  );
-}
+const Main = createStackNavigator();
 
 export default function MainStack() {
   return (
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={MyTabs} />
-        <Stack.Screen name="Root" component={Root} />
-      </Stack.Navigator>
+      <Main.Navigator headerMode="none" mode="modal">
+        <Main.Screen name="Main" component={MyTabsScreen} />
+        <Main.Screen name="EditProfile" component={EditProfileScreen} />
+        <Main.Screen name="Settings" component={SettingsScreen} options={horizontalAnimation}/>
+      </Main.Navigator>
   );
 }
+
+// Changing vertical animation (mode="modal") to horizontal animation
+const horizontalAnimation = {
+  cardStyleInterpolator: ({ current, layouts }) => {
+    return {
+      cardStyle: {
+        transform: [
+          {
+            translateX: current.progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [layouts.screen.width, 0],
+            }),
+          },
+        ],
+      },
+    };
+  },
+};

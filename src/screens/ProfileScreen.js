@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Button, TouchableOpacity } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
 import * as Colors from '../styles/colors';
-import { Icon } from 'react-native-elements'
-
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function ProfileScreen({ navigation }) {
 
@@ -12,10 +10,10 @@ export default function ProfileScreen({ navigation }) {
         <SafeAreaView style={styles.container}>
             <View style={styles.settings_icon}>
                 <Icon
-                    name='settings'
+                    name='settings-outline'
                     color='white'
                     size={30}
-                    onPress={() => navigation.navigate('Root', { screen: 'Settings' })}
+                    onPress={() => navigation.navigate('Settings')}
                 />
             </View>
             <View style={styles.header}>
@@ -60,7 +58,7 @@ export default function ProfileScreen({ navigation }) {
                         The idea with React Native Elements is more about component structure than actual design.
                     </Text>
                     <TouchableOpacity style={styles.button_container} onPress={() =>
-                        navigation.navigate('Root', { screen: 'EditProfile' })
+                        navigation.navigate('EditProfile')
                     }>
                         <Text style={styles.button_text}>Edit profile</Text>
                     </TouchableOpacity>

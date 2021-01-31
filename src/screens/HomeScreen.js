@@ -8,9 +8,10 @@ import { AuthContext } from '../navigation/AuthProvider';
 export default function HomeScreen() {
   const { user, logout } = useContext(AuthContext);
 
+  // {user.displayName}
   return (
       <View style={styles.container}>
-        <Title>Hello, {user.displayName}!</Title>
+        <Title>Hello, !</Title>
         <FormButton
             modeValue="contained"
             title="Logout"

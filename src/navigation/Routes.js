@@ -13,7 +13,6 @@ export default function Routes() {
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
 
- 
 
   useEffect(() => {
     return kitty.onCurrentUserChanged((currentUser) => {
@@ -30,9 +29,11 @@ export default function Routes() {
   if (loading) {
     return <Loading />;
   }
+
+  //{user ? <MainStack /> : <AuthStack />}
   return (
     <NavigationContainer>
-        {user ? <MainStack /> : <AuthStack />}
+         <MainStack />
     </NavigationContainer>
   );
 }

@@ -2,15 +2,22 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Button, TouchableOpacity } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
+
+// Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // Importing components
 import LongButton from '../components/atoms/LongButton'
+import SelectedItems from '../components/molecules/SelectedItems'
 import * as Colors from '../styles/colors';
 
+// Lists
+import listOfHobbies from '../utils/hobbies'
+import listOfLanguages from '../utils/languages'
+import listOfCountries from '../utils/countries'
 
-export default function ProfileScreen({ navigation }) {
-
+export default function ProfileScreen({ route, navigation }) {
+    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.settings_icon}>
@@ -42,26 +49,19 @@ export default function ProfileScreen({ navigation }) {
                     </Text>
                     <Text style={styles.text}>
                         The idea with React Native Elements is more about component structure than actual design.
-                        The idea with React Native Elements is more about component structure than actual design.
                     </Text>
                     <Text style={styles.title}>
                         Hobbies
                     </Text>
-                    <Text style={styles.text}>
-                        The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
+                    <SelectedItems list={listOfHobbies} selectedItems={[6,1,2]}></SelectedItems>
                     <Text style={styles.title}>
                         Languages
                     </Text>
-                    <Text style={styles.text}>
-                        The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
+                    <SelectedItems list={listOfLanguages} selectedItems={[6,1,2]}></SelectedItems>
                     <Text style={styles.title}>
                         Countries
                     </Text>
-                    <Text style={styles.text}>
-                        The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
+                    <SelectedItems list={listOfCountries} selectedItems={[6,1,2]}></SelectedItems>
                     <LongButton style={styles.edit_button} title="Edit profile" onPress={() =>
                         navigation.navigate('EditProfile')}>
                     </LongButton>

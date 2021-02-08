@@ -12,6 +12,7 @@ import * as Colors from '../styles/colors';
 import Button from '../components/atoms/Button'
 import Selector from '../components/molecules/Selector'
 
+// Lists
 import listOfHobbies from '../utils/hobbies'
 import listOfLanguages from '../utils/languages'
 import listOfCountries from '../utils/countries'
@@ -65,7 +66,7 @@ export default function EditProfileScreen({ navigation }) {
             </View>
             <View style={styles.buttons_container}>
               <Button style={styles.save_button} title="Save" 
-                onPress={() => console.log(selectedLanguages)}></Button>
+                onPress={() => {}}></Button>
               <Button style={styles.cancel_button} title="Cancel"
                 onPress={() => navigation.goBack()}></Button>
             </View>

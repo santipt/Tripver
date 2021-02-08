@@ -6,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 // Importing components
 import * as Colors from '../../styles/colors';
 
-export default function LongButton({...props}) {
+export default function Button({...props}) {
     return(
     <TouchableOpacity style={{...styles.button_container, ...props.style}} onPress={props.onPress}>
         <Text style={{...styles.button_text, ...props.textStyle}}>{props.title}</Text>

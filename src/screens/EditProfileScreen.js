@@ -12,13 +12,17 @@ import * as Colors from '../styles/colors';
 import Button from '../components/atoms/Button'
 import Selector from '../components/molecules/Selector'
 
-import hobbies from '../utils/hobbies'
-import languages from '../utils/languages'
-import countries from '../utils/countries'
+import listOfHobbies from '../utils/hobbies'
+import listOfLanguages from '../utils/languages'
+import listOfCountries from '../utils/countries'
 
 
 export default function EditProfileScreen({ navigation }) {
   const [description, onChangeText] = React.useState('The idea with React Native Elements is more about component structure than actual design.The idea with React Native Elements is more about');
+  
+  const [selectedHobbies, onChangeHobbies] = React.useState([])
+  const [selectedLanguages, onChangeLanguages] = React.useState([])
+  const [selectedCountries, onChangeCountries] = React.useState([])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,16 +55,17 @@ export default function EditProfileScreen({ navigation }) {
               />
             </View>
             <View style={styles.selector_container}>
-              <Selector listName="hobbies" list={hobbies}></Selector>
+              <Selector listName="hobbies" list={listOfHobbies} onSelectedItemObjectsChange = {(selectedItems) => onChangeHobbies(selectedItems)}></Selector>
             </View>
             <View style={styles.selector_container}>
-              <Selector listName="languages" list={languages}></Selector>
+              <Selector listName="languages" list={listOfLanguages} onSelectedItemObjectsChange = {(selectedItems) => onChangeLanguages(selectedItems)}></Selector>
             </View>
             <View style={styles.selector_container}>
-              <Selector listName="countries" list={countries}></Selector>
+              <Selector listName="countries" list={listOfCountries} onSelectedItemObjectsChange = {(selectedItems) => onChangeCountries(selectedItems)}></Selector>
             </View>
             <View style={styles.buttons_container}>
-              <Button style={styles.save_button} title="Save"></Button>
+              <Button style={styles.save_button} title="Save" 
+                onPress={() => console.log(selectedLanguages)}></Button>
               <Button style={styles.cancel_button} title="Cancel"
                 onPress={() => navigation.goBack()}></Button>
             </View>

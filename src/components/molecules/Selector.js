@@ -18,8 +18,8 @@ export default class Selector extends Component {
     }
     onSelectedItemsChange = (selectedItems) => {
         this.setState({ selectedItems });
-        console.log(selectedItems)
     };
+
     render() {
         return (
             <View>
@@ -44,10 +44,11 @@ export default class Selector extends Component {
                     uniqueKey="id"
                     selectText={"Select " + this.props.listName}
                     confirmText="Confirm"
-                    searchPlaceholderText="Search hobbies..."
+                    searchPlaceholderText={"Search " + this.props.listName + "..."}
                     showDropDowns={false}
                     modalWithSafeAreaView={true}
                     onSelectedItemsChange={this.onSelectedItemsChange}
+                    onSelectedItemObjectsChange	={this.props.onSelectedItemObjectsChange}
                     selectedItems={this.state.selectedItems}
                     styles={{
                         button: styles.confirm_button, confirmText: styles.confirm_text,

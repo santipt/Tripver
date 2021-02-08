@@ -1,3 +1,4 @@
+// List of languages
 const languages = [
     { id: 1, name: 'Abkhazian' }
     ,

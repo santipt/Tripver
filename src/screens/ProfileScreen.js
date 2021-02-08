@@ -1,9 +1,12 @@
+// Importing react utilities
 import React, { useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Button, TouchableOpacity } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
-import * as Colors from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+// Importing components
 import LongButton from '../components/atoms/LongButton'
+import * as Colors from '../styles/colors';
 
 
 export default function ProfileScreen({ navigation }) {

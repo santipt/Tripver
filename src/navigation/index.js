@@ -1,6 +1,8 @@
+// Importing react utilities
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
+// Importing components
 import { AuthProvider } from './AuthProvider';
 import Routes from './Routes';
 

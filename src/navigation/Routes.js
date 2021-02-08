@@ -1,6 +1,8 @@
+// Importing react utilities
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 
+// Importing components
 import { kitty } from '../chatkitty';
 import Loading from '../components/atoms/Loading';
 
@@ -30,6 +32,7 @@ export default function Routes() {
     return <Loading />;
   }
 
+  // In order to authenticate user
   //{user ? <MainStack /> : <AuthStack />}
   return (
     <NavigationContainer>

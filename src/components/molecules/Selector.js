@@ -1,11 +1,15 @@
+// Importing react utilities
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import * as Colors from '../../styles/colors';
-import languages from '../../utils/languages'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/AntDesign';
 
-export default class SelectLanguages extends Component {
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+
+// Importing components
+import * as Colors from '../../styles/colors';
+
+export default class Selector extends Component {
     constructor() {
         super();
         this.state = {
@@ -16,20 +20,31 @@ export default class SelectLanguages extends Component {
         this.setState({ selectedItems });
         console.log(selectedItems)
     };
-
     render() {
         return (
             <View>
                 <SectionedMultiSelect
-                    items={languages}
-                    IconRenderer={Icon}
+                    items={this.props.list}
+                    IconRenderer={MaterialIcons}
                     single={false}
                     selectedText=""
                     alwaysShowSelectText={true}
+                    selectToggleIconComponent={<Icon
+                        name='plus'
+                        color='black'
+                        size={18}
+                    />}
+                    selectedIconComponent={
+                        <MaterialIcons
+                            name='check'
+                            color='green'
+                            size={20}
+                        />
+                    }
                     uniqueKey="id"
-                    selectText="Select languages"
+                    selectText={"Select " + this.props.listName}
                     confirmText="Confirm"
-                    searchPlaceholderText="Search languages..."
+                    searchPlaceholderText="Search hobbies..."
                     showDropDowns={false}
                     modalWithSafeAreaView={true}
                     onSelectedItemsChange={this.onSelectedItemsChange}
@@ -79,7 +94,7 @@ const styles = StyleSheet.create({
     searchTextInput: {
         fontSize: 20,
     },
-    selectToggle:{
-        marginBottom:'2%',
+    selectToggle: {
+        marginBottom: '2%',
     }
 });

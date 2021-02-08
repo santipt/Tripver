@@ -1,3 +1,4 @@
+// List of hobbies
 const hobbies = [
     { id: 1, name: '3D printing' }
     ,

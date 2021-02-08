@@ -1,3 +1,4 @@
+// List of countries
 const countries = [
     { name: 'Afghanistan', id: 1 }
     ,

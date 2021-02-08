@@ -1,7 +1,7 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
 
-import { StyleSheet, View, SafeAreaView, Text, TextInput,ScrollView } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, TextInput, ScrollView } from 'react-native';
 import { Card, Avatar } from 'react-native-elements';
 
 // Importing icons
@@ -10,11 +10,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 // Importing components
 import * as Colors from '../styles/colors';
 import Button from '../components/atoms/Button'
-import SelectLanguages from '../components/molecules/SelectLanguages'
-import SelectCountries from '../components/molecules/SelectCountries'
-import SelectHobbies from '../components/molecules/SelectHobbies'
+import Selector from '../components/molecules/Selector'
 
-
+import hobbies from '../utils/hobbies'
+import languages from '../utils/languages'
+import countries from '../utils/countries'
 
 
 export default function EditProfileScreen({ navigation }) {
@@ -35,36 +35,35 @@ export default function EditProfileScreen({ navigation }) {
       </View>
       <View style={styles.card_container}>
         <Card containerStyle={styles.card}>
-        <ScrollView contentContainerStyle={styles.scrollview}>
-          <View style={styles.description_container}>
-            <Text style={styles.description_title}>
-              Description
+          <ScrollView contentContainerStyle={styles.scrollview}>
+            <View style={styles.description_container}>
+              <Text style={styles.description_title}>
+                Description
             </Text>
-            <TextInput
-              style={styles.text_input}
-              multiline
-              editable
-              maxLength={200}
-              onChangeText={description => onChangeText(description)}
-              value={description}
-              blurOnSubmit={true}
-            />
-          </View>
-
-          <View style={styles.selector_container}>
-            <SelectHobbies></SelectHobbies>
-          </View>
-          <View style={styles.selector_container}>
-            <SelectLanguages></SelectLanguages>
-          </View>
-          <View style={styles.selector_container}>
-            <SelectCountries></SelectCountries>
-          </View>
-          <View style={styles.buttons_container}>
-            <Button style={styles.save_button} title="Save"></Button>
-            <Button style={styles.cancel_button} title="Cancel"
-              onPress={() => navigation.goBack()}></Button>
-          </View>
+              <TextInput
+                style={styles.text_input}
+                multiline
+                editable
+                maxLength={200}
+                onChangeText={description => onChangeText(description)}
+                value={description}
+                blurOnSubmit={true}
+              />
+            </View>
+            <View style={styles.selector_container}>
+              <Selector listName="hobbies" list={hobbies}></Selector>
+            </View>
+            <View style={styles.selector_container}>
+              <Selector listName="languages" list={languages}></Selector>
+            </View>
+            <View style={styles.selector_container}>
+              <Selector listName="countries" list={countries}></Selector>
+            </View>
+            <View style={styles.buttons_container}>
+              <Button style={styles.save_button} title="Save"></Button>
+              <Button style={styles.cancel_button} title="Cancel"
+                onPress={() => navigation.goBack()}></Button>
+            </View>
           </ScrollView>
         </Card>
       </View>
@@ -97,14 +96,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignSelf: 'center',
-    padding:0,
+    padding: 0,
   },
 
-  scrollview:{
+  scrollview: {
     padding: 10,
   },
 
-  description_container:{
+  description_container: {
     borderRadius: 14,
     padding: 8,
     marginBottom: 10,
@@ -119,7 +118,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 
-  text_input:{
+  text_input: {
     padding: 5,
     color: Colors.GRAY_DARK,
   },

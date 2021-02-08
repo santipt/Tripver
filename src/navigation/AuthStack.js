@@ -1,6 +1,8 @@
+// Importing react utilities
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
+// Importing screens
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 

@@ -1,3 +1,4 @@
+// Importing react utilities
 import React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';

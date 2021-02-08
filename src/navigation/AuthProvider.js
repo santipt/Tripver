@@ -1,5 +1,7 @@
+// Importing react utilities
 import React, { createContext, useState } from 'react';
 
+// Importing components
 import { kitty } from '../chatkitty';
 import { firebase } from '../firebase';
 

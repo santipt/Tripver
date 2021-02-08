@@ -1,7 +1,9 @@
+// Importing react utilities
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Title } from 'react-native-paper';
 
+// Importing components
 import FormButton from '../components/atoms/FormButton';
 import { AuthContext } from '../navigation/AuthProvider';
 

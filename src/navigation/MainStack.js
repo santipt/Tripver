@@ -1,7 +1,9 @@
+// Importing react utilities
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import MyTabsScreen from '../screens/MyTabsScreen';
 
+// Importing screens
+import MyTabsScreen from '../screens/MyTabsScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 

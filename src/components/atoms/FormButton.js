@@ -7,10 +7,10 @@ import * as Colors from '../../styles/colors';
 
 const { width, height } = Dimensions.get('screen');
 
-export default function FormButton({ title, ...props }) {
+export default function FormButton({ title, onPress ,...props }) {
   return (
-    <TouchableOpacity style={{ ...styles.button_container, ...props.style }} onPress={props.onPress}>
-      <Text style={{ ...styles.button_text, ...props.textStyle }}>{props.title}</Text>
+    <TouchableOpacity style={{ ...styles.button_container, ...props.style }} onPress={onPress}>
+      <Text style={{ ...styles.button_text, ...props.textStyle }}>{title}</Text>
     </TouchableOpacity>
   );
 }

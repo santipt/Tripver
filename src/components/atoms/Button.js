@@ -1,15 +1,26 @@
 // Importing react utilities
 import { useLinkProps } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, useState } from 'react-native';
+
+// Importing icons
+import Icon from 'react-native-vector-icons/AntDesign';
 
 // Importing components
 import * as Colors from '../../styles/colors';
 
 export default function Button({...props}) {
+
     return(
     <TouchableOpacity style={{...styles.button_container, ...props.style}} onPress={props.onPress}>
         <Text style={{...styles.button_text, ...props.textStyle}}>{props.title}</Text>
+        { props.showIcon ?
+        <Icon
+          name='arrowright'
+          color={Colors.WHITE}
+          style={styles.icon}
+          size={20}
+        /> : null}
     </TouchableOpacity>
     )
 }
@@ -21,11 +32,16 @@ const styles = StyleSheet.create({
         padding: 10,
         width:'50%',
         margin: 8,
+        flexDirection:'row',
+        justifyContent: 'space-between',
     },
     button_text: {
         textAlign: 'center',
         fontSize: 18,
         fontWeight: 'bold',
-        color: 'white',
+        color: Colors.WHITE,
+        flex:1,
     },
+    icon:{
+    }
 }); 

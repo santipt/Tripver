@@ -36,7 +36,7 @@ export default function Routes() {
   //{user ? <MainStack /> : <AuthStack />}
   return (
     <NavigationContainer>
-         <MainStack />
+      {user ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }

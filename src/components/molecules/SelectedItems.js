@@ -30,6 +30,7 @@ export default class SelectedItems extends Component {
                     uniqueKey="id"
                     modalWithSafeAreaView={true}
                     selectedItems={this.props.selectedItems}
+                    onSelectedItemsChange = {this.onSelectedItemsChange}
                     onSelectedItemObjectsChange	={this.props.onSelectedItemObjectsChange}
                     styles={{
                         button: styles.confirm_button, confirmText: styles.confirm_text,

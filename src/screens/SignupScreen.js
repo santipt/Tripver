@@ -1,16 +1,19 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { IconButton, Title } from 'react-native-paper';
+import { StyleSheet, View, ImageBackground, SafeAreaView, Text } from 'react-native';
+
+// Importing icons
+import Icon from 'react-native-vector-icons/AntDesign';
 
 // Importing components
-import FormButton from '../components/atoms/FormButton';
+import * as Colors from '../styles/colors';
+import LongButton from '../components/atoms/LongButton';
 import FormInput from '../components/atoms/FormInput';
 import Loading from '../components/atoms/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
 
 export default function SignupScreen({ navigation }) {
-  const [displayName, setDisplayName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,46 +24,72 @@ export default function SignupScreen({ navigation }) {
   }
 
   return (
-      <View style={styles.container}>
-        <Title style={styles.titleText}>Let's get started!</Title>
-        <FormInput
-            labelName="Display Name"
-            value={displayName}
-            autoCapitalize="none"
-            onChangeText={(userDisplayName) => setDisplayName(userDisplayName)}
+    <SafeAreaView style={styles.container}>
+      <ImageBackground source={require('../assets/images/background/SignUpBackground.jpg')} style={styles.background}>
+        <Icon
+          name='arrowleft'
+          color={Colors.WHITE}
+          style={styles.icon_left}
+          size={30}
+          onPress={() => navigation.goBack()}
         />
-        <FormInput
+        <View style={styles.sing_up_container}>
+        <Text style={styles.titleText}>Let's get started!</Text>
+         <FormInput
+            labelName="Name"
+            value={name}
+            onChangeText={(userName) => setDisplayName(setName)}
+            autoCompleteType='email'
+            keyboardType='email-address'
+            placeholder='Name'
+          />
+         <FormInput
             labelName="Email"
             value={email}
             autoCapitalize="none"
             onChangeText={(userEmail) => setEmail(userEmail)}
-        />
+            autoCompleteType='email'
+            keyboardType='email-address'
+            placeholder='Email'
+          />
         <FormInput
             labelName="Password"
             value={password}
             secureTextEntry={true}
             onChangeText={(userPassword) => setPassword(userPassword)}
+            textContentType='password'
+            placeholder='Password'
+          />
+          <FormInput
+            labelName="Password"
+            value={password}
+            secureTextEntry={true}
+            onChangeText={(userPassword) => setPassword(userPassword)}
+            textContentType='password'
+            placeholder='Repeat password'
+          />
+        <LongButton
+          title="Signup"
+          labelStyle={styles.loginButtonLabel}
+          onPress={() => register(displayName, email, password)}
         />
-        <FormButton
-            title="Signup"
-            modeValue="contained"
-            labelStyle={styles.loginButtonLabel}
-            onPress={() => register(displayName, email, password)}
-        />
-        <IconButton
-            icon="keyboard-backspace"
-            size={30}
-            style={styles.navButton}
-            color="#5b3a70"
-            onPress={() => navigation.goBack()}
-        />
-      </View>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+  },
   container: {
-    backgroundColor: '#f5f5f5',
+    flex: 1,
+    backgroundColor: 'orange'
+  },
+  sing_up_container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -69,13 +98,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 10,
   },
-  loginButtonLabel: {
-    fontSize: 22,
-  },
-  navButtonText: {
-    fontSize: 18,
-  },
-  navButton: {
+  icon_left:{
+    marginLeft: 15,
     marginTop: 10,
-  },
+  }
 });

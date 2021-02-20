@@ -1,10 +1,11 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ImageBackground, Image } from 'react-native';
 import { Title } from 'react-native-paper';
 
 // Importing components
-import FormButton from '../components/atoms/FormButton';
+import LongButton from '../components/atoms/LongButton';
+import Link from '../components/atoms/Link';
 import FormInput from '../components/atoms/FormInput';
 import Loading from '../components/atoms/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
@@ -20,52 +21,76 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-      <View style={styles.container}>
-        <Title style={styles.titleText}>Welcome!</Title>
-        <FormInput
+    <SafeAreaView style={styles.container}>
+      <ImageBackground source={require('../assets/images/background/loginBackground.jpg')} style={styles.background}>
+        <Link
+          title="Sign up"
+          onPress={() => navigation.navigate('Signup')}
+          style={styles.sing_up}
+        />
+        <View style={styles.login_container}>
+        <Image source={require('../assets/images/tripverLogov2.png')} style={styles.logo}></Image>
+          <Title style={styles.title_text}>Log In</Title>
+          <FormInput
             labelName="Email"
             value={email}
             autoCapitalize="none"
             onChangeText={(userEmail) => setEmail(userEmail)}
-        />
-        <FormInput
+            autoCompleteType='email'
+            keyboardType='email-address'
+            placeholder='Email'
+          />
+          <FormInput
             labelName="Password"
             value={password}
             secureTextEntry={true}
             onChangeText={(userPassword) => setPassword(userPassword)}
-        />
-        <FormButton
-            title="Login"
-            modeValue="contained"
-            labelStyle={styles.loginButtonLabel}
+            textContentType='password'
+            placeholder='Password'
+          />
+          <LongButton
+            title="Log In"
             onPress={() => login(email, password)}
-        />
-        <FormButton
-            title="Sign up here"
-            modeValue="text"
-            uppercase={false}
-            labelStyle={styles.navButtonText}
-            onPress={() => navigation.navigate('Signup')}
-        />
-      </View>
+            style={styles.login_button}
+          />
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
+
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    width: '100%',
+    height: '100%',
+    flex: 1
+  },
   container: {
-    backgroundColor: '#f5f5f5',
+    flex: 1,
+  },
+  login_container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  titleText: {
+  logo: {
+    width: '32%',
+    height: '20%',
+    marginTop: -40,
+    marginBottom:100,
+  },
+  title_text: {
     fontSize: 24,
-    marginBottom: 10,
+    marginBottom: 30,
   },
-  loginButtonLabel: {
-    fontSize: 22,
+  sing_up: {
+    alignSelf: 'flex-end',
+    marginRight: 15,
+    marginTop: 15,
   },
-  navButtonText: {
-    fontSize: 16,
+  login_button: {
+    marginTop: 30,
   },
+
 });

@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   title_text: {
     fontSize: 24,
     marginBottom: 30,
+    fontWeight:'bold'
   },
   sing_up: {
     alignSelf: 'flex-end',

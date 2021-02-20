@@ -6,11 +6,11 @@ import { StyleSheet, View, ImageBackground, SafeAreaView, Text } from 'react-nat
 import Icon from 'react-native-vector-icons/AntDesign';
 
 // Importing components
-import * as Colors from '../styles/colors';
-import LongButton from '../components/atoms/LongButton';
-import FormInput from '../components/atoms/FormInput';
-import Loading from '../components/atoms/Loading';
-import { AuthContext } from '../navigation/AuthProvider';
+import * as Colors from '../../styles/colors';
+import LongButton from '../../components/atoms/LongButton';
+import FormInput from '../../components/atoms/FormInput';
+import Loading from '../../components/atoms/Loading';
+import { AuthContext } from '../../navigation/AuthProvider';
 
 export default function SignupScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -25,7 +25,7 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={require('../assets/images/background/SignUpBackground.jpg')} style={styles.background}>
+      <ImageBackground source={require('../../assets/images/background/SignUpBackground.jpg')} style={styles.background}>
         <Icon
           name='arrowleft'
           color={Colors.WHITE}
@@ -39,9 +39,9 @@ export default function SignupScreen({ navigation }) {
             labelName="Name"
             value={name}
             onChangeText={(userName) => setDisplayName(setName)}
-            autoCompleteType='email'
-            keyboardType='email-address'
-            placeholder='Name'
+            autoCompleteType='name'
+            keyboardType='default'
+            style={styles.input_form}
           />
          <FormInput
             labelName="Email"
@@ -50,7 +50,7 @@ export default function SignupScreen({ navigation }) {
             onChangeText={(userEmail) => setEmail(userEmail)}
             autoCompleteType='email'
             keyboardType='email-address'
-            placeholder='Email'
+            style={styles.input_form}
           />
         <FormInput
             labelName="Password"
@@ -58,20 +58,24 @@ export default function SignupScreen({ navigation }) {
             secureTextEntry={true}
             onChangeText={(userPassword) => setPassword(userPassword)}
             textContentType='password'
-            placeholder='Password'
+            autoCompleteType='password'
+            style={styles.input_form}
           />
           <FormInput
-            labelName="Password"
+            labelName="Repeat password"
             value={password}
             secureTextEntry={true}
             onChangeText={(userPassword) => setPassword(userPassword)}
             textContentType='password'
-            placeholder='Repeat password'
+            autoCompleteType='password'
+            style={styles.input_form}
           />
         <LongButton
-          title="Signup"
+          title="Next"
           labelStyle={styles.loginButtonLabel}
-          onPress={() => register(displayName, email, password)}
+          style={styles.next_button}
+          //onPress={() => register(displayName, email, password)}
+          onPress={() => navigation.navigate('Signup2')}
         />
         </View>
       </ImageBackground>
@@ -91,15 +95,21 @@ const styles = StyleSheet.create({
   },
   sing_up_container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   titleText: {
     fontSize: 24,
-    marginBottom: 10,
+    marginBottom: 40,
+    marginTop:40,
   },
   icon_left:{
     marginLeft: 15,
     marginTop: 10,
+  },
+  input_form:{
+    marginBottom:30,
+  },
+  next_button:{
+    marginTop:20,
   }
 });

@@ -104,8 +104,7 @@ export default function SignupScreen({ navigation }) {
                 key: 'AIzaSyC_iGZnODFXnCUCOF_gRwja3-kmHnF-PAY',
                 language: 'en',
               }} 
-              nearbyPlacesAPI={'GoogleReverseGeocoding'}
-              renderDescription={(row) => row.description || row.vicinity || row.details}
+              renderDescription={(row) => row.description || row.vicinity}
               enablePoweredByContainer={false}
               autoFocus={true}
             />

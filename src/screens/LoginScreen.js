@@ -3,12 +3,16 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View, SafeAreaView, ImageBackground, Image } from 'react-native';
 import { Title } from 'react-native-paper';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 // Importing components
 import LongButton from '../components/atoms/LongButton';
 import Link from '../components/atoms/Link';
 import FormInput from '../components/atoms/FormInput';
 import Loading from '../components/atoms/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
+import * as Colors from '../styles/colors';
+
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -21,6 +25,12 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
+    <KeyboardAwareScrollView
+      style={{ backgroundColor: Colors.GRAY_LIGHT }}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      contentContainerStyle={styles.container}
+      scrollEnabled={false}
+    >
     <SafeAreaView style={styles.container}>
       <ImageBackground source={require('../assets/images/background/loginBackground.jpg')} style={styles.background}>
         <Link
@@ -56,7 +66,7 @@ export default function LoginScreen({ navigation }) {
         </View>
       </ImageBackground>
     </SafeAreaView>
-
+    </KeyboardAwareScrollView>
   );
 }
 

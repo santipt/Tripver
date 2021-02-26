@@ -13,7 +13,7 @@ export default function Button({...props}) {
 
     return(
     <TouchableOpacity style={{...styles.button_container, ...props.style}} onPress={props.onPress}>
-        <Text style={{...styles.button_text, ...props.textStyle}}>{props.title}</Text>
+        <Text style={{...styles.button_text, ...props.textStyle, ...props.showIcon ? styles.button_text_icon : null}}>{props.title}</Text>
         { props.showIcon ?
         <Icon
           name='arrowright'
@@ -37,11 +37,16 @@ const styles = StyleSheet.create({
     },
     button_text: {
         textAlign: 'center',
+        alignItems: 'center',
         fontSize: 18,
         fontWeight: 'bold',
         color: Colors.WHITE,
         flex:1,
     },
     icon:{
+        marginRight:0,
+    },
+    button_text_icon:{
+        marginLeft:15,
     }
 }); 

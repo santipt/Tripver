@@ -37,10 +37,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: width / 1.2,
     height: height / 15,
-    padding: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,    
     borderRadius: 30,
     backgroundColor: 'white',
-    paddingLeft: 15,
+    fontSize: 15,
   },
   title:{
     marginLeft:10,

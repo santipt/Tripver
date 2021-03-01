@@ -12,6 +12,8 @@ import * as Colors from '../../styles/colors';
 import Button from '../../components/atoms/Button';
 import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
+import GoogleInput from '../../components/atoms/GoogleInput';
+import DatePicker from '../../components/atoms/DatePicker';
 import { AuthContext } from '../../navigation/AuthProvider';
 import { State } from 'react-native-gesture-handler';
 
@@ -21,10 +23,12 @@ export default function SignupScreen({ navigation }) {
   const [date, setDate] = useState('');
   const [phone, setPhone] = useState('');
   const [currentLocation, setCurrentLocation] = useState('');
-  const [focus, setFocus] = useState(false);
-
 
   const { register, loading } = useContext(AuthContext);
+  const [focus, setFocus] = useState(false);
+  const [lengthLocationForm, setLengthLocationForm] = useState(0);
+
+
 
   if (loading) {
     return <Loading />;
@@ -63,7 +67,7 @@ export default function SignupScreen({ navigation }) {
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={styles.container}
         scrollEnabled={false}
-        keyboardShouldPersistTaps='always'
+        keyboardShouldPersistTaps='handled'
       >
         <ImageBackground source={require('../../assets/images/background/SignUpBackground.jpg')} style={styles.background}>
           <Icon
@@ -75,78 +79,62 @@ export default function SignupScreen({ navigation }) {
           />
           <View style={styles.sing_up_container}>
             <Text style={styles.titleText}>Let's get started!</Text>
-            <GooglePlacesAutocomplete
-              styles={focus ? googleInputStyle : googleInputStyle2}
-              //disableScroll={true}
-              isRowScrollable={false}
-              currentLocation={true}
-              currentLocationLabel='Current location'
-              //minLength={3}
-              keyboardShouldPersistTaps='always'
-              placeholder='Search'
-              fetchDetails = {true}
-              onFail={(error) => console.error(error)}
-              onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-                console.log(data, details);
-              }}
+            <GoogleInput
+              focus={focus}
+              showLabel={true}
+              labelName="Location"
               textInputProps={{
                 onFocus: () => {
-                  // Changing input style border bottom radius
-                  setFocus(true)
                 },
                 onBlur: () => {
                   setFocus(false)
                 },
-                onChangeText: (location) => setCurrentLocation(location)
-              }}
-              query={{
-                key: 'AIzaSyC_iGZnODFXnCUCOF_gRwja3-kmHnF-PAY',
-                language: 'en',
-              }} 
-              renderDescription={(row) => row.description || row.vicinity}
-              enablePoweredByContainer={false}
-              autoFocus={true}
-            />
+                onChangeText: (location) => {
+                  if (location.length > 0) {
+                    // Changing input style border bottom radius
+                    setFocus(true)
+                  } else {
+                    setFocus(false)
+                  }
+                  setCurrentLocation(location)
+                }
+              }} ></GoogleInput>
             <View>
-            <FormInput
-              labelName="Gender"
-              value={gender}
-              onChangeText={(userGender) => setGender(userGender)}
-              autoCompleteType='name'
-              keyboardType='default'
-              style={styles.input_form}
-              showLabel={true}
-            />
-            <FormInput
-              labelName="Date of birth"
-              value={date}
-              autoCapitalize="none"
-              onChangeText={(userDate) => setDate(userDate)}
-              autoCompleteType='email'
-              keyboardType='email-address'
-              style={styles.input_form}
-              showLabel={true}
-            />
-            <FormInput
-              labelName="Phone"
-              value={phone}
-              onChangeText={(userPhone) => setPhone(userPhone)}
-              textContentType='telephoneNumber'
-              autoCompleteType='tel'
-              keyboardType='phone-pad'
-              style={styles.input_form}
-              showLabel={true}
-              secureTextEntry={false}
-            />
-            <Button
-              title="Next"
-              labelStyle={styles.loginButtonLabel}
-              style={styles.next_button}
-              //onPress={() => register(displayName, email, password)}
-              onPress={() => checkTextInput()}
-              showIcon={true}
-            />
+              <FormInput
+                labelName="Gender"
+                value={gender}
+                onChangeText={(userGender) => setGender(userGender)}
+                autoCompleteType='name'
+                keyboardType='default'
+                style={styles.input_form}
+                showLabel={true}
+              />
+              <DatePicker
+                date={date} // Initial date from state
+                labelName='Date of birth' 
+                showLabel={true} 
+                onDateChange={(date) => {
+                  setDate(date);
+                }}></DatePicker>
+              <FormInput
+                labelName="Phone"
+                value={phone}
+                onChangeText={(userPhone) => setPhone(userPhone)}
+                textContentType='telephoneNumber'
+                autoCompleteType='tel'
+                keyboardType='phone-pad'
+                style={styles.input_form}
+                showLabel={true}
+                secureTextEntry={false}
+              />
+              <Button
+                title="Next"
+                labelStyle={styles.loginButtonLabel}
+                style={styles.next_button}
+                //onPress={() => register(displayName, email, password)}
+                onPress={() => checkTextInput()}
+                showIcon={true}
+              />
             </View>
           </View>
         </ImageBackground>
@@ -155,116 +143,6 @@ export default function SignupScreen({ navigation }) {
 
   );
 }
-
-const googleInputStyle = StyleSheet.create({
-  container: {
-    flex: 0,
-    width: '82%',
-    borderTopLeftRadius:30,
-    borderTopRightRadius:30,
-    marginBottom: 30,
-  },
-  textInputContainer: {
-    flexDirection: 'row',
-    marginBottom: -10,
-  },
-  textInput: {
-    backgroundColor: '#FFFFFF',
-    height: 44,
-    //borderRadius: 30,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius:30,
-    borderBottomRightRadius:0,
-    borderBottomLeftRadius:0,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    fontSize: 15,
-    flex: 1,
-    width: '135%'
-  },
-  poweredContainer: {
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
-    borderColor: '#c8c7cc',
-    borderTopWidth: 0.5,
-  },
-  powered: {},
-  listView: {
-  },
-  row: {
-    backgroundColor: '#FFFFFF',
-    padding: 13,
-    height: 44,
-    flexDirection: 'row',
-  },
-  separator: {
-    height: 0.5,
-    backgroundColor: '#c8c7cc',
-  },
-  description: {},
-  loader: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    height: 30,
-  },
-});
-
-const googleInputStyle2 = StyleSheet.create({
-  container: {
-    flex: 0,
-    width: '82%',
-    borderTopLeftRadius:30,
-    borderTopRightRadius:30,
-    marginBottom: 30,
-  },
-  textInputContainer: {
-    flexDirection: 'row',
-    marginBottom: -10,
-  },
-  textInput: {
-    backgroundColor: '#FFFFFF',
-    height: 44,
-    //borderRadius: 30,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius:30,
-    borderBottomRightRadius:30,
-    borderBottomLeftRadius:30,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    fontSize: 15,
-    flex: 1,
-    width: '135%'
-  },
-  poweredContainer: {
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
-    borderColor: '#c8c7cc',
-    borderTopWidth: 0.5,
-  },
-  powered: {},
-  listView: {
-  },
-  row: {
-    backgroundColor: '#FFFFFF',
-    padding: 13,
-    height: 44,
-    flexDirection: 'row',
-  },
-  separator: {
-    height: 0.5,
-    backgroundColor: '#c8c7cc',
-  },
-  description: {},
-  loader: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    height: 30,
-  },
-});
 
 const styles = StyleSheet.create({
   background: {
@@ -295,6 +173,6 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   next_button: {
-    marginTop: 20,
+    marginTop: 10,
   }
 });

@@ -17,14 +17,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config":{
+        "googleSignIn": {
+          "reservedClientId":"com.googleusercontent.apps.258735134861-ofh5l2autr27ds68hukkp823l44un220"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.loginreact",
+      "package": "com.tripver",
       "googleServicesFile": "./google-services.json"
     },
     "web": {

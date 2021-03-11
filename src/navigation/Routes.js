@@ -15,7 +15,6 @@ export default function Routes() {
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
 
-
   useEffect(() => {
     return kitty.onCurrentUserChanged((currentUser) => {
       setUser(currentUser);

@@ -12,13 +12,13 @@ import * as Colors from '../../styles/colors';
 import Button from '../../components/atoms/Button';
 import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
-import GoogleInput from '../../components/atoms/GoogleInput';
+import GoogleInput from '../../components/atoms/Google/GoogleInput';
 import DatePicker from '../../components/atoms/DatePicker';
 import { AuthContext } from '../../navigation/AuthProvider';
 import { State } from 'react-native-gesture-handler';
 
 
-export default function SignupScreen({ navigation }) {
+export default function SignupScreen({ route, navigation }) {
   const [gender, setGender] = useState('');
   const [date, setDate] = useState('');
   const [phone, setPhone] = useState('');
@@ -28,7 +28,7 @@ export default function SignupScreen({ navigation }) {
   const [focus, setFocus] = useState(false);
   const [lengthLocationForm, setLengthLocationForm] = useState(0);
 
-
+  console.log(route.params)
 
   if (loading) {
     return <Loading />;
@@ -174,5 +174,6 @@ const styles = StyleSheet.create({
   },
   next_button: {
     marginTop: 10,
+    alignSelf:'center',
   }
 });

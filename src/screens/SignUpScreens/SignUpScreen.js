@@ -1,68 +1,27 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, ImageBackground, SafeAreaView, Text } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ImageBackground, Image, Text, Linking } from 'react-native';
+import { Title } from 'react-native-paper';
+
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-
-// Importing icons
-import Icon from 'react-native-vector-icons/AntDesign';
-
 // Importing components
-import * as Colors from '../../styles/colors';
-import Button from '../../components/atoms/Button';
+import LongButton from '../../components/atoms/LongButton';
+import Link from '../../components/atoms/Link';
 import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
+import GoogleButton from '../../components/atoms/Google/GoogleButton';
+import * as Colors from '../../styles/colors';
 
 
-export default function SignupScreen({ navigation }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
+export default function LoginScreen({ navigation }) {
 
-  const { register, loading } = useContext(AuthContext);
+  const { registerWithGoogle, loading } = useContext(AuthContext);
 
   if (loading) {
     return <Loading />;
   }
-
-  const checkTextInput = () => {
-    /*
-    //Check for the Name TextInput
-    if (!name.trim()) {
-      alert('Please enter Name');
-      return;
-    }
-    //Check for the Email TextInput
-    if (!email.trim()) {
-      alert('Please enter Email');
-      return;
-    }
-    //Check for the Password TextInput
-    if (!password.trim()) {
-      alert('Please enter password');
-      return;
-    }
-    //Check for the Repeat Password TextInput
-    if (!repeatPassword.trim()) {
-      alert('Please enter repeat password');
-      return;
-    }
-     // Check if the email contains @
-     if(!email.includes('@')){
-      alert('The email format is not valid');
-      return;
-    }
-    // Check if the passwords match
-    if(password != repeatPassword){
-      alert('The passwords does not match');
-      return;
-    }*/
-    //Checked Successfully
-    navigation.navigate('Signup2')
-  };
-
 
   return (
     <KeyboardAwareScrollView
@@ -72,63 +31,39 @@ export default function SignupScreen({ navigation }) {
       scrollEnabled={false}
     >
       <SafeAreaView style={styles.container}>
-        <ImageBackground source={require('../../assets/images/background/SignUpBackground.jpg')} style={styles.background}>
-          <Icon
-            name='arrowleft'
-            color={Colors.WHITE}
-            style={styles.icon_left}
-            size={30}
-            onPress={() => navigation.goBack()}
+        <ImageBackground source={require('../../assets/images/background/loginBackground.jpg')} style={styles.background}>
+          <Link
+            title="Log In"
+            onPress={() => navigation.navigate('Login')}
+            style={styles.sing_up}
           />
-          <View style={styles.sing_up_container}>
-            <Text style={styles.titleText}>Let's get started!</Text>
-            <FormInput
-              labelName="Name"
-              value={name}
-              onChangeText={(name) => setName(name)}
-              autoCompleteType='name'
-              keyboardType='default'
-              style={styles.input_form}
-              showLabel={true}
+          <Image source={require('../../assets/images/tripverLogov2.png')} style={styles.logo}></Image>
+          <Title style={styles.title_text}>Welcome to Tripver</Title>
+          <View style={styles.login_container}>
+            <LongButton
+              title="Create account"
+              onPress={() => navigation.navigate('Signup1')}
+              style={styles.login_button}
             />
-            <FormInput
-              labelName="Email"
-              value={email}
-              autoCapitalize="none"
-              onChangeText={(userEmail) => setEmail(userEmail)}
-              autoCompleteType='email'
-              keyboardType='email-address'
-              style={styles.input_form}
-              showLabel={true}
-            />
-            <FormInput
-              labelName="Password"
-              value={password}
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-              textContentType='password'
-              autoCompleteType='password'
-              style={styles.input_form}
-              showLabel={true}
-            />
-            <FormInput
-              labelName="Repeat password"
-              value={password}
-              secureTextEntry={true}
-              onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
-              textContentType='password'
-              autoCompleteType='password'
-              style={styles.input_form}
-              showLabel={true}
-            />
-            <Button
-              title="Next"
-              labelStyle={styles.loginButtonLabel}
-              style={styles.next_button}
-              //onPress={() => register(displayName, email, password)}
-              onPress={() => checkTextInput()}
+            <GoogleButton
+              title="Continue with Google"
               showIcon={true}
+              longButton={true}
+              onPress={async () => {
+                var res = await registerWithGoogle()
+
+                if (res != null) {
+                  navigation.navigate('Signup2', { googleData: res })
+                }
+              }}
+              style={styles.google_button}
             />
+            <Text style={styles.privacy_policy}>
+              {"By typing Continue or Create Account, I agree to Tripver's "}
+              <Text style={{ textDecorationLine: 'underline' }}
+                onPress={() => Linking.openURL('http://google.com')}>
+              {"Terms of Service, Privacy Policy and Nondicrimination Policy."}</Text>
+            </Text>
           </View>
         </ImageBackground>
       </SafeAreaView>
@@ -140,28 +75,42 @@ const styles = StyleSheet.create({
   background: {
     width: '100%',
     height: '100%',
-    flex: 1,
+    flex: 1
   },
   container: {
     flex: 1,
   },
-  sing_up_container: {
+  login_container: {
     flex: 1,
     alignItems: 'center',
   },
-  titleText: {
-    fontSize: 24,
+  logo: {
+    width: '34%',
+    height: '20%',
+    marginTop: 0,
     marginBottom: 40,
-    marginTop: 40,
+    marginLeft: 30,
   },
-  icon_left: {
-    marginLeft: 15,
-    marginTop: 10,
+  title_text: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginLeft: 40,
+    marginBottom: 80,
   },
-  input_form: {
-    marginBottom: 30,
+  sing_up: {
+    alignSelf: 'flex-end',
+    marginRight: 15,
+    marginTop: 15,
   },
-  next_button: {
-    marginTop: 20,
+  login_button: {
+  },
+  google_button: {
+    marginTop: 30,
+  },
+  privacy_policy: {
+    position: 'absolute', left: 0, right: 0, bottom: 0,
+    margin: 20,
+    color: Colors.WHITE,
+    fontSize: 12,
   }
 });

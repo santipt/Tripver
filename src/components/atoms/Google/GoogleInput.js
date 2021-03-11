@@ -8,7 +8,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import Icon from 'react-native-vector-icons/AntDesign';
 
 // Importing components
-import * as Colors from '../../styles/colors';
+import * as Colors from '../../../styles/colors';
 
 export default function GoogleInput({ labelName, focus, ...props }) {
     return (

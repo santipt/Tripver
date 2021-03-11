@@ -1,8 +1,7 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, ImageBackground, Image } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ImageBackground, Image, Text } from 'react-native';
 import { Title } from 'react-native-paper';
-
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 // Importing components
@@ -11,14 +10,15 @@ import Link from '../components/atoms/Link';
 import FormInput from '../components/atoms/FormInput';
 import Loading from '../components/atoms/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
+import Divider from '../components/atoms/Divider';
+import GoogleButton from '../components/atoms/Google/GoogleButton';
 import * as Colors from '../styles/colors';
-
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { login, loading } = useContext(AuthContext);
+  const { loginWithEmail, loginWithGoogle, loading } = useContext(AuthContext);
 
   if (loading) {
     return <Loading />;
@@ -31,41 +31,48 @@ export default function LoginScreen({ navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-    <SafeAreaView style={styles.container}>
-      <ImageBackground source={require('../assets/images/background/loginBackground.jpg')} style={styles.background}>
-        <Link
-          title="Sign up"
-          onPress={() => navigation.navigate('Signup')}
-          style={styles.sing_up}
-        />
-        <View style={styles.login_container}>
-        <Image source={require('../assets/images/tripverLogov2.png')} style={styles.logo}></Image>
-          <Title style={styles.title_text}>Log In</Title>
-          <FormInput
-            labelName="Email"
-            value={email}
-            autoCapitalize="none"
-            onChangeText={(userEmail) => setEmail(userEmail)}
-            autoCompleteType='email'
-            keyboardType='email-address'
-            placeholder='Email'
+      <SafeAreaView style={styles.container}>
+        <ImageBackground source={require('../assets/images/background/loginBackground.jpg')} style={styles.background}>
+          <Link
+            title="Sign up"
+            onPress={() => navigation.navigate('Signup')}
+            style={styles.sing_up}
           />
-          <FormInput
-            labelName="Password"
-            value={password}
-            secureTextEntry={true}
-            onChangeText={(userPassword) => setPassword(userPassword)}
-            textContentType='password'
-            placeholder='Password'
-          />
-          <LongButton
-            title="Log In"
-            onPress={() => login(email, password)}
-            style={styles.login_button}
-          />
-        </View>
-      </ImageBackground>
-    </SafeAreaView>
+          <View style={styles.login_container}>
+            <Image source={require('../assets/images/tripverLogov2.png')} style={styles.logo}></Image>
+            <Title style={styles.title_text}>Tripver</Title>
+            <FormInput
+              labelName="Email"
+              value={email}
+              autoCapitalize="none"
+              onChangeText={(userEmail) => setEmail(userEmail)}
+              autoCompleteType='email'
+              keyboardType='email-address'
+              placeholder='Email'
+            />
+            <FormInput
+              labelName="Password"
+              value={password}
+              secureTextEntry={true}
+              onChangeText={(userPassword) => setPassword(userPassword)}
+              textContentType='password'
+              placeholder='Password'
+            />
+            <LongButton
+              title="Log In"
+              onPress={() => loginWithEmail(email, password)}
+              style={styles.login_button}
+            />
+            <Divider style={styles.divider}></Divider>
+            <GoogleButton
+              title="Google"
+              showIcon={true}
+              onPress={() => loginWithGoogle()}
+              style={styles.login_button}
+            />
+          </View>
+        </ImageBackground>
+      </SafeAreaView>
     </KeyboardAwareScrollView>
   );
 }
@@ -87,13 +94,12 @@ const styles = StyleSheet.create({
   logo: {
     width: '32%',
     height: '20%',
-    marginTop: -40,
-    marginBottom:100,
   },
   title_text: {
     fontSize: 24,
     marginBottom: 30,
-    fontWeight:'bold'
+    fontWeight: 'bold',
+    marginTop:20,
   },
   sing_up: {
     alignSelf: 'flex-end',
@@ -103,5 +109,8 @@ const styles = StyleSheet.create({
   login_button: {
     marginTop: 30,
   },
+  divider: {
+    marginTop:30,
+  }
 
 });

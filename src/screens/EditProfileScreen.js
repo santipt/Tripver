@@ -4,9 +4,6 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, TextInput, ScrollView } from 'react-native';
 import { Card, Avatar } from 'react-native-elements';
 
-// Importing icons
-import Icon from 'react-native-vector-icons/AntDesign';
-
 // Importing components
 import * as Colors from '../styles/colors';
 import Button from '../components/atoms/Button'
@@ -43,7 +40,7 @@ export default function EditProfileScreen({ navigation }) {
           <ScrollView contentContainerStyle={styles.scrollview}>
             <View style={styles.description_container}>
               <Text style={styles.description_title}>
-                Description
+                About me
             </Text>
               <TextInput
                 style={styles.text_input}

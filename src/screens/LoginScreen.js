@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }) {
       scrollEnabled={false}
     >
       <SafeAreaView style={styles.container}>
-        <ImageBackground source={require('../assets/images/background/loginBackground.jpg')} style={styles.background}>
+        <ImageBackground source={require('../assets/images/backgrounds/loginBackground.jpg')} style={styles.background}>
           <Link
             title="Sign up"
             onPress={() => navigation.navigate('Signup')}

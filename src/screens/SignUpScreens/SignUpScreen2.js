@@ -2,7 +2,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, ImageBackground, SafeAreaView, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -15,20 +14,22 @@ import Loading from '../../components/atoms/Loading';
 import GoogleInput from '../../components/atoms/Google/GoogleInput';
 import DatePicker from '../../components/atoms/DatePicker';
 import { AuthContext } from '../../navigation/AuthProvider';
-import { State } from 'react-native-gesture-handler';
 
+// Importing image paths
+import { images } from '../../utils/images'
 
-export default function SignupScreen({ route, navigation }) {
+export default function SignupScreen2({ route, navigation }) {
+  const [currentLocation, setCurrentLocation] = useState('');
   const [gender, setGender] = useState('');
   const [date, setDate] = useState('');
   const [phone, setPhone] = useState('');
-  const [currentLocation, setCurrentLocation] = useState('');
 
-  const { register, loading } = useContext(AuthContext);
+  const { loading } = useContext(AuthContext);
   const [focus, setFocus] = useState(false);
   const [lengthLocationForm, setLengthLocationForm] = useState(0);
 
-  console.log(route.params)
+  // Getting the data from the other screens
+  var data = route.params;
 
   if (loading) {
     return <Loading />;
@@ -36,7 +37,7 @@ export default function SignupScreen({ route, navigation }) {
 
   const checkTextInput = () => {
     //Check for the Current Location TextInput
-    if (!currentLocation.trim()) {
+    /*if (!currentLocation.trim()) {
       alert('Please enter repeat password');
       return;
     }
@@ -54,9 +55,16 @@ export default function SignupScreen({ route, navigation }) {
     if (!phone.trim()) {
       alert('Please enter password');
       return;
-    }
+    }*/
     //Checked Successfully
-    //navigation.navigate('Signup2')
+
+    // Adding data to the json
+    data.current_location = currentLocation;
+    data.gender = gender;
+    data.date_of_birth = date;
+    data.phone = phone;
+
+    navigation.navigate('LocalOrTripverScreen', data)
   };
 
 
@@ -69,7 +77,7 @@ export default function SignupScreen({ route, navigation }) {
         scrollEnabled={false}
         keyboardShouldPersistTaps='handled'
       >
-        <ImageBackground source={require('../../assets/images/background/SignUpBackground.jpg')} style={styles.background}>
+        <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
           <Icon
             name='arrowleft'
             color={Colors.WHITE}
@@ -83,6 +91,9 @@ export default function SignupScreen({ route, navigation }) {
               focus={focus}
               showLabel={true}
               labelName="Location"
+              onPress={(data, details = null) => {
+                setCurrentLocation(data.description)
+              }}
               textInputProps={{
                 onFocus: () => {
                 },
@@ -90,15 +101,17 @@ export default function SignupScreen({ route, navigation }) {
                   setFocus(false)
                 },
                 onChangeText: (location) => {
+                  // Styling the input
                   if (location.length > 0) {
                     // Changing input style border bottom radius
                     setFocus(true)
                   } else {
                     setFocus(false)
                   }
-                  setCurrentLocation(location)
-                }
-              }} ></GoogleInput>
+                },
+              }}
+              
+              ></GoogleInput>
             <View>
               <FormInput
                 labelName="Gender"
@@ -111,8 +124,8 @@ export default function SignupScreen({ route, navigation }) {
               />
               <DatePicker
                 date={date} // Initial date from state
-                labelName='Date of birth' 
-                showLabel={true} 
+                labelName='Date of birth'
+                showLabel={true}
                 onDateChange={(date) => {
                   setDate(date);
                 }}></DatePicker>
@@ -174,6 +187,6 @@ const styles = StyleSheet.create({
   },
   next_button: {
     marginTop: 10,
-    alignSelf:'center',
+    alignSelf: 'center',
   }
 });

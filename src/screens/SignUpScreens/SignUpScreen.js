@@ -2,18 +2,20 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View, SafeAreaView, ImageBackground, Image, Text, Linking } from 'react-native';
 import { Title } from 'react-native-paper';
+import { SocialIcon } from 'react-native-elements'
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 // Importing components
 import LongButton from '../../components/atoms/LongButton';
 import Link from '../../components/atoms/Link';
-import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 import GoogleButton from '../../components/atoms/Google/GoogleButton';
 import * as Colors from '../../styles/colors';
 
+// Importing image paths
+import { images } from '../../utils/images'
 
 export default function LoginScreen({ navigation }) {
 
@@ -31,7 +33,7 @@ export default function LoginScreen({ navigation }) {
       scrollEnabled={false}
     >
       <SafeAreaView style={styles.container}>
-        <ImageBackground source={require('../../assets/images/background/loginBackground.jpg')} style={styles.background}>
+        <ImageBackground source={images.loginBackground.uri} style={styles.background}>
           <Link
             title="Log In"
             onPress={() => navigation.navigate('Login')}
@@ -58,11 +60,17 @@ export default function LoginScreen({ navigation }) {
               }}
               style={styles.google_button}
             />
+            <SocialIcon
+              title='Sign In With Facebook'
+              button
+              type='facebook'
+              raise={false}
+            />
             <Text style={styles.privacy_policy}>
               {"By typing Continue or Create Account, I agree to Tripver's "}
               <Text style={{ textDecorationLine: 'underline' }}
                 onPress={() => Linking.openURL('http://google.com')}>
-              {"Terms of Service, Privacy Policy and Nondicrimination Policy."}</Text>
+                {"Terms of Service, Privacy Policy and Nondicrimination Policy."}</Text>
             </Text>
           </View>
         </ImageBackground>
@@ -101,8 +109,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginRight: 15,
     marginTop: 15,
-  },
-  login_button: {
   },
   google_button: {
     marginTop: 30,

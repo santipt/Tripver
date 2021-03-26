@@ -14,8 +14,10 @@ import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 
+// Importing image paths
+import { images } from '../../utils/images'
 
-export default function SignupScreen({ navigation }) {
+export default function SignupScreen1({ navigation }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +27,12 @@ export default function SignupScreen({ navigation }) {
 
   if (loading) {
     return <Loading />;
+  }
+
+  var data = {
+    name: name,
+    email: email,
+    password: password
   }
 
   const checkTextInput = () => {
@@ -60,9 +68,8 @@ export default function SignupScreen({ navigation }) {
       return;
     }*/
     //Checked Successfully
-    navigation.navigate('Signup2')
+    navigation.navigate('Signup2', data)
   };
-
 
   return (
     <KeyboardAwareScrollView
@@ -72,7 +79,7 @@ export default function SignupScreen({ navigation }) {
       scrollEnabled={false}
     >
       <SafeAreaView style={styles.container}>
-        <ImageBackground source={require('../../assets/images/background/SignUpBackground.jpg')} style={styles.background}>
+        <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
           <Icon
             name='arrowleft'
             color={Colors.WHITE}

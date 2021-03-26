@@ -35,7 +35,12 @@ export default function GoogleInput({ labelName, focus, ...props }) {
                     query={{
                         key: 'AIzaSyC_iGZnODFXnCUCOF_gRwja3-kmHnF-PAY',
                         language: 'en',
+                        types: '(cities)',
                     }}
+                    filterReverseGeocodingByTypes={[
+                        'locality',
+                        'administrative_area_level_3',
+                      ]}
                     renderDescription={(row) => row.description || row.vicinity}
                     //disableScroll={true}
                     //currentLocation={true}

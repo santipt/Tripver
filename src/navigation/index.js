@@ -1,6 +1,7 @@
 // Importing react utilities
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 // Importing components
 import { AuthProvider } from './AuthProvider';
@@ -8,11 +9,11 @@ import Routes from './Routes';
 
 export default function Providers() {
   return (
-      <PaperProvider theme={theme}>
-        <AuthProvider>
-          <Routes />
-        </AuthProvider>
-      </PaperProvider>
+    <PaperProvider theme={theme}>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </PaperProvider>
   );
 }
 
@@ -21,8 +22,8 @@ const theme = {
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#5b3a70',
-    accent: '#50c878',
-    background: '#f7f9fb',
+    primary: Colors.PRIMARY,
+    accent: Colors.SECONDARY,
+    background: 'transparent',
   },
 };

@@ -1,13 +1,16 @@
 import React  from 'react';
 import { Asset } from 'expo-asset';
+import { images } from './src/utils/images'
 import Providers from './src/navigation';
 
+// Preloading the backgrounds
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      require('./src/assets/images/background/loginBackground.jpg'),      
-      require('./src/assets/images/background/SignUpBackground.jpg'), 
-      require('./src/assets/images/tripverLogov2.png'), 
+      images.localOrTripverBackground.uri,
+      images.signUpBackground.uri,
+      images.loginBackground.uri,
+      images.tripverLogov2.uri,
     ]),
   ]);
 }

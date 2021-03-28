@@ -25,18 +25,3 @@ var db = firebase.firestore();
 
 export { firebase, db, IOS_CLIENT_ID, ANDROID_CLIENT_ID  };
 
-// Example data base insert
-/*db.collection("users").add({
-            name: googleUser.user.givenName,
-            email: googleUser.user.email,
-            profile_picture: googleUser.user.photoUrl,
-            about_me: "adsffafa",
-            current_location: "Valencia",
-            birth_date:"12/12/10",
-            countries:["adsf","fsda"],
-            languages:["fsafd","gfdsg"],
-            user_type:"local",
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-        });*/

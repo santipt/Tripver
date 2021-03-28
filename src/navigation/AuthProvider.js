@@ -1,17 +1,18 @@
 // Importing react utilities
 import React, { createContext, useState } from 'react';
+import * as Google from "expo-google-app-auth";
 
 // Importing components
 import { kitty } from '../chatkitty';
-import { firebase, IOS_CLIENT_ID, ANDROID_CLIENT_ID } from '../firebase';
-import * as Google from "expo-google-app-auth";
+import { firebase, IOS_CLIENT_ID, ANDROID_CLIENT_ID } from '../firebase/index.js';
+import { createUser } from '../firebase/Logic.js';
 
 export const AuthContext = createContext({});
 
-// Call this at the end of the sign up steps
-function onGoogleSignUp(googleUser) {
+// Register google user in firebase
+function onGoogleSignUp(googleUser, data) {
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-  var unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+  var unsubscribe = firebase.auth().onAuthStateChanged(async (firebaseUser) => {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
     if (!isUserEqual(googleUser.user, firebaseUser)) {
@@ -23,14 +24,42 @@ function onGoogleSignUp(googleUser) {
       );
 
       // Sign in with credential from the Google user.
-      firebase.auth().signInWithCredential(credential).then(function (result) {
+      firebase.auth().signInWithCredential(credential).then(async function () {
+
         // Inserting all the user data to the cloud firestore and create user
+        await createUser(data);
+
+        // Starting session
+        let result = await kitty.startSession({
+          username: googleUser.user.email,
+          authParams: {
+            accessToken: googleUser.accessToken,
+            idToken: googleUser.accessToken
+          },
+        });
+
+        if (result.failed) {
+          console.log('Could not login');
+        }
 
       }).catch((error) => {
         console.log(error)
       });
+
     } else {
       console.log('User already signed-in Firebase.');
+  
+      // Login with the user and the credentials of gooogle
+      // Starting session
+      let result = await kitty.startSession({
+        username: googleUser.user.email,
+        authParams: {
+          accessToken: googleUser.accessToken,
+          idToken: googleUser.accessToken
+        },
+      });
+
+      
     }
   }
   );
@@ -94,8 +123,6 @@ export const AuthProvider = ({ children }) => {
               androidClientId: ANDROID_CLIENT_ID,
             });
 
-            setLoading(false);
-
             if (googleResult.type === "success") {
               // In order to get firebase users
               var unsubscribe = firebase.auth().onAuthStateChanged(async (firebaseUser) => {
@@ -105,17 +132,24 @@ export const AuthProvider = ({ children }) => {
 
               // Check if the user exists
               if (userExists) {
+
                 // Starting session
                 let result = await kitty.startSession({
                   username: googleResult.user.email,
+                  authParams: {
+                    accessToken: googleResult.accessToken,
+                    idToken: googleResult.accessToken
+                  },
                 });
 
+                setLoading(false);
 
                 if (result.failed) {
                   console.log('Could not login');
                 }
+
               } else {
-                console.log("This user does not exist: ",googleResult.user)
+                console.log("This user does not exist: ", googleResult.user)
                 setLoading(false);
               }
 
@@ -130,42 +164,68 @@ export const AuthProvider = ({ children }) => {
         // --------------------------------
         // -------- Email register --------
         //---------------------------------
-        registerWithEmail: async (email, password) => {
+        register: async (data) => {
+
           setLoading(true);
 
           try {
-            await firebase
-              .auth()
-              .createUserWithEmailAndPassword(email, password)
-              .then((credential) => {
-                credential.user
-                  .then(async () => {
-                    console.log(email)
-                    console.log(password)
 
-                    // Starting session
-                    let result = await kitty.startSession({
-                      username: email,
-                      authParams: {
-                        password: password,
-                      },
+            // --------------------------------
+            // ----- Register with Google -----
+            //---------------------------------
+            if (data.googleData != null) {
+              console.log("GOOGLE AUTH")
+
+              onGoogleSignUp(data.googleData, data)
+
+            }
+
+            // --------------------------------
+            // ----- Register with Email -----
+            //---------------------------------
+            else {
+              // Creating the user from email
+              console.log("EMAIL AUTH")
+              await firebase
+                .auth()
+                .createUserWithEmailAndPassword(data.email, data.password)
+                .then((credential) => {
+                  credential.user
+                    .updateProfile({ displayName: data.name })
+                    .then(async () => {
+
+                      // Inserting all the user data to the cloud firestore and create user
+                      
+
+                      // Starting session
+                      const result = await kitty.startSession({
+                        username: data.email,
+                        authParams: {
+                          password: data.password,
+                        },
+                      });
+
+                      setLoading(false);
+
+                      console.log(result)
+
+                      if (result.failed) {
+                        console.log('Could not login');
+                      }
+
                     });
-
-                    if (result.failed) {
-                      console.log('Could not login');
-                    }
-                  });
-              });
+                });
+            }
           } catch (e) {
             console.log(e);
+            setLoading(false);
           }
-          setLoading(false);
         },
         // --------------------------------
-        // ----- Register with Google -----
-        //---------------------------------
-        registerWithGoogle: async () => {
-          console.log("Sign Up with Google");
+        // ----- Continue with Google -----
+        // --------------------------------
+        continueWithGoogle: async () => {
+          console.log("Continue with Google");
           setLoading(true);
 
           try {
@@ -174,7 +234,7 @@ export const AuthProvider = ({ children }) => {
               iosClientId: IOS_CLIENT_ID,
               androidClientId: ANDROID_CLIENT_ID,
             })
-            
+
             setLoading(false);
 
             if (googleResult.type === "success") {
@@ -186,12 +246,25 @@ export const AuthProvider = ({ children }) => {
               });
 
               if (!userExists) {
-                // Passing data to SignUp2
+                // Returning data to SignUpScreen2
                 return googleResult;
               }
               else {
-                console.log("This user already exists", googleResult)
-                return null;
+                // If the user exists log in with the google credentials
+                console.log("This user already exists: ", googleResult.user.email)
+
+                // Starting session
+                let result = await kitty.startSession({
+                  username: googleUser.user.email,
+                  authParams: {
+                    accessToken: googleUser.accessToken,
+                    idToken: googleUser.accessToken
+                  },
+                });
+
+                if (result.failed) {
+                  console.log('Could not login');
+                }
               }
             }
 
@@ -206,8 +279,11 @@ export const AuthProvider = ({ children }) => {
         logout: async () => {
           try {
             await kitty.endSession();
+            console.log("Logged out")
+            setLoading(false);
           } catch (e) {
             console.error(e);
+            setLoading(false);
           }
         },
       }

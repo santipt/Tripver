@@ -9,7 +9,6 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 // Importing components
 import * as Colors from '../../styles/colors';
 
-
 export default class Selector extends Component {
     constructor() {
         super();

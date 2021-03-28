@@ -19,7 +19,7 @@ import { images } from '../../utils/images'
 
 export default function LoginScreen({ navigation }) {
 
-  const { registerWithGoogle, loading } = useContext(AuthContext);
+  const { continueWithGoogle, loading } = useContext(AuthContext);
 
   if (loading) {
     return <Loading />;
@@ -52,7 +52,7 @@ export default function LoginScreen({ navigation }) {
               showIcon={true}
               longButton={true}
               onPress={async () => {
-                var res = await registerWithGoogle()
+                var res = await continueWithGoogle()
 
                 if (res != null) {
                   navigation.navigate('Signup2', { googleData: res })

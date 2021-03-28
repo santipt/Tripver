@@ -21,18 +21,11 @@ export default function SignupScreen1({ navigation }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
 
   const { register, loading } = useContext(AuthContext);
 
   if (loading) {
     return <Loading />;
-  }
-
-  var data = {
-    name: name,
-    email: email,
-    password: password
   }
 
   const checkTextInput = () => {
@@ -52,11 +45,6 @@ export default function SignupScreen1({ navigation }) {
       alert('Please enter password');
       return;
     }
-    //Check for the Repeat Password TextInput
-    if (!repeatPassword.trim()) {
-      alert('Please enter repeat password');
-      return;
-    }
      // Check if the email contains @
      if(!email.includes('@')){
       alert('The email format is not valid');
@@ -67,8 +55,15 @@ export default function SignupScreen1({ navigation }) {
       alert('The passwords does not match');
       return;
     }*/
+
+    var data = {
+      name: name,
+      email: email,
+      password: password
+    }
+    
     //Checked Successfully
-    navigation.navigate('Signup2', data)
+    navigation.navigate('CountriesScreen', data)
   };
 
   return (
@@ -118,16 +113,6 @@ export default function SignupScreen1({ navigation }) {
               style={styles.input_form}
               showLabel={true}
             />
-            <FormInput
-              labelName="Repeat password"
-              value={password}
-              secureTextEntry={true}
-              onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
-              textContentType='password'
-              autoCompleteType='password'
-              style={styles.input_form}
-              showLabel={true}
-            />
             <Button
               title="Next"
               labelStyle={styles.loginButtonLabel}
@@ -155,11 +140,12 @@ const styles = StyleSheet.create({
   sing_up_container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent:'center'
   },
   titleText: {
-    fontSize: 24,
-    marginBottom: 40,
-    marginTop: 40,
+    fontSize: 30,
+    marginBottom: 60,
+    marginTop:-10,
   },
   icon_left: {
     marginLeft: 15,
@@ -169,6 +155,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   next_button: {
-    marginTop: 20,
+    marginTop: 30,
   }
 });

@@ -29,15 +29,13 @@ export default function LanguagesScreen({ route, navigation }) {
   // Getting the data from the other screens
   var data = route.params;
 
-  console.log(data)
-
   if (loading) {
     return <Loading />;
   }
 
   const checkTextInput = () => {
 
-    if (selectedLanguages.length >= 1) {
+    if (selectedLanguages.length >= 0) {
       data.languages = selectedLanguages;
 
       //Checked Successfully

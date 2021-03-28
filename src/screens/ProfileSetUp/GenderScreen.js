@@ -29,8 +29,6 @@ export default function GenderScreen({ route, navigation }) {
   // Getting the data from the other screens
   var data = route.params;
 
-  console.log(data)
-
   if (loading) {
     return <Loading />;
   }

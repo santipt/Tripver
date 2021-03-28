@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, ImageBackground, Image, Text } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, SafeAreaView } from 'react-native';
 import { Title } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -13,6 +13,7 @@ import { AuthContext } from '../navigation/AuthProvider';
 import Divider from '../components/atoms/Divider';
 import GoogleButton from '../components/atoms/Google/GoogleButton';
 import * as Colors from '../styles/colors';
+import GlobalStyles from '../styles/GlobalStyles';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -31,7 +32,7 @@ export default function LoginScreen({ navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={require('../assets/images/backgrounds/loginBackground.jpg')} style={styles.background}>
           <Link
             title="Sign up"

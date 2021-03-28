@@ -24,12 +24,10 @@ export default function CountriesScreen({ route, navigation }) {
   const [selectedCountries, onChangeCountries] = React.useState([])
   const [maxNumberOfItems, setMaxNumberOfItems] = React.useState(0)
 
-  const { loading } = useContext(AuthContext);
+  const { loading, register} = useContext(AuthContext);
 
   // Getting the data from the other screens
   var data = route.params;
-
-  console.log(data)
 
   if (loading) {
     return <Loading />;
@@ -37,11 +35,11 @@ export default function CountriesScreen({ route, navigation }) {
 
   const checkTextInput = () => {
 
-    if (selectedCountries.length >= 1) {
+    if (selectedCountries.length >= 0) {
       data.countries = selectedCountries;
 
       //Checked Successfully
-      //Upload all the data to firestore
+      register(data);
     }
 
   };

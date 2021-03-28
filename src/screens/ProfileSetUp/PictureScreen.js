@@ -30,6 +30,10 @@ export default function PictureScreen({ route, navigation }) {
         return <Loading />;
     }
 
+    /*if(data.googleData != undefined){
+        setSelectedImage(data.googleData.user.photoUrl)
+    }*/
+
     // Open photo library from the phone and save the uri in order to show the image
     let openImagePickerAsync = async () => {
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -53,6 +57,8 @@ export default function PictureScreen({ route, navigation }) {
             data.profile_picture = selectedImage.localUri;
 
             //Checked Successfully
+            navigation.navigate('AboutMeScreen', data)
+        }else{
             navigation.navigate('AboutMeScreen', data)
         }
     };

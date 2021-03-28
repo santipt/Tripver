@@ -26,15 +26,18 @@ export default function AboutMeScreen({ route, navigation }) {
   // Getting the data from the other screens
   var data = route.params;
 
-  console.log(data)
-
   if (loading) {
     return <Loading />;
   }
 
   const checkTextInput = () => {
+    
+    data.about_me = description;
+
     if (description != '') {
       //Checked Successfully
+      navigation.navigate('HobbiesScreen', data)
+    }else{
       navigation.navigate('HobbiesScreen', data)
     }
   };
@@ -60,7 +63,7 @@ export default function AboutMeScreen({ route, navigation }) {
             <Text style={styles.title_text}>Tell us something {'\n'} about you!</Text>
             <View style={styles.about_me_container}>
               <Text style={styles.about_me_title}>
-                About me
+                About me...
             </Text>
               <TextInput
                 style={styles.text_input}
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
   },
 
   about_me_container: {
-    borderRadius: 14,
+    borderRadius: 16,
     padding: 12,
     backgroundColor: Colors.WHITE,
     color: Colors.WHITE,
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
 
   about_me_title: {
     fontWeight: 'normal',
-    fontSize: 16,
+    fontSize: 18,
   },
 
   next_button: {

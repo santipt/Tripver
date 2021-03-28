@@ -1,6 +1,6 @@
 // Importing react utilities
-import React, { useContext, useState } from 'react';
-import { StyleSheet, View, ImageBackground, SafeAreaView, Text, Image } from 'react-native';
+import React, { useContext, useState, useRef } from 'react';
+import { StyleSheet, View, ImageBackground, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 // Importing icons
@@ -29,15 +29,13 @@ export default function HobbiesScreen({ route, navigation }) {
   // Getting the data from the other screens
   var data = route.params;
 
-  console.log(data)
-
   if (loading) {
     return <Loading />;
   }
 
   const checkTextInput = () => {
 
-    if (selectedHobbies.length >= 5) {
+    if (selectedHobbies.length >= 0) {
       data.hobbies = selectedHobbies;
 
       //Checked Successfully
@@ -45,6 +43,10 @@ export default function HobbiesScreen({ route, navigation }) {
     }
 
   };
+
+  const mm = () => {
+    return 2;
+  }
 
   return (
     <KeyboardAwareScrollView
@@ -64,15 +66,18 @@ export default function HobbiesScreen({ route, navigation }) {
           />
           <View style={styles.content}>
             <Text style={styles.title_text}>Select at least 5 hobbies</Text>
-            <View style={maxNumberOfItems > 8 ? styles.selector_container_max : styles.selector_container}>
-              <ImageBackground source={images.hobbies.uri} style={ maxNumberOfItems > 8 ? styles.hobbies_background_max : styles.hobbies_background} imageStyle={ maxNumberOfItems > 8 ? styles.image_style_max : styles.image_style}>
-                <Selector listName="hobbies" list={listOfHobbies}
+            <TouchableOpacity style={maxNumberOfItems > 8 ? styles.selector_container_max : styles.selector_container}>
+              <ImageBackground source={images.hobbies.uri} style={maxNumberOfItems > 8 ? styles.hobbies_background_max : styles.hobbies_background} imageStyle={maxNumberOfItems > 8 ? styles.image_style_max : styles.image_style}>
+                <Selector
+                  listName="hobbies"
+                  list={listOfHobbies}
                   onSelectedItemObjectsChange={(selectedItems) => {
                     setMaxNumberOfItems(selectedItems.length)
                     onChangeHobbies(selectedItems)
-                  }}></Selector>
+                  }}
+                ></Selector>
               </ImageBackground>
-            </View>
+            </TouchableOpacity>
 
             <Button
               title="Next"
@@ -98,18 +103,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  hobbies_background_max:{
+  hobbies_background_max: {
   },
 
   image_style: {
     width: '40%',
     height: '60%',
-    marginLeft:90,
-    marginTop:50,
+    marginLeft: 90,
+    marginTop: 50,
   },
 
-  image_style_max:{
-   display:'none',
+  image_style_max: {
+    display: 'none',
   },
 
   container: {
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     position: 'absolute',
     top: 60,
-    textAlign:'center',
+    textAlign: 'center',
   },
   icon_left: {
     marginLeft: 15,

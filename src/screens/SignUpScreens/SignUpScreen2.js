@@ -20,7 +20,6 @@ import { images } from '../../utils/images'
 
 export default function SignupScreen2({ route, navigation }) {
   const [currentLocation, setCurrentLocation] = useState('');
-  const [gender, setGender] = useState('');
   const [date, setDate] = useState('');
   const [phone, setPhone] = useState('');
 
@@ -60,8 +59,7 @@ export default function SignupScreen2({ route, navigation }) {
 
     // Adding data to the json
     data.current_location = currentLocation;
-    data.gender = gender;
-    data.date_of_birth = date;
+    data.birth_date = date;
     data.phone = phone;
 
     navigation.navigate('LocalOrTripverScreen', data)
@@ -113,15 +111,6 @@ export default function SignupScreen2({ route, navigation }) {
               
               ></GoogleInput>
             <View>
-              <FormInput
-                labelName="Gender"
-                value={gender}
-                onChangeText={(userGender) => setGender(userGender)}
-                autoCompleteType='name'
-                keyboardType='default'
-                style={styles.input_form}
-                showLabel={true}
-              />
               <DatePicker
                 date={date} // Initial date from state
                 labelName='Date of birth'
@@ -169,11 +158,12 @@ const styles = StyleSheet.create({
   sing_up_container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent:'center'
   },
   titleText: {
-    fontSize: 24,
-    marginBottom: 40,
-    marginTop: 40,
+    fontSize: 30,
+    marginBottom: 60,
+    marginTop:-10,
   },
   icon_left: {
     marginLeft: 15,
@@ -186,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   next_button: {
-    marginTop: 10,
+    marginTop: 30,
     alignSelf: 'center',
   }
 });

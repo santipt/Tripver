@@ -13,7 +13,35 @@ const getAge = (dateString) => {
     return age;
 }
 
-export function createUser(data) {
+async function uploadProfilePicture(uri,name) {
+    // Why are we using XMLHttpRequest? See:
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  
+    const ref = firebase
+      .storage()
+      .ref()
+      .child(name);
+    const snapshot = await ref.put(blob);
+  
+    // We're done with the blob, close and release it
+    blob.close();
+  
+    return await snapshot.ref.getDownloadURL();
+  }
+
+export async function createUser(data) {
 
     console.log("Inserting user data into firestore...")
 
@@ -22,18 +50,19 @@ export function createUser(data) {
     var profile_picture;
     var age = getAge(data.birth_date.replace(/-/g, '/'));
     var birth_date = new Date(data.birth_date.replace(/-/g, '/'));
-   
-    if (data.googleData != null) {
-        name = data.googleData.user.givenName;
-        email = data.googleData.user.email;
-        profile_picture = data.googleData.user.photoUrl;
-    } else {
-        name = data.name;
-        email = data.email;
-        profile_picture = data.profile_picture;
-    }
 
     try {
+
+        if (data.googleData != null) {
+            name = data.googleData.user.givenName;
+            email = data.googleData.user.email;
+            profile_picture = data.googleData.user.photoUrl;
+        } else {
+            name = data.name;
+            email = data.email;
+            profile_picture = await uploadProfilePicture(data.profile_picture, data.uid);
+        }
+
         var userData = {
             name: name,
             email: email,
@@ -50,10 +79,11 @@ export function createUser(data) {
         }
 
         // Inserting user data
-        db.collection("users").add(userData)
+        db.collection("users").doc(data.uid).set(userData)
             .catch((error) => {
                 console.error("Error adding document: ", error);
             });
+
     } catch (err) {
         console.log(err);
         return err;
@@ -70,17 +100,36 @@ export function editUser() {
 
 };
 
-export async function getListOfUsers() {
+export async function getListOfUsers(currentUser) {
 
     var users = [];
     var data = await db.collection("users").get();
 
-    await data.docs.forEach(item => {
-        users.push(item.data())
+    //Current user
+    //const {uid} = auth().currentUser;
+
+    data.docs.forEach(item => {
+        if (item.data().email != currentUser) {
+            users.push(item.data())
+        }
     })
 
     return users;
 };
+
+export async function userExists(email) {
+
+    var exists = false;
+    var data = await db.collection("users").get();
+
+    data.docs.forEach(item => {
+        if (email == item.data().email) {
+            exists = true;
+        }
+    })
+
+    return exists;
+}
 
 
 export function getUserData(user) {

@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import '@firebase/auth';
 import '@firebase/firestore';
+import '@firebase/storage';
 
 // Clients ids for google sign in
 const IOS_CLIENT_ID = "258735134861-ofh5l2autr27ds68hukkp823l44un220.apps.googleusercontent.com";

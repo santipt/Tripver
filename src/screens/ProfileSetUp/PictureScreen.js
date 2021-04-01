@@ -14,6 +14,7 @@ import * as Colors from '../../styles/colors';
 import Button from '../../components/atoms/Button';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
+import {uploadProfilePicture} from '../../firebase/Logic'
 
 // Importing image paths
 import { images } from '../../utils/images'
@@ -53,11 +54,13 @@ export default function PictureScreen({ route, navigation }) {
     };
 
     const checkTextInput = () => {
-        if (selectedImage != '') {
+
+        if (selectedImage != null && selectedImage != '') {
             data.profile_picture = selectedImage.localUri;
 
             //Checked Successfully
             navigation.navigate('AboutMeScreen', data)
+            //uploadProfilePicture(data.profile_picture, 'name.jpg')
         }
     };
 

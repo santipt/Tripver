@@ -10,8 +10,9 @@ import { AuthContext } from '../../navigation/AuthProvider';
 
 
 export default function ProfileCard({ title, age, location, profile_picture, onPress, ...props }) {
+
     const { user } = useContext(AuthContext);
-    console.log(user)
+    //console.log(user)
 
     return (
         <Card containerStyle={styles.card_container}>

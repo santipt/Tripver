@@ -63,7 +63,7 @@ export default function SignupScreen1({ navigation }) {
     }
     
     //Checked Successfully
-    navigation.navigate('CountriesScreen', data)
+    navigation.navigate('Signup2', data)
   };
 
   return (

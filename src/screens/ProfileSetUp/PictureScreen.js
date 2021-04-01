@@ -44,7 +44,7 @@ export default function PictureScreen({ route, navigation }) {
         }
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        console.log(pickerResult);
+        //console.log(pickerResult);
 
         if (pickerResult.cancelled === true) {
             return;
@@ -53,12 +53,10 @@ export default function PictureScreen({ route, navigation }) {
     };
 
     const checkTextInput = () => {
-        if (selectedImage != null) {
+        if (selectedImage != '') {
             data.profile_picture = selectedImage.localUri;
 
             //Checked Successfully
-            navigation.navigate('AboutMeScreen', data)
-        }else{
             navigation.navigate('AboutMeScreen', data)
         }
     };

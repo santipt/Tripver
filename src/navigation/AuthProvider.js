@@ -24,17 +24,19 @@ function onGoogleSignUp(googleUser, data) {
       );
 
       // Sign in with credential from the Google user.
-      firebase.auth().signInWithCredential(credential).then(async function () {
+      firebase.auth().signInWithCredential(credential).then(async function (res) {
 
         // Inserting all the user data to the cloud firestore and create user
         await createUser(data);
+        //displayName: res.additionalUserInfo.profile.given_name
 
         // Starting session
         let result = await kitty.startSession({
           username: googleUser.user.email,
           authParams: {
             accessToken: googleUser.accessToken,
-            idToken: googleUser.accessToken
+            idToken: googleUser.accessToken,
+            displayName: googleUser.user.givenName
           },
         });
 
@@ -48,27 +50,77 @@ function onGoogleSignUp(googleUser, data) {
 
     } else {
       console.log('User already signed-in Firebase.');
-  
+
       // Login with the user and the credentials of gooogle
       // Starting session
       let result = await kitty.startSession({
-        username: googleUser.user.email,
+        username: data.email,
         authParams: {
           accessToken: googleUser.accessToken,
-          idToken: googleUser.accessToken
+          idToken: googleUser.accessToken,
         },
       });
 
-      
+      if (result.failed) {
+        console.log('Could not login');
+      }
     }
   }
   );
+}
+
+// Log In google user with firebase
+async function onGoogleSignIn() {
+  try {
+
+    const googleResult = await Google.logInAsync({
+      iosClientId: IOS_CLIENT_ID,
+      androidClientId: ANDROID_CLIENT_ID,
+    });
+
+    if (googleResult.type === "success") {
+      // In order to get firebase users
+      var unsubscribe = firebase.auth().onAuthStateChanged(async (firebaseUser) => {
+        unsubscribe();
+
+        // Check if the user exists
+        if (isUserEqual(googleResult.user, firebaseUser)) {
+
+          // Starting session
+          let result = await kitty.startSession({
+            username: googleResult.user.email,
+            authParams: {
+              accessToken: googleResult.accessToken,
+              idToken: googleResult.accessToken
+            },
+          });
+
+          return;
+
+          if (result.failed) {
+            console.log('Could not login');
+            return;
+          }
+
+        } else {
+          console.log("This user does not exist: ", googleResult.user)
+          return;
+        }
+      });
+    }
+  }
+  catch (error) {
+    console.log("Could not login", error);
+    return;
+  }
 }
 
 function isUserEqual(googleUser, firebaseUser) {
   if (firebaseUser) {
     var providerData = firebaseUser.providerData;
     for (var i = 0; i < providerData.length; i++) {
+      console.log(providerData[i].uid)
+      console.log(googleUser.id)
       if (providerData[i].uid === googleUser.id) {
         // We don't need to reauth the Firebase connection.
         return true;
@@ -81,7 +133,7 @@ function isUserEqual(googleUser, firebaseUser) {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [userExists, setUserExists] = useState(false);
+  const [userExists, setUserExists] = useState(null);
 
   return (
     <AuthContext.Provider
@@ -115,51 +167,7 @@ export const AuthProvider = ({ children }) => {
         //---------------------------------
         loginWithGoogle: async () => {
           setLoading(true);
-
-          try {
-
-            const googleResult = await Google.logInAsync({
-              iosClientId: IOS_CLIENT_ID,
-              androidClientId: ANDROID_CLIENT_ID,
-            });
-
-            if (googleResult.type === "success") {
-              // In order to get firebase users
-              var unsubscribe = firebase.auth().onAuthStateChanged(async (firebaseUser) => {
-                unsubscribe();
-                setUserExists(isUserEqual(googleResult.user, firebaseUser))
-              });
-
-              // Check if the user exists
-              if (userExists) {
-
-                // Starting session
-                let result = await kitty.startSession({
-                  username: googleResult.user.email,
-                  authParams: {
-                    accessToken: googleResult.accessToken,
-                    idToken: googleResult.accessToken
-                  },
-                });
-
-                setLoading(false);
-
-                if (result.failed) {
-                  console.log('Could not login');
-                }
-
-              } else {
-                console.log("This user does not exist: ", googleResult.user)
-                setLoading(false);
-              }
-
-            }
-          }
-          catch (error) {
-            console.log("Could not login", error);
-            setLoading(false);
-          }
-
+          await onGoogleSignIn();
         },
         // --------------------------------
         // -------- Email register --------
@@ -195,7 +203,7 @@ export const AuthProvider = ({ children }) => {
                     .then(async () => {
 
                       // Inserting all the user data to the cloud firestore and create user
-                      
+                      await createUser(data);
 
                       // Starting session
                       const result = await kitty.startSession({
@@ -206,8 +214,6 @@ export const AuthProvider = ({ children }) => {
                       });
 
                       setLoading(false);
-
-                      console.log(result)
 
                       if (result.failed) {
                         console.log('Could not login');
@@ -238,34 +244,38 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
 
             if (googleResult.type === "success") {
+
               // Then you can use the Google REST API
               // In order to get firebase users
               var unsubscribe = firebase.auth().onAuthStateChanged(async (firebaseUser) => {
                 unsubscribe();
-                setUserExists(isUserEqual(googleResult.user, firebaseUser))
+
+                if (!isUserEqual(googleResult.user, firebaseUser)) {
+                  // Returning data to SignUpScreen2
+                  return googleResult;
+                }
+                else {
+                  // If the user exists log in with the google credentials
+                  setLoading(true);
+
+                  // Starting session
+                  let result = await kitty.startSession({
+                    username: googleResult.user.email,
+                    authParams: {
+                      accessToken: googleResult.accessToken,
+                      idToken: googleResult.idToken
+                    },
+                  });
+
+                  setLoading(false);
+
+                  if (result.failed) {
+                    console.log('Could not login');
+                    return;
+                  }
+                }
               });
 
-              if (!userExists) {
-                // Returning data to SignUpScreen2
-                return googleResult;
-              }
-              else {
-                // If the user exists log in with the google credentials
-                console.log("This user already exists: ", googleResult.user.email)
-
-                // Starting session
-                let result = await kitty.startSession({
-                  username: googleUser.user.email,
-                  authParams: {
-                    accessToken: googleUser.accessToken,
-                    idToken: googleUser.accessToken
-                  },
-                });
-
-                if (result.failed) {
-                  console.log('Could not login');
-                }
-              }
             }
 
           } catch (error) {

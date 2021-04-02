@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 // Importing components
 import * as Colors from '../../styles/colors';
 import Button from '../../components/atoms/Button';
+import CircleButton from '../../components/atoms/CircleButton';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 
@@ -20,7 +21,7 @@ export default function LocalOrTripverScreen({ route, navigation }) {
 
   const [userType, setUserType] = React.useState(null)
 
-  const { register, loading } = useContext(AuthContext);
+  const { loading } = useContext(AuthContext);
 
   // Getting the data from the other screens
   var data = route.params;
@@ -61,26 +62,26 @@ export default function LocalOrTripverScreen({ route, navigation }) {
       <SafeAreaView style={styles.container}>
         <ImageBackground source={images.localOrTripverBackground.uri} style={styles.background}>
           <View style={styles.header}>
-          <Icon
-            name='arrowleft'
-            color={Colors.WHITE}
-            style={styles.icon_left}
-            size={30}
-            onPress={() => navigation.goBack()}
-          />
-          <Avatar
+            <Icon
+              name='arrowleft'
+              color={Colors.WHITE}
+              style={styles.icon_left}
+              size={30}
+              onPress={() => navigation.goBack()}
+            />
+            <Avatar
               size="small"
               rounded
-              icon={{ name: 'info', color: Colors.PRIMARY, size: 30,  }}
+              icon={{ name: 'info', color: Colors.PRIMARY, size: 30, }}
               containerStyle={styles.info_button}
-              onPress={() => console.log("fadsf")}
+              onPress={() => console.log("Open info modal")}
             ></Avatar>
           </View>
           <View>
             <Text style={styles.title_text}>Tripver or Local?</Text>
             <View>
               {/* Local */}
-              <Avatar
+              {/* <Avatar
                 size="xlarge"
                 width={styles.profile_picture.width}
                 height={styles.profile_picture.height}
@@ -89,11 +90,21 @@ export default function LocalOrTripverScreen({ route, navigation }) {
                 imageProps={{ resizeMode: 'cover' }} // Rescaling the image
                 containerStyle={userType == 0 ? styles.avatar_local_selected : styles.avatar_local}
                 onPress={() => onSelected(0)}
-              ></Avatar>
+              ></Avatar> */}
+              <CircleButton
+                showText={true}
+                title="Local"
+                icon = 'city-variant-outline'
+                style={!userType ? styles.avatar_local_selected : styles.avatar_local}
+                iconStyle = {!userType ? { color: Colors.WHITE } : { color: Colors.SECONDARY }}
+                textStyle={!userType ? { color: Colors.WHITE } : { color: Colors.PRIMARY }}
+                onPress={() => onSelected(0)}
+                >
+              </CircleButton>
             </View>
             <View>
               {/* Tripver */}
-              <Avatar
+              {/* <Avatar
                 size="xlarge"
                 width={styles.profile_picture.width}
                 height={styles.profile_picture.height}
@@ -102,7 +113,17 @@ export default function LocalOrTripverScreen({ route, navigation }) {
                 imageProps={{ resizeMode: 'cover' }} // Rescaling the image
                 containerStyle={userType == 1 ? styles.avatar_tripver_selected : styles.avatar_tripver}
                 onPress={() => onSelected(1)}
-              ></Avatar>
+              ></Avatar> */}
+              <CircleButton
+                showText={true}
+                title="Tripver"
+                icon = 'bag-personal-outline'
+                style={userType == 1 ? styles.avatar_tripver_selected : styles.avatar_tripver}
+                iconStyle = {userType ? {color: Colors.WHITE } : { color: Colors.SECONDARY}}
+                textStyle={userType ? {color: Colors.WHITE } : { color: Colors.PRIMARY}}
+                onPress={() => onSelected(1)}
+                >
+              </CircleButton>
             </View>
             <Button
               title="Next"
@@ -128,8 +149,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection:'row',
-    justifyContent:'space-between'
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   title_text: {
     fontSize: 30,
@@ -182,7 +203,7 @@ const styles = StyleSheet.create({
   info_button: {
     alignSelf: 'flex-start',
     marginTop: 10,
-    marginRight:15,
+    marginRight: 15,
   },
 
   next_button: {

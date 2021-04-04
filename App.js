@@ -11,7 +11,7 @@ async function loadResourcesAsync() {
       images.localOrTripverBackground.uri,
       images.signUpBackground.uri,
       images.loginBackground.uri,
-      images.tripverLogov2.uri,
+      images.tripverLogo.uri,
     ]),
   ]);
 }

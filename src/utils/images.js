@@ -8,8 +8,8 @@ const images = {
   signUpBackground: {
     uri: require('../assets/images/backgrounds/signUpBackground.jpg')
   },
-  tripverLogov2: {
-    uri: require('../assets/images/tripverLogov2.png')
+  tripverLogo: {
+    uri: require('../assets/images/tripverLogo.png')
   },
   hobbies: {
     uri: require('../assets/images/hobbies.png')

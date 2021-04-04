@@ -15,6 +15,9 @@ import GoogleButton from '../components/atoms/Google/GoogleButton';
 import * as Colors from '../styles/colors';
 import GlobalStyles from '../styles/GlobalStyles';
 
+// Importing image paths
+import { images } from '../utils/images'
+
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,14 +36,14 @@ export default function LoginScreen({ navigation }) {
       scrollEnabled={false}
     >
       <SafeAreaView style={GlobalStyles.androidSafeArea}>
-        <ImageBackground source={require('../assets/images/backgrounds/loginBackground.jpg')} style={styles.background}>
+        <ImageBackground source={images.loginBackground.uri} style={styles.background}>
           <Link
             title="Sign up"
             onPress={() => navigation.navigate('Signup')}
             style={styles.sing_up}
           />
           <View style={styles.login_container}>
-            <Image source={require('../assets/images/tripverLogov2.png')} style={styles.logo}></Image>
+            <Image source={images.tripverLogo.uri} resizeMode="contain" style={styles.logo}></Image>
             <Title style={styles.title_text}>Tripver</Title>
             <FormInput
               labelName="Email"

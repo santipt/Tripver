@@ -40,7 +40,7 @@ export default function LoginScreen({ navigation }) {
             onPress={() => navigation.navigate('Login')}
             style={styles.sing_up}
           />
-          <Image source={require('../../assets/images/tripverLogov2.png')} resizeMode="contain" style={styles.logo}></Image>
+          <Image source={images.tripverLogo.uri} resizeMode="contain" style={styles.logo}></Image>
           <Title style={styles.title_text}>Welcome to Tripver</Title>
           <View style={styles.login_container}>
             <LongButton

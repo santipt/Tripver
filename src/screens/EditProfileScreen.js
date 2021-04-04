@@ -1,5 +1,5 @@
 // Importing react utilities
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import { StyleSheet, View, SafeAreaView, Text, TextInput, ScrollView } from 'react-native';
 import { Card, Avatar } from 'react-native-elements';
@@ -8,6 +8,7 @@ import { Card, Avatar } from 'react-native-elements';
 import * as Colors from '../styles/colors';
 import Button from '../components/atoms/Button'
 import Selector from '../components/molecules/Selector'
+import { firebase } from '../firebase/index'
 
 // Lists
 import listOfHobbies from '../utils/hobbies'
@@ -18,9 +19,28 @@ import listOfCountries from '../utils/countries'
 export default function EditProfileScreen({ navigation }) {
   const [description, onChangeText] = React.useState('The idea with React Native Elements is more about component structure than actual design.The idea with React Native Elements is more about');
 
-  const [selectedHobbies, onChangeHobbies] = React.useState([])
-  const [selectedLanguages, onChangeLanguages] = React.useState([])
-  const [selectedCountries, onChangeCountries] = React.useState([])
+  const [selectedHobbies, onChangeHobbies] = useState([])
+  const [selectedLanguages, onChangeLanguages] = useState([])
+  const [selectedCountries, onChangeCountries] = useState([])
+  const [user, setUser] = React.useState([])
+
+
+  useEffect(() => {
+
+    var userId = firebase.auth().currentUser.uid;
+    console.log(userId)
+
+    const subscriber = firebase.firestore()
+      .collection('users')
+      .doc(userId)
+      .onSnapshot(documentSnapshot => {
+        setUser(documentSnapshot.data())
+        console.log(user)
+      });
+
+    // Stop listening for updates when no longer required
+    return () => subscriber();
+  },[]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -116,9 +136,10 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: 8,
     marginBottom: 10,
-    backgroundColor: Colors.GRAY_LIGHT,
     color: Colors.GRAY_DARK,
-
+    borderColor: Colors.GRAY_MEDIUM,
+    borderRadius: 14,
+    borderWidth: 2,
   },
 
   description_title: {
@@ -129,20 +150,21 @@ const styles = StyleSheet.create({
 
   text_input: {
     padding: 5,
-    color: Colors.GRAY_DARK,
+    color: Colors.PRIMARY,
   },
 
   selector_container: {
-    borderRadius: 14,
     padding: 10,
     marginBottom: 10,
-    backgroundColor: Colors.GRAY_LIGHT,
-    color: Colors.GRAY_DARK,
+    //backgroundColor: Colors.GRAY_LIGHT,
+    borderColor: Colors.GRAY_MEDIUM,
+    borderRadius: 14,
+    borderWidth: 2,
   },
 
   buttons_container: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   save_button: {
     marginRight: 7,

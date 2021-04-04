@@ -1,7 +1,8 @@
-import React  from 'react';
+import React from 'react';
 import { Asset } from 'expo-asset';
 import { images } from './src/utils/images'
 import Providers from './src/navigation';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 
 // Preloading the backgrounds
 async function loadResourcesAsync() {
@@ -15,7 +16,11 @@ async function loadResourcesAsync() {
   ]);
 }
 
-export default  function App() {
+export default function App() {
   loadResourcesAsync()
-  return <Providers />;
+  return (
+    <ActionSheetProvider>
+      <Providers />
+    </ActionSheetProvider>
+  );
 }

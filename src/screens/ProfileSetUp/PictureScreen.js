@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, View, ImageBackground, SafeAreaView, Text, } from 'react-native';
+import { StyleSheet, View, ImageBackground, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Avatar, Accessory } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
@@ -134,34 +134,36 @@ export default function PictureScreen({ route, navigation, props }) {
                     <View style={styles.content}>
                         <Text style={styles.title_text}>Say{'\n'} cheese :)</Text>
                         <View style={styles.header}>
-                            {selectedImage != null ?
-                                <Avatar
-                                    size="xlarge"
-                                    width={styles.profile_picture.width}
-                                    height={styles.profile_picture.height}
-                                    rounded
-                                    source={{ uri: selectedImage}}
-                                    imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                                >
-                                    <Accessory
-                                        style={styles.edit_picture}
-                                        onPress={onOpenActionSheet}
-                                        iconStyle={styles.edit_icon} />
-                                </Avatar>
-                                : <Avatar
-                                    size="xlarge"
-                                    width={styles.profile_picture.width}
-                                    height={styles.profile_picture.height}
-                                    rounded
-                                    imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                                    icon={{ name: 'camera', type: 'font-awesome-5', color: 'rgba(0,0,0,0.5)' }}
-                                    overlayContainerStyle={{ backgroundColor: 'rgba(255,255,255,0.5)' }}
-                                >
-                                    <Accessory
-                                        style={styles.edit_picture}
-                                        onPress={onOpenActionSheet}
-                                        iconStyle={styles.edit_icon} />
-                                </Avatar>}
+                            <TouchableOpacity onPress={() => onOpenActionSheet()}>
+                                {selectedImage != null ?
+                                    <Avatar
+                                        size="xlarge"
+                                        width={styles.profile_picture.width}
+                                        height={styles.profile_picture.height}
+                                        rounded
+                                        source={{ uri: selectedImage }}
+                                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                                    >
+                                        <Accessory
+                                            style={styles.edit_picture}
+                                            onPress={onOpenActionSheet}
+                                            iconStyle={styles.edit_icon} />
+                                    </Avatar>
+                                    : <Avatar
+                                        size="xlarge"
+                                        width={styles.profile_picture.width}
+                                        height={styles.profile_picture.height}
+                                        rounded
+                                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                                        icon={{ name: 'camera', type: 'font-awesome-5', color: 'rgba(0,0,0,0.5)' }}
+                                        overlayContainerStyle={{ backgroundColor: 'rgba(255,255,255,0.5)' }}
+                                    >
+                                        {/* <Accessory
+                                            style={styles.edit_picture}
+                                            onPress={onOpenActionSheet}
+                                            iconStyle={styles.edit_icon} /> */}
+                                    </Avatar>}
+                            </TouchableOpacity>
                         </View>
                         <Button
                             title="Next"

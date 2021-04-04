@@ -35,9 +35,7 @@ async function onGoogleSignUp(googleUser, data) {
       },
     });
 
-    if (result.failed) {
-      console.log('Could not login');
-    }
+    return result;
 
   }).catch((error) => {
     console.log(error)
@@ -140,7 +138,15 @@ export const AuthProvider = ({ children }) => {
             //---------------------------------
             if (data.googleData != null) {
               console.log("GOOGLE AUTH")
-              onGoogleSignUp(data.googleData, data)
+              
+              var res = onGoogleSignUp(data.googleData, data);
+
+              setLoading(false);
+
+              if (res.failed) {
+                console.log('Could not login');
+              }
+              
 
             }
 

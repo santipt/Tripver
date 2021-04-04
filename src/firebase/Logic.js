@@ -14,7 +14,6 @@ const getAge = (dateString) => {
 }
 
 async function uploadProfilePicture(uri,name) {
-    // Why are we using XMLHttpRequest? See:
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function() {
@@ -48,8 +47,8 @@ export async function createUser(data) {
     var name;
     var email;
     var profile_picture;
-    var age = getAge(data.birth_date.replace(/-/g, '/'));
-    var birth_date = new Date(data.birth_date.replace(/-/g, '/'));
+    var age = getAge(data.birth_date);//getAge(data.birth_date.replace(/-/g, '/'));
+    var birth_date = new Date(data.birth_date);//new Date(data.birth_date.replace(/-/g, '/'));
 
     try {
 

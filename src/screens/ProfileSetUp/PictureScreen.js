@@ -1,10 +1,9 @@
 // Importing react utilities
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, View, ImageBackground, SafeAreaView, Text, } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Avatar, Accessory } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
-
 
 // Importing icons
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -14,13 +13,19 @@ import * as Colors from '../../styles/colors';
 import Button from '../../components/atoms/Button';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
-import {uploadProfilePicture} from '../../firebase/Logic'
+import GlobalStyles from '../../styles/GlobalStyles';
+import ProgressLine from '../../components/atoms/ProgressLine'
+import { useActionSheet } from '@expo/react-native-action-sheet'
 
 // Importing image paths
 import { images } from '../../utils/images'
 
-export default function PictureScreen({ route, navigation }) {
-    const [selectedImage, setSelectedImage] = React.useState(null);
+export default function PictureScreen({ route, navigation, props }) {
+
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    // To open the camera/library option
+    const { showActionSheetWithOptions } = useActionSheet();
 
     // Getting the data from the other screens
     var data = route.params;
@@ -31,12 +36,40 @@ export default function PictureScreen({ route, navigation }) {
         return <Loading />;
     }
 
-    /*if(data.googleData != undefined){
-        setSelectedImage(data.googleData.user.photoUrl)
-    }*/
+    // Running only the screen is loaded
+    useEffect(() => {
+        if (data.googleData != undefined) {
+            setSelectedImage(data.googleData.user.photoUrl)
+        }
+    }, []);
+
+
+    let onOpenActionSheet = () => {
+        // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+        const options = ['Take Photo', 'Choose from library', 'Cancel'];
+        const cancelButtonIndex = 2;
+
+        showActionSheetWithOptions(
+            {
+                options,
+                cancelButtonIndex,
+            },
+            buttonIndex => {
+                // Do something here depending on the button index selected
+                if (buttonIndex == 0) {
+                    console.log("Open Camera")
+                    openCamera();
+                }
+                else if (buttonIndex == 1) {
+                    console.log("Open Photo Library")
+                    openImageLibrary();
+                }
+            },
+        );
+    };
 
     // Open photo library from the phone and save the uri in order to show the image
-    let openImagePickerAsync = async () => {
+    let openImageLibrary = async () => {
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
@@ -45,12 +78,30 @@ export default function PictureScreen({ route, navigation }) {
         }
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync();
+        //console.log(pickerResult.uri);
+
+        if (pickerResult.cancelled === true) {
+            return;
+        }
+        setSelectedImage(pickerResult.uri);
+    };
+
+    // Open camera from the phone and save the uri in order to show the image
+    let openCamera = async () => {
+        let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert("Permission to access camera is required!");
+            return;
+        }
+
+        let pickerResult = await ImagePicker.launchCameraAsync();
         //console.log(pickerResult);
 
         if (pickerResult.cancelled === true) {
             return;
         }
-        setSelectedImage({ localUri: pickerResult.uri });
+        setSelectedImage(pickerResult.uri);
     };
 
     const checkTextInput = () => {
@@ -60,9 +111,9 @@ export default function PictureScreen({ route, navigation }) {
 
             //Checked Successfully
             navigation.navigate('AboutMeScreen', data)
-            //uploadProfilePicture(data.profile_picture, 'name.jpg')
         }
     };
+
 
     return (
         <KeyboardAwareScrollView
@@ -71,7 +122,7 @@ export default function PictureScreen({ route, navigation }) {
             contentContainerStyle={styles.container}
             scrollEnabled={false}
         >
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={GlobalStyles.androidSafeArea}>
                 <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
                     <Icon
                         name='arrowleft'
@@ -80,8 +131,8 @@ export default function PictureScreen({ route, navigation }) {
                         size={30}
                         onPress={() => navigation.goBack()}
                     />
-                    <View style={styles.sing_up_container}>
-                        <Text style={styles.title_text}> Say cheese :)</Text>
+                    <View style={styles.content}>
+                        <Text style={styles.title_text}>Say{'\n'} cheese :)</Text>
                         <View style={styles.header}>
                             {selectedImage != null ?
                                 <Avatar
@@ -89,12 +140,12 @@ export default function PictureScreen({ route, navigation }) {
                                     width={styles.profile_picture.width}
                                     height={styles.profile_picture.height}
                                     rounded
-                                    source={{ uri: selectedImage.localUri }}
+                                    source={{ uri: selectedImage}}
                                     imageProps={{ resizeMode: 'cover' }} // Rescaling the image
                                 >
                                     <Accessory
                                         style={styles.edit_picture}
-                                        onPress={openImagePickerAsync}
+                                        onPress={onOpenActionSheet}
                                         iconStyle={styles.edit_icon} />
                                 </Avatar>
                                 : <Avatar
@@ -108,7 +159,7 @@ export default function PictureScreen({ route, navigation }) {
                                 >
                                     <Accessory
                                         style={styles.edit_picture}
-                                        onPress={openImagePickerAsync}
+                                        onPress={onOpenActionSheet}
                                         iconStyle={styles.edit_icon} />
                                 </Avatar>}
                         </View>
@@ -121,6 +172,7 @@ export default function PictureScreen({ route, navigation }) {
                             showIcon={true}
                         />
                     </View>
+                    <ProgressLine value='42%'></ProgressLine>
                 </ImageBackground>
             </SafeAreaView>
         </KeyboardAwareScrollView>
@@ -137,8 +189,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        alignItems: 'center',
-        margin: 20,
     },
     profile_picture: {
         width: 200,
@@ -153,20 +203,24 @@ const styles = StyleSheet.create({
     edit_icon: {
         fontSize: 20,
     },
-    sing_up_container: {
+    content: {
         flex: 1,
-        alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     title_text: {
         fontSize: 30,
-        marginBottom: 60,
-        marginTop: 60,
+        position: 'absolute',
+        top: 60,
+        textAlign: 'center',
     },
     icon_left: {
         marginLeft: 15,
         marginTop: 10,
     },
     next_button: {
-        marginTop: 100,
+        marginTop: 20,
+        position: 'absolute',
+        bottom: 60,
     }
 });

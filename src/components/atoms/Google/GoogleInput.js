@@ -25,7 +25,7 @@ export default function GoogleInput({ labelName, focus, ...props }) {
                     enablePoweredByContainer={false}
                     autoFocus={true}
                     keyboardShouldPersistTaps='always'
-                    placeholder='Search location'
+                    placeholder='Search city'
                     fetchDetails={true}
                     onFail={(error) => console.error(error)}
                     onPress={(data, details = null) => {

@@ -22,30 +22,28 @@ import { images } from '../../utils/images'
 
 export default function PictureScreen({ route, navigation, props }) {
 
-    const [selectedImage, setSelectedImage] = useState(null);
-
     // To open the camera/library option
     const { showActionSheetWithOptions } = useActionSheet();
+    const { loading } = useContext(AuthContext);
+
+    const [selectedImage, setSelectedImage] = useState(null);
 
     // Getting the data from the other screens
     var data = route.params;
 
-    const { loading } = useContext(AuthContext);
+    // Running only the screen is loaded
+    useEffect(() => {
+        if (data.googleData != undefined && selectedImage == null) {
+            setSelectedImage(data.googleData.user.photoUrl)
+        }
+    },[]);
 
     if (loading) {
         return <Loading />;
     }
 
-    // Running only the screen is loaded
-    useEffect(() => {
-        if (data.googleData != undefined) {
-            setSelectedImage(data.googleData.user.photoUrl)
-        }
-    }, []);
-
-
     let onOpenActionSheet = () => {
-        // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+        
         const options = ['Take Photo', 'Choose from library', 'Cancel'];
         const cancelButtonIndex = 2;
 
@@ -107,7 +105,7 @@ export default function PictureScreen({ route, navigation, props }) {
     const checkTextInput = () => {
 
         if (selectedImage != null && selectedImage != '') {
-            data.profile_picture = selectedImage.localUri;
+            data.profile_picture = selectedImage;
 
             //Checked Successfully
             navigation.navigate('AboutMeScreen', data)
@@ -116,12 +114,6 @@ export default function PictureScreen({ route, navigation, props }) {
 
 
     return (
-        <KeyboardAwareScrollView
-            style={{ backgroundColor: Colors.GRAY_LIGHT }}
-            resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={styles.container}
-            scrollEnabled={false}
-        >
             <SafeAreaView style={GlobalStyles.androidSafeArea}>
                 <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
                     <Icon
@@ -177,7 +169,6 @@ export default function PictureScreen({ route, navigation, props }) {
                     <ProgressLine value='42%'></ProgressLine>
                 </ImageBackground>
             </SafeAreaView>
-        </KeyboardAwareScrollView>
     );
 }
 

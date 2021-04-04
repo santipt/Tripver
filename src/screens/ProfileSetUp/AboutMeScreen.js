@@ -11,6 +11,8 @@ import * as Colors from '../../styles/colors';
 import Button from '../../components/atoms/Button';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
+import GlobalStyles from '../../styles/GlobalStyles';
+import ProgressLine from '../../components/atoms/ProgressLine'
 
 // Importing images paths
 import { images } from '../../utils/images'
@@ -31,13 +33,13 @@ export default function AboutMeScreen({ route, navigation }) {
   }
 
   const checkTextInput = () => {
-    
+
     data.about_me = description;
 
     if (description != '') {
       //Checked Successfully
       navigation.navigate('HobbiesScreen', data)
-    }else{
+    } else {
       navigation.navigate('HobbiesScreen', data)
     }
   };
@@ -50,7 +52,7 @@ export default function AboutMeScreen({ route, navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
           <Icon
             name='arrowleft'
@@ -84,6 +86,7 @@ export default function AboutMeScreen({ route, navigation }) {
               showIcon={true}
             />
           </View>
+          <ProgressLine value='56%'></ProgressLine>
         </ImageBackground>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     position: 'absolute',
     top: 60,
-    textAlign:'center',
+    textAlign: 'center',
   },
   icon_left: {
     marginLeft: 15,

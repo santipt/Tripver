@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, ImageBackground, SafeAreaView, Text, TextInput } from 'react-native';
+import { StyleSheet, View, ImageBackground, SafeAreaView, Text, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Card } from 'react-native-elements';
 
@@ -14,7 +14,8 @@ import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 import RadioButton from '../../components/atoms/RadioButton'
-
+import GlobalStyles from '../../styles/GlobalStyles';
+import ProgressLine from '../../components/atoms/ProgressLine'
 
 // Importing images paths
 import { images } from '../../utils/images'
@@ -53,7 +54,7 @@ export default function GenderScreen({ route, navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
           <Icon
             name='arrowleft'
@@ -62,12 +63,13 @@ export default function GenderScreen({ route, navigation }) {
             size={30}
             onPress={() => navigation.goBack()}
           />
-          <View>
+          <View style={styles.content}>
             <Text style={styles.title_text}>How do you identify?</Text>
             <Card style={styles.card_container} containerStyle={styles.card}>
               <RadioButton value={checked} onValueChange={checked => setChecked(checked)} />
-              {checked == 'Other' ? <FormInput style={styles.form_input} value={gender} onChangeText={(text) => setGender(text)} labelName="Enter preferred gender"></FormInput> : null}
+              {checked == 'other' ? <FormInput style={styles.form_input} value={gender} onChangeText={(text) => setGender(text)} labelName="Enter preferred gender"></FormInput> : null}
             </Card>
+            { }
             <Button
               title="Next"
               labelStyle={styles.loginButtonLabel}
@@ -76,6 +78,7 @@ export default function GenderScreen({ route, navigation }) {
               showIcon={true}
             />
           </View>
+          <ProgressLine value='28%'></ProgressLine>
         </ImageBackground>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -91,12 +94,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 
   title_text: {
     fontSize: 30,
-    marginBottom: 65,
-    marginTop: 60,
-    alignSelf: 'center'
+    position: 'relative',
+    textAlign: 'center',
+    marginBottom:60,
+    marginTop:-20,
   },
 
   icon_left: {
@@ -106,8 +115,7 @@ const styles = StyleSheet.create({
 
   card: {
     borderRadius: 30,
-    alignContent: 'center',
-    marginTop: 60,
+    width: '90%',
   },
 
   form_input: {
@@ -118,7 +126,8 @@ const styles = StyleSheet.create({
   },
 
   next_button: {
-    alignSelf: 'center',
-    marginTop: 80,
+    marginTop: 100,
+    marginBottom:-20,
+    position: 'relative',
   }
 });

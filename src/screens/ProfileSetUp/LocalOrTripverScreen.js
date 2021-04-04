@@ -13,6 +13,8 @@ import Button from '../../components/atoms/Button';
 import CircleButton from '../../components/atoms/CircleButton';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
+import GlobalStyles from '../../styles/GlobalStyles';
+import ProgressLine from '../../components/atoms/ProgressLine'
 
 // Importing images paths
 import { images } from '../../utils/images'
@@ -59,7 +61,7 @@ export default function LocalOrTripverScreen({ route, navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.localOrTripverBackground.uri} style={styles.background}>
           <View style={styles.header}>
             <Icon
@@ -77,7 +79,7 @@ export default function LocalOrTripverScreen({ route, navigation }) {
               onPress={() => console.log("Open info modal")}
             ></Avatar>
           </View>
-          <View>
+          <View style={styles.content}>
             <Text style={styles.title_text}>Tripver or Local?</Text>
             <View>
               {/* Local */}
@@ -94,12 +96,12 @@ export default function LocalOrTripverScreen({ route, navigation }) {
               <CircleButton
                 showText={true}
                 title="Local"
-                icon = 'city-variant-outline'
-                style={!userType ? styles.avatar_local_selected : styles.avatar_local}
-                iconStyle = {!userType ? { color: Colors.WHITE } : { color: Colors.SECONDARY }}
-                textStyle={!userType ? { color: Colors.WHITE } : { color: Colors.PRIMARY }}
+                icon='city-variant-outline'
+                style={userType == 0 ? styles.avatar_local_selected : styles.avatar_local}
+                iconStyle={userType == 0 ? { color: Colors.WHITE } : { color: Colors.SECONDARY }}
+                textStyle={userType == 0 ? { color: Colors.WHITE } : { color: Colors.PRIMARY }}
                 onPress={() => onSelected(0)}
-                >
+              >
               </CircleButton>
             </View>
             <View>
@@ -117,12 +119,12 @@ export default function LocalOrTripverScreen({ route, navigation }) {
               <CircleButton
                 showText={true}
                 title="Tripver"
-                icon = 'bag-personal-outline'
-                style={userType == 1 ? styles.avatar_tripver_selected : styles.avatar_tripver}
-                iconStyle = {userType ? {color: Colors.WHITE } : { color: Colors.SECONDARY}}
-                textStyle={userType ? {color: Colors.WHITE } : { color: Colors.PRIMARY}}
+                icon='bag-personal-outline'
+                style={userType ? styles.avatar_tripver_selected : styles.avatar_tripver}
+                iconStyle={userType ? { color: Colors.WHITE } : { color: Colors.SECONDARY }}
+                textStyle={userType ? { color: Colors.WHITE } : { color: Colors.PRIMARY }}
                 onPress={() => onSelected(1)}
-                >
+              >
               </CircleButton>
             </View>
             <Button
@@ -133,6 +135,7 @@ export default function LocalOrTripverScreen({ route, navigation }) {
               showIcon={true}
             />
           </View>
+          <ProgressLine value='14%'></ProgressLine>
         </ImageBackground>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -152,11 +155,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   title_text: {
     fontSize: 30,
-    marginBottom: 65,
-    marginTop: 40,
-    alignSelf: 'center'
+    position: 'absolute',
+    top: 60,
+    textAlign: 'center',
+    alignSelf:'center',
   },
   icon_left: {
     marginLeft: 15,
@@ -188,14 +196,12 @@ const styles = StyleSheet.create({
     borderRadius: 120,
     alignSelf: 'flex-end',
     marginRight: 50,
-    marginTop: 30,
   },
 
   avatar_tripver_selected: {
     backgroundColor: Colors.SECONDARY,
     alignSelf: 'flex-end',
     marginRight: 50,
-    marginTop: 30,
     borderColor: Colors.WHITE,
     borderWidth: 8,
   },
@@ -207,7 +213,9 @@ const styles = StyleSheet.create({
   },
 
   next_button: {
-    marginTop: 60,
-    alignSelf: 'center'
+    marginTop: 20,
+    position: 'absolute',
+    bottom: 60,
+    alignSelf:'center'
   }
 });

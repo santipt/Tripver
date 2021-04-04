@@ -12,6 +12,8 @@ import Button from '../../components/atoms/Button';
 import Selector from '../../components/molecules/Selector'
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
+import GlobalStyles from '../../styles/GlobalStyles';
+import ProgressLine from '../../components/atoms/ProgressLine'
 
 // Lists
 import listOfHobbies from '../../utils/hobbies'
@@ -55,7 +57,7 @@ export default function HobbiesScreen({ route, navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
           <Icon
             name='arrowleft'
@@ -65,9 +67,9 @@ export default function HobbiesScreen({ route, navigation }) {
             onPress={() => navigation.goBack()}
           />
           <View style={styles.content}>
-            <Text style={styles.title_text}>Select at least 5 hobbies</Text>
+            <Text style={styles.title_text}>Select at least 3 hobbies</Text>
             <TouchableOpacity style={maxNumberOfItems > 8 ? styles.selector_container_max : styles.selector_container}>
-              <ImageBackground source={images.hobbies.uri} style={maxNumberOfItems > 8 ? styles.hobbies_background_max : styles.hobbies_background} imageStyle={maxNumberOfItems > 8 ? styles.image_style_max : styles.image_style}>
+              <ImageBackground resizeMode="contain" source={images.hobbies.uri} style={maxNumberOfItems > 8 ? styles.hobbies_background_max : styles.hobbies_background} imageStyle={maxNumberOfItems > 8 ? styles.image_style_max : styles.image_style}>
                 <Selector
                   listName="hobbies"
                   list={listOfHobbies}
@@ -87,6 +89,7 @@ export default function HobbiesScreen({ route, navigation }) {
               showIcon={true}
             />
           </View>
+          <ProgressLine value='70%'></ProgressLine>
         </ImageBackground>
       </SafeAreaView>
     </KeyboardAwareScrollView>

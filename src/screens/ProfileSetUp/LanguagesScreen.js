@@ -12,6 +12,8 @@ import Button from '../../components/atoms/Button';
 import Selector from '../../components/molecules/Selector'
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
+import GlobalStyles from '../../styles/GlobalStyles';
+import ProgressLine from '../../components/atoms/ProgressLine'
 
 // Lists
 import listOfLanguages from '../../utils/languages'
@@ -51,7 +53,7 @@ export default function LanguagesScreen({ route, navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
           <Icon
             name='arrowleft'
@@ -63,7 +65,7 @@ export default function LanguagesScreen({ route, navigation }) {
           <View style={styles.content}>
             <Text style={styles.title_text}>Select languages you know {'\n'}or you are learning</Text>
             <View style={maxNumberOfItems > 8 ? styles.selector_container_max : styles.selector_container}>
-              <ImageBackground source={images.languages.uri} style={ maxNumberOfItems > 8 ? styles.hobbies_background_max : styles.hobbies_background} imageStyle={ maxNumberOfItems > 8 ? styles.image_style_max : styles.image_style}>
+              <ImageBackground resizeMode="contain" source={images.languages.uri} style={maxNumberOfItems > 8 ? styles.hobbies_background_max : styles.hobbies_background} imageStyle={maxNumberOfItems > 8 ? styles.image_style_max : styles.image_style}>
                 <Selector listName="languages" list={listOfLanguages}
                   onSelectedItemObjectsChange={(selectedItems) => {
                     setMaxNumberOfItems(selectedItems.length)
@@ -80,6 +82,7 @@ export default function LanguagesScreen({ route, navigation }) {
               showIcon={true}
             />
           </View>
+          <ProgressLine value='84%'></ProgressLine>
         </ImageBackground>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -96,18 +99,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  hobbies_background_max:{
+  hobbies_background_max: {
   },
 
   image_style: {
     width: '42%',
     height: '60%',
-    marginLeft:90,
-    marginTop:50,
+    marginLeft: 90,
+    marginTop: 50,
   },
 
-  image_style_max:{
-   display:'none',
+  image_style_max: {
+    display: 'none',
   },
 
   container: {
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     position: 'absolute',
     top: 60,
-    textAlign:'center',
+    textAlign: 'center',
   },
   icon_left: {
     marginLeft: 15,

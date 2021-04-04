@@ -17,7 +17,7 @@ import listOfCountries from '../utils/countries'
 
 export default function EditProfileScreen({ navigation }) {
   const [description, onChangeText] = React.useState('The idea with React Native Elements is more about component structure than actual design.The idea with React Native Elements is more about');
-  
+
   const [selectedHobbies, onChangeHobbies] = React.useState([])
   const [selectedLanguages, onChangeLanguages] = React.useState([])
   const [selectedCountries, onChangeCountries] = React.useState([])
@@ -53,20 +53,21 @@ export default function EditProfileScreen({ navigation }) {
               />
             </View>
             <View style={styles.selector_container}>
-              <Selector listName="hobbies" list={listOfHobbies} onSelectedItemObjectsChange = {(selectedItems) => onChangeHobbies(selectedItems)}></Selector>
+              <Selector listName="hobbies" list={listOfHobbies} onSelectedItemObjectsChange={(selectedItems) => onChangeHobbies(selectedItems)}></Selector>
             </View>
             <View style={styles.selector_container}>
-              <Selector listName="languages" list={listOfLanguages} onSelectedItemObjectsChange = {(selectedItems) => onChangeLanguages(selectedItems)}></Selector>
+              <Selector listName="languages" list={listOfLanguages} onSelectedItemObjectsChange={(selectedItems) => onChangeLanguages(selectedItems)}></Selector>
             </View>
             <View style={styles.selector_container}>
-              <Selector listName="countries" list={listOfCountries} onSelectedItemObjectsChange = {(selectedItems) => onChangeCountries(selectedItems)}></Selector>
+              <Selector listName="countries" list={listOfCountries} onSelectedItemObjectsChange={(selectedItems) => onChangeCountries(selectedItems)}></Selector>
             </View>
             <View style={styles.buttons_container}>
-              <Button style={styles.save_button} title="Save" 
-                onPress={() => {}}></Button>
+              <Button style={styles.save_button} title="Save"
+                onPress={() => { }}></Button>
               <Button style={styles.cancel_button} title="Cancel"
                 onPress={() => navigation.goBack()}></Button>
             </View>
+            <View style={styles.scrollview_bottom}></View>
           </ScrollView>
         </Card>
       </View>
@@ -104,6 +105,11 @@ const styles = StyleSheet.create({
 
   scrollview: {
     padding: 10,
+    flexGrow: 1,
+  },
+
+  scrollview_bottom: {
+    height: 120,
   },
 
   description_container: {

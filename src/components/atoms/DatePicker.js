@@ -36,22 +36,20 @@ export default function DatePicker({ labelName, focus, ...props }) {
                 style={styles.datePickerStyle}
                 mode="date" // The enum of date, datetime and time
                 placeholder="Select date"
-                format="DD-MM-YYYY"
-                minDate="01-01-1920"
-                maxDate="11-10-2020"
+                format="DD/MM/YYYY"
+                minDate="01/01/1920"
+                maxDate="11/10/2020"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{
                     dateIcon: {
                         display: 'none',
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0,
+                        width: 0,
+                        height: 0,
                     },
                     dateInput: {
                         borderWidth: 0,
-                        height: height / 15,
+                        height: 44,
                         paddingVertical: 5,
                         paddingHorizontal: 10,
                         borderRadius: 30,
@@ -71,15 +69,14 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
     },
-    title:{
-        marginLeft:10,
+    title: {
+        marginLeft: 10,
         fontWeight: 'bold',
         color: Colors.BLACK,
-      },
+    },
     datePickerStyle: {
         width: width / 1.2,
         marginTop: 10,
-    marginBottom: 30,
-
+        marginBottom: 30,
     },
 });

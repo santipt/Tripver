@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 // Importing components
 import * as Colors from '../../styles/colors';
+import GlobalStyles from '../../styles/GlobalStyles';
 import Button from '../../components/atoms/Button';
 import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
@@ -67,8 +68,8 @@ export default function SignupScreen2({ route, navigation }) {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAwareScrollView
+    <SafeAreaView style={GlobalStyles.androidSafeArea}>
+    <KeyboardAwareScrollView
         style={{ backgroundColor: Colors.GRAY_LIGHT }}
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={styles.container}

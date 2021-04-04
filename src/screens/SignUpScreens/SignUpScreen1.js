@@ -13,6 +13,7 @@ import Button from '../../components/atoms/Button';
 import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
+import GlobalStyles from '../../styles/GlobalStyles';
 
 // Importing image paths
 import { images } from '../../utils/images'
@@ -73,7 +74,7 @@ export default function SignupScreen1({ navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
           <Icon
             name='arrowleft'

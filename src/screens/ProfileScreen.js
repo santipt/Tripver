@@ -16,7 +16,7 @@ import listOfHobbies from '../utils/hobbies'
 import listOfLanguages from '../utils/languages'
 import listOfCountries from '../utils/countries'
 
-export default function ProfileScreen({ route, navigation }) {
+export default function ProfileScreen({ navigation }) {
     
     return (
         <SafeAreaView style={styles.container}>

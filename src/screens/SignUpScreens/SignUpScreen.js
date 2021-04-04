@@ -12,6 +12,7 @@ import Link from '../../components/atoms/Link';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 import GoogleButton from '../../components/atoms/Google/GoogleButton';
+import GlobalStyles from '../../styles/GlobalStyles';
 import * as Colors from '../../styles/colors';
 
 // Importing image paths
@@ -32,14 +33,14 @@ export default function LoginScreen({ navigation }) {
       contentContainerStyle={styles.container}
       scrollEnabled={false}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.loginBackground.uri} style={styles.background}>
           <Link
             title="Log In"
             onPress={() => navigation.navigate('Login')}
             style={styles.sing_up}
           />
-          <Image source={require('../../assets/images/tripverLogov2.png')} style={styles.logo}></Image>
+          <Image source={require('../../assets/images/tripverLogov2.png')} resizeMode="contain" style={styles.logo}></Image>
           <Title style={styles.title_text}>Welcome to Tripver</Title>
           <View style={styles.login_container}>
             <LongButton

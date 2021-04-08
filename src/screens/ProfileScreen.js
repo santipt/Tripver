@@ -1,15 +1,25 @@
 // Importing react utilities
-import React, { useContext } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, Button, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 // Importing components
 import LongButton from '../components/atoms/LongButton'
 import SelectedItems from '../components/molecules/SelectedItems'
 import * as Colors from '../styles/colors';
+import { firebase } from '../firebase/index'
+import Loading from '../components/atoms/Loading';
+import { AuthContext } from '../navigation/AuthProvider';
+import CircleButton from '../components/atoms/CircleButton'
+
+// Importing image paths
+import { images } from '../utils/images'
+
 
 // Lists
 import listOfHobbies from '../utils/hobbies'
@@ -17,61 +27,121 @@ import listOfLanguages from '../utils/languages'
 import listOfCountries from '../utils/countries'
 
 export default function ProfileScreen({ navigation }) {
-    
+
+    const [user, setUser] = useState([])
+    const { loading, setLoading } = useContext(AuthContext);
+
+    useEffect(() => {
+        setLoading(true)
+
+        var userId = firebase.auth().currentUser.uid;
+        console.log("USER ID: ", userId)
+
+        const subscriber = firebase.firestore()
+            .collection('users')
+            .doc(userId)
+            .onSnapshot(documentSnapshot => {
+                setUser(documentSnapshot.data())
+                //console.log(documentSnapshot.data())
+                setLoading(false)
+            });
+
+        // Stop listening for updates when no longer required
+        return () => subscriber();
+
+    }, []);
+
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.settings_icon}>
-                <Icon
-                    name='settings-outline'
-                    color='white'
-                    size={30}
-                    onPress={() => navigation.navigate('Settings')}
-                />
-            </View>
-            <View style={styles.header}>
-                <Avatar
-                    size="xlarge"
-                    width={styles.profile_picture.width}
-                    height={styles.profile_picture.height}
-                    rounded
-                    source={require("../assets/images/profile_picture.jpg")}
-                    imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                />
-                <View>
-                    <Text style={styles.profile_name}>Santi, 21</Text>
-                    <Text style={styles.city}>Valencia (Spain)</Text>
+            <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
+                <View style={styles.settings_icon}>
+                    <Icon
+                        name='settings-outline'
+                        color='white'
+                        size={30}
+                        onPress={() => navigation.navigate('Settings')}
+                    />
                 </View>
-            </View>
-            <View style={styles.card_container}>
-                <Card containerStyle={styles.card}>
-                    <Text style={styles.title}>
-                        Description
-                    </Text>
-                    <Text style={styles.text}>
-                        The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
-                    <Text style={styles.title}>
-                        Hobbies
-                    </Text>
-                    <SelectedItems list={listOfHobbies} selectedItems={[6,1,2]}></SelectedItems>
-                    <Text style={styles.title}>
-                        Languages
-                    </Text>
-                    <SelectedItems list={listOfLanguages} selectedItems={[6,1,2]}></SelectedItems>
-                    <Text style={styles.title}>
-                        Countries
-                    </Text>
-                    <SelectedItems list={listOfCountries} selectedItems={[6,1,2]}></SelectedItems>
-                    <LongButton style={styles.edit_button} title="Edit profile" onPress={() =>
-                        navigation.navigate('EditProfile')}>
-                    </LongButton>
-                </Card>
-            </View>
+                <View style={styles.header}>
+                    <Avatar
+                        size="medium" // If I want a circle xlarge
+                        width={styles.profile_picture.width}
+                        height={styles.profile_picture.height}
+                        rounded
+                        source={{ uri: user.profile_picture }}
+                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                    />
+                    <View>
+                        <Text style={styles.profile_name}>{user.name}, {user.age}</Text>
+                        <Text style={styles.city}>{user.current_location}</Text>
+                    </View>
+                </View>
+                <View style={styles.card_container}>
+                    <Card containerStyle={styles.card}>
+                        <ScrollView
+                            contentContainerStyle={styles.scrollview}
+                            showsVerticalScrollIndicator={false}>
+                            <Text style={styles.title}>
+                                About me
+                                </Text>
+                            <Text style={styles.text}>
+                                {user.about_me}
+                            </Text>
+                            <Text style={styles.title}>
+                                Hobbies
+                            </Text>
+                            <SelectedItems list={listOfHobbies} selectedItems={user.hobbies}></SelectedItems>
+                            <Text style={styles.title}>
+                                Languages
+                            </Text>
+                            <SelectedItems list={listOfLanguages} selectedItems={user.languages}></SelectedItems>
+                            <Text style={styles.title}>
+                                Countries
+                            </Text>
+                            <SelectedItems list={listOfCountries} selectedItems={user.countries}></SelectedItems>
+                            {/* <LongButton style={styles.edit_button} title="Edit profile" onPress={() =>
+                                navigation.navigate('EditProfile', user)}>
+                            </LongButton> */}
+                            <View style={styles.scrollview_bottom}></View>
+                        </ScrollView>
+                    </Card>
+                    <View style={styles.user_type_container}>
+                        <Text style={styles.user_type_text}>Local</Text>
+                        <Icon2
+                            name='bag-personal-outline'
+                            color={Colors.SECONDARY}
+                            size={30}
+                            style={styles.user_type_icon}
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.edit_icon}>
+                        <Icon2
+                            name='pencil-circle'
+                            color={Colors.SECONDARY}
+                            size={27}
+                            onPress={() => {
+                                // Because a warning
+                                user.birth_date = "";
+                                navigation.navigate('EditProfile', user)
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    background: {
+        width: '100%',
+        height: '100%',
+        flex: 1,
+    },
     container: {
         backgroundColor: Colors.PRIMARY,
         flex: 1,
@@ -97,27 +167,69 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginLeft: 20,
     },
+    edit_icon: {
+        position: 'absolute',
+        alignSelf: 'flex-end',
+        top: 20,
+        right: 12,
+    },
+
+    user_type_container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        borderRadius: 10,
+        padding: 6,
+        backgroundColor: Colors.WHITE,
+        width: '50%',
+        height:'10%',
+        position: 'absolute',
+        alignSelf:'center',
+        top:-16,
+    },
+
+    user_type_text: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 17
+    },
+
+    user_type_icon: {
+        marginLeft: 10,
+    },
+
     card_container: {
         alignSelf: 'center',
         position: 'absolute',
-        bottom: 50,
+        bottom: '2%',
+        width: '98%',
     },
     card: {
         borderRadius: 14,
         marginRight: '2%',
         marginLeft: '2%',
-        height: '107%'
+        paddingTop: 5,
+        paddingBottom: 5,
+    },
+    scrollview: {
+    },
+
+    scrollview_bottom: {
+        height: 20,
     },
     title: {
         fontWeight: 'bold',
         fontSize: 15,
-        marginBottom: 5
+        marginBottom: 5,
+        marginTop: 10,
     },
     text: {
-        marginBottom: 15
+        //marginBottom: 15
     },
     edit_button: {
-        bottom: '-12%',
+        position: 'relative',
+        top: 10,
+        alignSelf: 'center'
     },
     settings_icon: {
         flexWrap: 'wrap-reverse',

@@ -223,6 +223,8 @@ const languages = [
     ,
     { id: 110, name: 'Mongolian' }
     ,
+    { id: 185, name: 'Murciano' }
+    ,
     { id: 111, name: 'Nauru' }
     ,
     { id: 112, name: 'Navajo' }

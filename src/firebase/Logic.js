@@ -13,32 +13,32 @@ const getAge = (dateString) => {
     return age;
 }
 
-async function uploadProfilePicture(uri,name) {
+async function uploadProfilePicture(uri, name) {
     const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function(e) {
-        console.log(e);
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
     });
-  
+
     const ref = firebase
-      .storage()
-      .ref()
-      .child(name);
+        .storage()
+        .ref()
+        .child(name);
     const snapshot = await ref.put(blob);
-  
+
     // We're done with the blob, close and release it
     blob.close();
-  
+
     return await snapshot.ref.getDownloadURL();
-  }
+}
 
 export async function createUser(data) {
 
@@ -55,11 +55,13 @@ export async function createUser(data) {
         if (data.googleData != null) {
             name = data.googleData.user.givenName;
             email = data.googleData.user.email;
-            profile_picture = data.googleData.user.photoUrl;
+            // Get google image with more quality
+            profile_picture = data.googleData.user.photoUrl.replace("s96", "s400");
         } else {
             name = data.name;
             email = data.email;
-            profile_picture = await uploadProfilePicture(data.profile_picture, data.uid);
+            //profile_picture = await uploadProfilePicture(data.profile_picture, data.uid);
+            profile_picture = "https://lh3.googleusercontent.com/a-/AOh14Gj32recPlk45teYg20KnAt3WZX8i8kql9LcUJiSdcg=s400-c";
         }
 
         var userData = {
@@ -68,10 +70,11 @@ export async function createUser(data) {
             profile_picture: profile_picture,
             current_location: data.current_location,
             birth_date: birth_date,
-            user_type: data.phone,
+            phone: data.phone,
             about_me: data.about_me,
             countries: data.countries,
             languages: data.languages,
+            hobbies: data.hobbies,
             user_type: data.user_type,
             age: age,
             gender: data.gender,
@@ -90,12 +93,32 @@ export async function createUser(data) {
 
 };
 
+export async function editUser(data) {
 
-export function deleteUser() {
+    // Checking if the profile picture is local
+    // If it's not local then we don't update anything
+    // If it's local we delete the old one and change it for the new one
+    if(String(data.profile_picture).includes('googleusercontent') || String(data.profile_picture).includes('firebasestorage')){
+        delete data.profile_picture;
+    }else{
+        // Delete old image in firestore storage
 
+        // Update new image in firestore storage
+    }
+
+    console.log(data)
+
+    var userId = firebase.auth().currentUser.uid;
+
+    console.log("Updating user data... ", userId)
+    
+    db.collection('users').doc(userId).update(data).then(() => {
+        console.log('User updated!');
+        return;
+    });
 };
 
-export function editUser() {
+export function deleteUser() {
 
 };
 

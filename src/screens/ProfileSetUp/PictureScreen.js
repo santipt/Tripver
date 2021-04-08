@@ -11,19 +11,19 @@ import Icon from 'react-native-vector-icons/AntDesign';
 // Importing components
 import * as Colors from '../../styles/colors';
 import Button from '../../components/atoms/Button';
+import ProfileAvatar from '../../components/atoms/ProfileAvatar';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 import GlobalStyles from '../../styles/GlobalStyles';
 import ProgressLine from '../../components/atoms/ProgressLine'
-import { useActionSheet } from '@expo/react-native-action-sheet'
 
 // Importing image paths
 import { images } from '../../utils/images'
 
-export default function PictureScreen({ route, navigation, props }) {
+export default function PictureScreen({ route, navigation }) {
 
-    // To open the camera/library option
-    const { showActionSheetWithOptions } = useActionSheet();
+    // // To open the camera/library option
+    // const { showActionSheetWithOptions } = useActionSheet();
     const { loading } = useContext(AuthContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
@@ -36,71 +36,11 @@ export default function PictureScreen({ route, navigation, props }) {
         if (data.googleData != undefined && selectedImage == null) {
             setSelectedImage(data.googleData.user.photoUrl)
         }
-    },[]);
+    }, []);
 
     if (loading) {
         return <Loading />;
     }
-
-    let onOpenActionSheet = () => {
-        
-        const options = ['Take Photo', 'Choose from library', 'Cancel'];
-        const cancelButtonIndex = 2;
-
-        showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex,
-            },
-            buttonIndex => {
-                // Do something here depending on the button index selected
-                if (buttonIndex == 0) {
-                    console.log("Open Camera")
-                    openCamera();
-                }
-                else if (buttonIndex == 1) {
-                    console.log("Open Photo Library")
-                    openImageLibrary();
-                }
-            },
-        );
-    };
-
-    // Open photo library from the phone and save the uri in order to show the image
-    let openImageLibrary = async () => {
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-        if (permissionResult.granted === false) {
-            alert("Permission to access camera roll is required!");
-            return;
-        }
-
-        let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        //console.log(pickerResult.uri);
-
-        if (pickerResult.cancelled === true) {
-            return;
-        }
-        setSelectedImage(pickerResult.uri);
-    };
-
-    // Open camera from the phone and save the uri in order to show the image
-    let openCamera = async () => {
-        let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-
-        if (permissionResult.granted === false) {
-            alert("Permission to access camera is required!");
-            return;
-        }
-
-        let pickerResult = await ImagePicker.launchCameraAsync();
-        //console.log(pickerResult);
-
-        if (pickerResult.cancelled === true) {
-            return;
-        }
-        setSelectedImage(pickerResult.uri);
-    };
 
     const checkTextInput = () => {
 
@@ -114,61 +54,42 @@ export default function PictureScreen({ route, navigation, props }) {
 
 
     return (
-            <SafeAreaView style={GlobalStyles.androidSafeArea}>
-                <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
-                    <Icon
-                        name='arrowleft'
-                        color={Colors.WHITE}
-                        style={styles.icon_left}
-                        size={30}
-                        onPress={() => navigation.goBack()}
-                    />
-                    <View style={styles.content}>
-                        <Text style={styles.title_text}>Say{'\n'} cheese :)</Text>
-                        <View style={styles.header}>
-                            <TouchableOpacity onPress={() => onOpenActionSheet()}>
-                                {selectedImage != null ?
-                                    <Avatar
-                                        size="xlarge"
-                                        width={styles.profile_picture.width}
-                                        height={styles.profile_picture.height}
-                                        rounded
-                                        source={{ uri: selectedImage }}
-                                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                                    >
-                                        <Accessory
-                                            style={styles.edit_picture}
-                                            onPress={onOpenActionSheet}
-                                            iconStyle={styles.edit_icon} />
-                                    </Avatar>
-                                    : <Avatar
-                                        size="xlarge"
-                                        width={styles.profile_picture.width}
-                                        height={styles.profile_picture.height}
-                                        rounded
-                                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                                        icon={{ name: 'camera', type: 'font-awesome-5', color: 'rgba(0,0,0,0.5)' }}
-                                        overlayContainerStyle={{ backgroundColor: 'rgba(255,255,255,0.5)' }}
-                                    >
-                                        {/* <Accessory
-                                            style={styles.edit_picture}
-                                            onPress={onOpenActionSheet}
-                                            iconStyle={styles.edit_icon} /> */}
-                                    </Avatar>}
-                            </TouchableOpacity>
-                        </View>
-                        <Button
-                            title="Next"
-                            labelStyle={styles.loginButtonLabel}
-                            style={styles.next_button}
-                            //onPress={() => register(displayName, email, password)}
-                            onPress={() => checkTextInput()}
-                            showIcon={true}
-                        />
+        <SafeAreaView style={GlobalStyles.androidSafeArea}>
+            <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
+                <Icon
+                    name='arrowleft'
+                    color={Colors.WHITE}
+                    style={styles.icon_left}
+                    size={30}
+                    onPress={() => navigation.goBack()}
+                />
+                <View style={styles.content}>
+                    <Text style={styles.title_text}>Say{'\n'} cheese :)</Text>
+                    <View style={styles.header}>
+                        <ProfileAvatar
+                            size="xlarge"
+                            width={styles.profile_picture.width}
+                            height={styles.profile_picture.height}
+                            selectedImage={selectedImage}
+                            onImageChange={(img) => {
+                                setSelectedImage(img)
+                            }}
+                            iconStyle={styles.edit_icon}
+                            containerIconStyle={styles.container_icon_style}
+                        ></ProfileAvatar>
                     </View>
-                    <ProgressLine value='42%'></ProgressLine>
-                </ImageBackground>
-            </SafeAreaView>
+                    <Button
+                        title="Next"
+                        labelStyle={styles.loginButtonLabel}
+                        style={styles.next_button}
+                        //onPress={() => register(displayName, email, password)}
+                        onPress={() => checkTextInput()}
+                        showIcon={true}
+                    />
+                </View>
+                <ProgressLine value='42%'></ProgressLine>
+            </ImageBackground>
+        </SafeAreaView>
     );
 }
 
@@ -187,7 +108,7 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200
     },
-    edit_picture: {
+    container_icon_style:{
         height: '20%',
         width: '20%',
         borderRadius: 30,

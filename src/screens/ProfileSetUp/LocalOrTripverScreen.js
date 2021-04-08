@@ -101,6 +101,7 @@ export default function LocalOrTripverScreen({ route, navigation }) {
                 iconStyle={userType == 0 ? { color: Colors.WHITE } : { color: Colors.SECONDARY }}
                 textStyle={userType == 0 ? { color: Colors.WHITE } : { color: Colors.PRIMARY }}
                 onPress={() => onSelected(0)}
+                iconSize={60}
               >
               </CircleButton>
             </View>
@@ -124,6 +125,7 @@ export default function LocalOrTripverScreen({ route, navigation }) {
                 iconStyle={userType ? { color: Colors.WHITE } : { color: Colors.SECONDARY }}
                 textStyle={userType ? { color: Colors.WHITE } : { color: Colors.PRIMARY }}
                 onPress={() => onSelected(1)}
+                iconSize={60}
               >
               </CircleButton>
             </View>

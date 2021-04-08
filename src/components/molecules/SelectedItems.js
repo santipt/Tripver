@@ -10,8 +10,8 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import * as Colors from '../../styles/colors';
 
 export default class SelectedItems extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectedItems: [],
         };
@@ -20,18 +20,28 @@ export default class SelectedItems extends Component {
         this.setState({ selectedItems });
     };
 
+    componentDidMount() {
+        if (this.props.selectedItems != undefined) {
+            var newList = [];
+            this.props.selectedItems.forEach(item => {
+                newList.push(item.id)
+            });
+            this.setState({selectedItems : newList})
+        }
+    }
+
     render() {
         return (
             <View>
                 <SectionedMultiSelect
                     hideSelect={true}
                     items={this.props.list}
-                    IconRenderer={MaterialIcons}                
+                    IconRenderer={MaterialIcons}
                     uniqueKey="id"
                     modalWithSafeAreaView={true}
-                    selectedItems={this.props.selectedItems}
-                    onSelectedItemsChange = {this.onSelectedItemsChange}
-                    onSelectedItemObjectsChange	={this.props.onSelectedItemObjectsChange}
+                    selectedItems={this.state.selectedItems}
+                    onSelectedItemsChange={this.onSelectedItemsChange}
+                    onSelectedItemObjectsChange={this.props.onSelectedItemObjectsChange}
                     styles={{
                         button: styles.confirm_button, confirmText: styles.confirm_text,
                         chipText: styles.chipText, chipContainer: styles.chipColor, chipIcon: styles.chipIcon, item: styles.item, itemText: styles.itemText,
@@ -52,6 +62,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     chipIcon: {
-        display:'none',
+        display: 'none',
     },
 });

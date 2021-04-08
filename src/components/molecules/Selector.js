@@ -10,8 +10,8 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import * as Colors from '../../styles/colors';
 
 export default class Selector extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectedItems: [],
             maxItems: 12,
@@ -25,6 +25,16 @@ export default class Selector extends Component {
 
         this.setState({ selectedItems });
     };
+
+    componentDidMount() {
+        if (this.props.selectedItems != undefined) {
+            var newList = [];
+            this.props.selectedItems.forEach(item => {
+                newList.push(item.id)
+            });
+            this.setState({selectedItems : newList})
+        }
+    }
 
     render() {
         return (
@@ -60,6 +70,7 @@ export default class Selector extends Component {
                         button: styles.confirm_button, confirmText: styles.confirm_text,
                         chipText: styles.chipText, chipContainer: styles.chipColor, chipIcon: styles.chipIcon, item: styles.item, itemText: styles.itemText,
                         selectedItemText: styles.selectedItemText, searchBar: styles.searchBar, searchTextInput: styles.searchTextInput, selectToggle: styles.selectToggle,
+                        selectToggleText: styles.selectToggleText
                     }}
                 />
             </View>
@@ -93,7 +104,8 @@ const styles = StyleSheet.create({
         fontWeight: 'normal'
     },
     selectedItemText: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize:20,
     },
     searchBar: {
         marginTop: 5,
@@ -104,5 +116,8 @@ const styles = StyleSheet.create({
     },
     selectToggle: {
         marginBottom: '2%',
-    }
+    },
+    selectToggleText:{
+        fontSize:15,
+    },
 });

@@ -15,7 +15,7 @@ export default function CircleButton({ ...props }) {
                 name={props.icon}
                 color={Colors.SECONDARY}
                 style={{...styles.icon, ...props.iconStyle}}
-                size={60}
+                size={props.iconSize} //60
             />
             { props.showText ?
                 <Text style={{ ...styles.button_text, ...props.textStyle}}>{props.title}</Text>

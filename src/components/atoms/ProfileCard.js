@@ -52,12 +52,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
     },
     text_container: {
         flexDirection: 'column',
         justifyContent: 'center',
-        marginStart: -100
     },
     profile_picture: {
         width: 60,
@@ -79,11 +77,13 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         shadowColor: '#000',
-        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
         backgroundColor: 'white',
+        position:'absolute',
+        right:0
+        
     },
     chat: {
         ...Platform.select({

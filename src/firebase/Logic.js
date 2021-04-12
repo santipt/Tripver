@@ -40,6 +40,27 @@ async function uploadProfilePicture(uri, name) {
     return await snapshot.ref.getDownloadURL();
 }
 
+async function deleteProfilePicture(name) {
+    // Create a reference to the file to delete
+    const ref = firebase
+        .storage()
+        .ref()
+        .child(name);
+
+    // Delete the image
+    ref.delete().then(function () {
+        // File deleted successfully
+        console.log("Image from firestorage deleted")
+        return;
+    }).catch(function (error) {
+        // Uh-oh, an error occurred!
+        console.log("Image from firestorage NOT deleted because it doesn't exists")
+        return;
+    });
+}
+
+
+
 export async function createUser(data) {
 
     console.log("Inserting user data into firestore...")
@@ -95,23 +116,29 @@ export async function createUser(data) {
 
 export async function editUser(data) {
 
+    var profile_picture;
+    var userId = firebase.auth().currentUser.uid;
+
     // Checking if the profile picture is local
     // If it's not local then we don't update anything
     // If it's local we delete the old one and change it for the new one
-    if(String(data.profile_picture).includes('googleusercontent') || String(data.profile_picture).includes('firebasestorage')){
+    if (String(data.profile_picture).includes('googleusercontent') || String(data.profile_picture).includes('firebasestorage')) {
         delete data.profile_picture;
-    }else{
-        // Delete old image in firestore storage
+    } else {
 
-        // Update new image in firestore storage
+        // Delete old image in firestore storage
+        await deleteProfilePicture(userId);
+
+        // Upload new image in firestore storage
+        profile_picture = await uploadProfilePicture(data.profile_picture, userId);
     }
+
+    data.profile_picture = profile_picture;
 
     console.log(data)
 
-    var userId = firebase.auth().currentUser.uid;
-
     console.log("Updating user data... ", userId)
-    
+
     db.collection('users').doc(userId).update(data).then(() => {
         console.log('User updated!');
         return;

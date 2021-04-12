@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-elements';
 
 // Importing icons
@@ -9,12 +9,12 @@ import Icon from 'react-native-vector-icons/AntDesign';
 // Importing components
 import * as Colors from '../styles/colors';
 import FormInput from '../components/atoms/FormInput'
-import FormButton from '../components/atoms/FormButton';
+import Button from '../components/atoms/Button';
 import { AuthContext } from '../navigation/AuthProvider';
 
 
 
-export default function EditProfileScreen({ navigation }) {
+export default function SettingsScreen({ navigation }) {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const { user, logout } = useContext(AuthContext);
@@ -38,8 +38,7 @@ export default function EditProfileScreen({ navigation }) {
             autoCapitalize="none"
             onChangeText={(userEmail) => setEmail(userEmail)}
           />
-          <FormButton
-            modeValue="contained"
+          <Button
             title="Logout"
             onPress={() => logout()}
           />

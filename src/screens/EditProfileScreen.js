@@ -11,6 +11,7 @@ import Selector from '../components/molecules/Selector'
 import { editUser } from '../firebase/Logic'
 import ProfileAvatar from '../components/atoms/ProfileAvatar';
 import { AuthContext } from '../navigation/AuthProvider';
+import GlobalStyles from '../styles/GlobalStyles';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,14 +46,14 @@ export default function EditProfileScreen({ navigation, route }) {
     setLoading(true);
 
     var userData = {
-            name: name,
-            profile_picture: profilePicture,
-            current_location: currentLocation,
-            user_type: userType,
-            about_me: description,
-            countries: selectedCountries,
-            languages: selectedLanguages,
-            hobbies: selectedHobbies,
+      name: name,
+      profile_picture: profilePicture,
+      current_location: currentLocation,
+      user_type: userType,
+      about_me: description,
+      countries: selectedCountries,
+      languages: selectedLanguages,
+      hobbies: selectedHobbies,
     }
 
     await editUser(userData)
@@ -64,20 +65,22 @@ export default function EditProfileScreen({ navigation, route }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={GlobalStyles.androidSafeArea}>
       <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
         <View style={styles.header}>
-          <ProfileAvatar
-            size="medium"
-            width={styles.profile_picture.width}
-            height={styles.profile_picture.height}
-            selectedImage={profilePicture}
-            onImageChange={(img) => {
-              setProfilePicture(img)
-            }}
-            iconStyle={styles.edit_icon}
-            containerIconStyle={styles.edit_picture}
-          ></ProfileAvatar>
+            <ProfileAvatar
+              size="medium"
+              width={styles.profile_picture.width}
+              height={styles.profile_picture.height}
+              selectedImage={profilePicture}
+              onImageChange={(img) => {
+                setProfilePicture(img)
+              }}
+              iconStyle={styles.edit_icon}
+              containerIconStyle={styles.edit_picture}
+              showEditIcon={false}
+              showCameraIcon={true}
+            ></ProfileAvatar>
           <View>
             <TextInput
               value={name}
@@ -221,6 +224,7 @@ const styles = StyleSheet.create({
   edit_icon: {
     fontSize: 15,
   },
+
   text_input_name: {
     color: 'white',
     fontWeight: 'bold',
@@ -270,7 +274,7 @@ const styles = StyleSheet.create({
 
   local_or_tripver_text: {
     color: Colors.PRIMARY,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
   },
 
   local_or_tripver_text_selected: {

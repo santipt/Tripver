@@ -7,8 +7,11 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Colors from '../../styles/colors';
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
+// Importing icons
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function ProfileAvatar({ ...props }) {
+
     // To open the camera/library option
     const { showActionSheetWithOptions } = useActionSheet();
 
@@ -87,14 +90,28 @@ export default function ProfileAvatar({ ...props }) {
                     rounded
                     source={{ uri: selectedImage }}
                     imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                    style={styles.avatar_container}
                 >
-                    <Accessory
-                        style={{...styles.edit_picture}, { ...props.containerIconStyle }}
-                        onPress={onOpenActionSheet}
-                        iconStyle={{ ...styles.edit_icon }, { ...props.iconStyle }} />
+                    {/* Show edit icon */}
+                    {props.showEditIcon != false ?
+                        <Accessory
+                            style={{ ...styles.edit_picture }, { ...props.containerIconStyle }}
+                            onPress={onOpenActionSheet}
+                            iconStyle={{ ...styles.edit_icon }, { ...props.iconStyle }} />
+                        : null
+                    }
+                    {/* Show camera in the middle of the picture */}
+                    {props.showCameraIcon == true ?
+                        <Icon
+                            name='camera-plus-outline'
+                            color={Colors.WHITE}
+                            size={40}
+                            style={styles.camera_icon}
+                        />
+                        : null}
                 </Avatar>
                 : <Avatar
-                    size={props.size} //"xlarge"
+                    size={props.size}
                     width={props.width}
                     height={props.height}
                     rounded
@@ -109,6 +126,9 @@ export default function ProfileAvatar({ ...props }) {
 }
 
 const styles = StyleSheet.create({
+    avatar_container:{
+        justifyContent:'center',
+    },
     edit_picture: {
         height: '20%',
         width: '20%',
@@ -117,5 +137,9 @@ const styles = StyleSheet.create({
     },
     edit_icon: {
         fontSize: 20,
+    },
+    camera_icon: {
+        position: 'absolute',
+        alignSelf: 'center',
     },
 });

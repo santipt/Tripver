@@ -11,6 +11,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 // Importing components
 import HomeScreen from './HomeScreen'
 import ProfileScreen from './ProfileScreen'
+import FindPlacesScreen from './FindPlacesScreen'
+
 import * as Colors from '../styles/colors';
 
 const Tab = createBottomTabNavigator();
@@ -40,7 +42,7 @@ export default function MyTabs() {
       />
       <Tab.Screen
         name="Find places"
-        component={HomeScreen}
+        component={FindPlacesScreen}
         options={{
           tabBarButton: CustomTabButton,
           tabBarIcon: ({ color }) => (
@@ -49,7 +51,7 @@ export default function MyTabs() {
       />
       <Tab.Screen
         name="Chat"
-        component={HomeScreen}
+        component={FindPlacesScreen}
         options={{
           tabBarButton: CustomTabButton,
           tabBarBadge: '',

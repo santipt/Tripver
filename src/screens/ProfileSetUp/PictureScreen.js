@@ -22,8 +22,6 @@ import { images } from '../../utils/images'
 
 export default function PictureScreen({ route, navigation }) {
 
-    // // To open the camera/library option
-    // const { showActionSheetWithOptions } = useActionSheet();
     const { loading } = useContext(AuthContext);
 
     const [selectedImage, setSelectedImage] = useState(null);

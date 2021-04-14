@@ -6,6 +6,8 @@ import React from 'react';
 import MyTabsScreen from '../screens/MyTabsScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import EditLocationScreen from '../screens/EditLocationScreen';
+
 
 const Main = createStackNavigator();
 
@@ -15,6 +17,7 @@ export default function MainStack() {
         <Main.Screen name="Main" component={MyTabsScreen} />
         <Main.Screen name="EditProfile" component={EditProfileScreen} />
         <Main.Screen name="Settings" component={SettingsScreen} options={horizontalAnimation}/>
+        <Main.Screen name="EditLocation" component={EditLocationScreen} options={horizontalAnimation}/>
       </Main.Navigator>
   );
 }

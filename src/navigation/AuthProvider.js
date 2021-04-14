@@ -22,7 +22,7 @@ async function onGoogleSignUp(googleUser, data) {
   firebase.auth().signInWithCredential(credential).then(async function (res) {
 
     data.uid = res.user.uid
-    
+
     // Inserting all the user data to the cloud firestore and create the user
     await createUser(data);
 
@@ -88,12 +88,15 @@ async function onGoogleSignIn() {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   return (
     <AuthContext.Provider
       value={{
         user,
         setUser,
+        userId,
+        setUserId,
         loading,
         setLoading,
         // --------------------------------
@@ -138,7 +141,7 @@ export const AuthProvider = ({ children }) => {
             //---------------------------------
             if (data.googleData != null) {
               console.log("GOOGLE AUTH")
-              
+
               var res = onGoogleSignUp(data.googleData, data);
 
               setLoading(false);
@@ -146,7 +149,7 @@ export const AuthProvider = ({ children }) => {
               if (res.failed) {
                 console.log('Could not login');
               }
-              
+
 
             }
 
@@ -250,7 +253,10 @@ export const AuthProvider = ({ children }) => {
         logout: async () => {
           try {
             await kitty.endSession();
-            console.log("Logged out")
+            console.log("Logged out");
+            firebase.auth()
+              .signOut()
+              .then(() => console.log('User signed out!'));
             setLoading(false);
           } catch (e) {
             console.error(e);

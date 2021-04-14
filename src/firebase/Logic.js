@@ -114,10 +114,7 @@ export async function createUser(data) {
 
 };
 
-export async function editUser(data) {
-
-    var profile_picture;
-    var userId = firebase.auth().currentUser.uid;
+export async function editUser(data, userId) {
 
     // Checking if the profile picture is local
     // If it's not local then we don't update anything
@@ -130,10 +127,9 @@ export async function editUser(data) {
         await deleteProfilePicture(userId);
 
         // Upload new image in firestore storage
-        profile_picture = await uploadProfilePicture(data.profile_picture, userId);
+        var profile_picture = await uploadProfilePicture(data.profile_picture, userId);
+        data.profile_picture = profile_picture;
     }
-
-    data.profile_picture = profile_picture;
 
     console.log(data)
 
@@ -149,15 +145,28 @@ export function deleteUser() {
 
 };
 
-export async function getListOfUsers(currentUser) {
+export async function getListOfLocals(currentUser) {
 
     var users = [];
-    var data = await db.collection("users").get();
-
-    //Current user
-    //const {uid} = auth().currentUser;
+    var data = await db.collection("users").where('user_type', 'in', ['local']).get();
 
     data.docs.forEach(item => {
+
+        if (item.data().email != currentUser) {
+            users.push(item.data())
+        }
+    })
+
+    return users;
+};
+
+export async function getListOfTripvers(currentUser) {
+
+    var users = [];
+    var data = await db.collection("users").where('user_type', 'in', ['tripver']).get();
+
+    data.docs.forEach(item => {
+
         if (item.data().email != currentUser) {
             users.push(item.data())
         }

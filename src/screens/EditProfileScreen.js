@@ -29,8 +29,10 @@ export default function EditProfileScreen({ navigation, route }) {
 
   var user = route.params;
 
-  const [name, setName] = useState(user.name)
-  const [currentLocation, setCurrentLocation] = useState(user.current_location)
+  const [name, setName] = useState(user.name);
+  // TO DO: cuando selecciono una ciudad la guardo y luego no selecciono ninguna, 
+  // no se muestra la última ciudad guardada.
+  const [currentLocation, setCurrentLocation] = useState(user.current_location);
   const [profilePicture, setProfilePicture] = useState(user.profile_picture);
   const [description, setDescription] = useState(user.about_me);
   const [userType, setUserType] = useState(user.user_type);
@@ -39,7 +41,13 @@ export default function EditProfileScreen({ navigation, route }) {
   const [selectedLanguages, onChangeLanguages] = useState(user.languages)
   const [selectedCountries, onChangeCountries] = useState(user.countries)
 
-  const { loading, setLoading } = useContext(AuthContext);
+  const { setLoading, userId } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (route.params.newLocation != '' && route.params.newLocation != undefined) {
+      setCurrentLocation(route.params.newLocation);
+    }
+  })
 
   const updateUserData = async () => {
 
@@ -56,7 +64,7 @@ export default function EditProfileScreen({ navigation, route }) {
       hobbies: selectedHobbies,
     }
 
-    await editUser(userData)
+    await editUser(userData, userId)
 
     setLoading(false);
 
@@ -68,19 +76,19 @@ export default function EditProfileScreen({ navigation, route }) {
     <SafeAreaView style={GlobalStyles.androidSafeArea}>
       <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
         <View style={styles.header}>
-            <ProfileAvatar
-              size="medium"
-              width={styles.profile_picture.width}
-              height={styles.profile_picture.height}
-              selectedImage={profilePicture}
-              onImageChange={(img) => {
-                setProfilePicture(img)
-              }}
-              iconStyle={styles.edit_icon}
-              containerIconStyle={styles.edit_picture}
-              showEditIcon={false}
-              showCameraIcon={true}
-            ></ProfileAvatar>
+          <ProfileAvatar
+            size="medium"
+            width={styles.profile_picture.width}
+            height={styles.profile_picture.height}
+            selectedImage={profilePicture}
+            onImageChange={(img) => {
+              setProfilePicture(img)
+            }}
+            iconStyle={styles.edit_icon}
+            containerIconStyle={styles.edit_picture}
+            showEditIcon={false}
+            showCameraIcon={true}
+          ></ProfileAvatar>
           <View>
             <TextInput
               value={name}
@@ -89,7 +97,7 @@ export default function EditProfileScreen({ navigation, route }) {
               autoCapitalize="words"
               inlineImageLeft='search_icon'
             ></TextInput>
-            <Text style={styles.city}>{user.current_location}</Text>
+            <Text style={styles.city}>{currentLocation}</Text>
           </View>
         </View>
         <View style={styles.local_or_tripver}>
@@ -139,11 +147,12 @@ export default function EditProfileScreen({ navigation, route }) {
                   style={styles.name_icon}
                 />
               </View>
-              <TouchableOpacity style={styles.description_container} onPress={() => console.log("dfsg")}>
+              <TouchableOpacity style={styles.description_container} onPress={() => navigation.navigate('EditLocation')
+              }>
                 <Text style={styles.description_title}>
                   Location
                 </Text>
-                <Text style={styles.text_input}>{currentLocation}</Text>
+                <Text style={styles.text_input}>{route.params.newLocation != null && route.params.newLocation != '' ? route.params.newLocation : currentLocation}</Text>
                 <Icon
                   name='location-sharp'
                   color={Colors.GRAY_MEDIUM}
@@ -230,7 +239,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     marginLeft: 20,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   city: {
     color: 'white',

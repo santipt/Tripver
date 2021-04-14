@@ -26,7 +26,6 @@ export default function SignupScreen2({ route, navigation }) {
 
   const { loading } = useContext(AuthContext);
   const [focus, setFocus] = useState(false);
-  const [lengthLocationForm, setLengthLocationForm] = useState(0);
 
   // Getting the data from the other screens
   var data = route.params;

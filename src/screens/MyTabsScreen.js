@@ -2,6 +2,8 @@
 import * as React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 
 // Importing icons
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -9,13 +11,15 @@ import { faHeart, faCommentAlt, faCompass, faUser } from '@fortawesome/fontaweso
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // Importing components
-import HomeScreen from './HomeScreen'
+import FindPeople from './FindPeople'
 import ProfileScreen from './ProfileScreen'
 import FindPlacesScreen from './FindPlacesScreen'
+import TopTabNavigator from '../components/molecules/TopTabNavigator.js'
 
 import * as Colors from '../styles/colors';
 
 const Tab = createBottomTabNavigator();
+
 
 export default function MyTabs() {
   return (
@@ -28,13 +32,13 @@ export default function MyTabs() {
     }}>
       <Tab.Screen
         name="Find people"
-        component={HomeScreen}
+        component={TopTabNavigator}
         options={{
           tabBarButton: CustomTabButton,
           tabBarIcon: ({ color }) => (
             <Icon
               name='md-people-outline'
-              color={ color }
+              color={color}
               size={30}
             />),
         }}

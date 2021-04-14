@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
+import { kitty } from '../chatkitty';
+
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,11 +17,10 @@ import * as Colors from '../styles/colors';
 import { firebase } from '../firebase/index'
 import Loading from '../components/atoms/Loading';
 import { AuthContext } from '../navigation/AuthProvider';
-import CircleButton from '../components/atoms/CircleButton'
+import GlobalStyles from '../styles/GlobalStyles';
 
 // Importing image paths
 import { images } from '../utils/images'
-
 
 // Lists
 import listOfHobbies from '../utils/hobbies'
@@ -29,19 +30,18 @@ import listOfCountries from '../utils/countries'
 export default function ProfileScreen({ navigation }) {
 
     const [user, setUser] = useState([])
-    const { loading, setLoading } = useContext(AuthContext);
+    const { loading, setLoading, userId } = useContext(AuthContext);
 
     useEffect(() => {
+
         setLoading(true)
 
-        var userId = firebase.auth().currentUser.uid;
         console.log("USER ID: ", userId)
 
         const subscriber = firebase.firestore()
-            .collection('users')
-            .doc(userId)
-            .onSnapshot(documentSnapshot => {
-                setUser(documentSnapshot.data())
+            .collection('users').doc(userId)
+            .onSnapshot(doc => {
+                setUser(doc.data())
                 //console.log(documentSnapshot.data())
                 setLoading(false)
             });
@@ -56,7 +56,7 @@ export default function ProfileScreen({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={GlobalStyles.androidSafeArea}>
             <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
                 <View style={styles.settings_icon}>
                     <Icon
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
         marginLeft: 20,
+        marginBottom: 5,
     },
     city: {
         color: 'white',
@@ -182,10 +183,10 @@ const styles = StyleSheet.create({
         padding: 6,
         backgroundColor: Colors.WHITE,
         width: '50%',
-        height:'10%',
+        height: '10%',
         position: 'absolute',
-        alignSelf:'center',
-        top:-16,
+        alignSelf: 'center',
+        top: -16,
     },
 
     user_type_text: {
@@ -200,9 +201,8 @@ const styles = StyleSheet.create({
 
     card_container: {
         alignSelf: 'center',
-        position: 'absolute',
-        bottom: '2%',
         width: '98%',
+        marginTop:40,
     },
     card: {
         borderRadius: 14,
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
         paddingTop: 5,
         paddingBottom: 5,
+        height:'82.5%',
     },
     scrollview: {
     },
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     text: {
-        //marginBottom: 15
+        marginBottom: 15
     },
     edit_button: {
         position: 'relative',

@@ -4,7 +4,7 @@ import { StyleSheet, View, FlatList, Text, RefreshControl } from 'react-native';
 
 // Importing components
 import ProfileCard from '../../components/atoms/ProfileCard';
-import { getListOfUsers, getProfilePicture } from '../../firebase/Logic';
+import { getListOfLocals, getListOfTripvers, getProfilePicture } from '../../firebase/Logic';
 
 // Importing components
 import * as Colors from '../../styles/colors';
@@ -18,6 +18,7 @@ export default class ListOfPeople extends Component {
             isFetching: false,
             listOfUsers: [],
             user: props.user,
+            userType: props.userType
         }
         this.getUsers()
     }
@@ -31,9 +32,15 @@ export default class ListOfPeople extends Component {
     async getUsers() {
         console.log("Getting users from data base")
 
-        // Passing the current user in order to not show itself in the lsit
-        var users = await getListOfUsers(this.state.user.name);
-        this.setState({ isFetching: false, listOfUsers: users })
+        if (this.state.userType == 'local') {
+            // Passing the current user in order to not show itself in the lsit
+            var users = await getListOfLocals(this.state.user.name);
+            this.setState({ isFetching: false, listOfUsers: users })
+        }else{
+             // Passing the current user in order to not show itself in the lsit
+             var users = await getListOfTripvers(this.state.user.name);
+             this.setState({ isFetching: false, listOfUsers: users })
+        }
     }
 
     render() {

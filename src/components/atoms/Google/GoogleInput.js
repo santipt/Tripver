@@ -18,9 +18,9 @@ export default function GoogleInput({ labelName, focus, ...props }) {
                     <Text style={{ ...styles.title, ...props.label_style }}>{labelName}</Text>
                     : null
             }
-            <View style={styles.container}>
+            <View style={{...styles.container}}>
                 <GooglePlacesAutocomplete
-                    styles={focus ? googleInputStyle : googleInputStyle2}
+                    styles={focus ? googleInputStyle : {googleInputStyle2, ...props.style}}
                     isRowScrollable={false}
                     enablePoweredByContainer={false}
                     autoFocus={true}
@@ -42,10 +42,11 @@ export default function GoogleInput({ labelName, focus, ...props }) {
                         'administrative_area_level_3',
                       ]}
                     renderDescription={(row) => row.description || row.vicinity}
-                    //disableScroll={true}
+                    disableScroll={props.disableScroll}
                     //currentLocation={true}
                     //currentLocationLabel='Current location'
                     //minLength={3}
+                    //listUnderlayColor={Colors.GRAY_LIGHT}
                     {...props}
                 />
             </View>
@@ -90,7 +91,7 @@ const googleInputStyle = StyleSheet.create({
         paddingHorizontal: 10,
         fontSize: 15,
         flex: 1,
-        width: '135%'
+        width: '135%',
     },
     row: {
         backgroundColor: '#FFFFFF',
@@ -116,11 +117,10 @@ const googleInputStyle2 = StyleSheet.create({
         width: '82%',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        marginBottom: 30,
+        marginBottom: 20,
     },
     textInputContainer: {
         flexDirection: 'row',
-        marginBottom: -10,
     },
     textInput: {
         backgroundColor: '#FFFFFF',

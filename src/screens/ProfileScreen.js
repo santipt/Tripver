@@ -2,8 +2,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
-import { kitty } from '../chatkitty';
-
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -30,11 +28,10 @@ import listOfCountries from '../utils/countries'
 export default function ProfileScreen({ navigation }) {
 
     const [user, setUser] = useState([])
-    const { loading, setLoading, userId } = useContext(AuthContext);
+    const { userId } = useContext(AuthContext);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
-        setLoading(true)
 
         console.log("USER ID: ", userId)
 
@@ -49,7 +46,7 @@ export default function ProfileScreen({ navigation }) {
         // Stop listening for updates when no longer required
         return () => subscriber();
 
-    }, []);
+    }, [loading]);
 
     if (loading) {
         return <Loading />;
@@ -63,7 +60,7 @@ export default function ProfileScreen({ navigation }) {
                         name='settings-outline'
                         color='white'
                         size={30}
-                        onPress={() => navigation.navigate('Settings')}
+                        onPress={() => navigation.navigate('Settings', user)}
                     />
                 </View>
                 <View style={styles.header}>
@@ -110,7 +107,7 @@ export default function ProfileScreen({ navigation }) {
                         </ScrollView>
                     </Card>
                     <View style={styles.user_type_container}>
-                        <Text style={styles.user_type_text}>Local</Text>
+                        <Text style={styles.user_type_text}>{user.user_type}</Text>
                         <Icon2
                             name='bag-personal-outline'
                             color={Colors.SECONDARY}
@@ -225,7 +222,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     text: {
-        marginBottom: 15
+        marginBottom: 10
     },
     edit_button: {
         position: 'relative',

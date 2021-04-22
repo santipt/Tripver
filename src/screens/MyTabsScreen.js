@@ -12,8 +12,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 // Importing components
 import FindPeople from './FindPeople'
-import ProfileScreen from './ProfileScreen'
 import FindPlacesScreen from './FindPlacesScreen'
+import ChatScreen from './ChatScreens/ChatScreen'
+import ProfileScreen from './ProfileScreen'
 import TopTabNavigator from '../components/molecules/TopTabNavigator.js'
 
 import * as Colors from '../styles/colors';
@@ -55,7 +56,7 @@ export default function MyTabs() {
       />
       <Tab.Screen
         name="Chat"
-        component={FindPlacesScreen}
+        component={ChatScreen}
         options={{
           tabBarButton: CustomTabButton,
           tabBarBadge: '',

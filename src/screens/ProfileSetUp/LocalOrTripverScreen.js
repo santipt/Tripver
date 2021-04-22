@@ -35,9 +35,9 @@ export default function LocalOrTripverScreen({ route, navigation }) {
   const checkTextInput = () => {
     if (userType != null) {
       if (userType == 0) {
-        data.user_type = "local"
+        data.user_type = "Local"
       } else {
-        data.user_type = "tripver"
+        data.user_type = "Tripver"
       }
       //Checked Successfully
       navigation.navigate('GenderScreen', data)

@@ -5,25 +5,25 @@ import { StyleSheet, View, SafeAreaView, Text, TextInput, ScrollView, ImageBackg
 import { Card } from 'react-native-elements';
 
 // Importing components
-import * as Colors from '../styles/colors';
-import Button from '../components/atoms/Button'
-import Selector from '../components/molecules/Selector'
-import { editUser } from '../firebase/Logic'
-import ProfileAvatar from '../components/atoms/ProfileAvatar';
-import { AuthContext } from '../navigation/AuthProvider';
-import GlobalStyles from '../styles/GlobalStyles';
+import * as Colors from '../../styles/colors';
+import Button from '../../components/atoms/Button'
+import Selector from '../../components/molecules/Selector'
+import { editUser } from '../../firebase/Logic'
+import ProfileAvatar from '../../components/atoms/ProfileAvatar';
+import { AuthContext } from '../../navigation/AuthProvider';
+import GlobalStyles from '../../styles/GlobalStyles';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Importing image paths
-import { images } from '../utils/images'
+import { images } from '../../utils/images'
 
 // Lists
-import listOfHobbies from '../utils/hobbies'
-import listOfLanguages from '../utils/languages'
-import listOfCountries from '../utils/countries'
+import listOfHobbies from '../../utils/hobbies'
+import listOfLanguages from '../../utils/languages'
+import listOfCountries from '../../utils/countries'
 
 export default function EditProfileScreen({ navigation, route }) {
 
@@ -102,22 +102,22 @@ export default function EditProfileScreen({ navigation, route }) {
         </View>
         <View style={styles.local_or_tripver}>
           <TouchableOpacity
-            onPress={() => setUserType("local")}
-            style={userType == "local" ? styles.local_or_tripver_container_selected : styles.local_or_tripver_container}>
-            <Text style={userType == "local" ? styles.local_or_tripver_text_selected : styles.local_or_tripver_text}>Local</Text>
+            onPress={() => setUserType("Local")}
+            style={userType == "Local" ? styles.local_or_tripver_container_selected : styles.local_or_tripver_container}>
+            <Text style={userType == "Local" ? styles.local_or_tripver_text_selected : styles.local_or_tripver_text}>Local</Text>
             <Icon2
               name='city-variant-outline'
-              color={userType == "local" ? Colors.WHITE : Colors.SECONDARY}
+              color={userType == "Local" ? Colors.WHITE : Colors.SECONDARY}
               size={25}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setUserType("tripver")}
-            style={userType == "tripver" ? styles.local_or_tripver_container_selected : styles.local_or_tripver_container}>
-            <Text style={userType == "tripver" ? styles.local_or_tripver_text_selected : styles.local_or_tripver_text}>Tripver</Text>
+            onPress={() => setUserType("Tripver")}
+            style={userType == "Tripver" ? styles.local_or_tripver_container_selected : styles.local_or_tripver_container}>
+            <Text style={userType == "Tripver" ? styles.local_or_tripver_text_selected : styles.local_or_tripver_text}>Tripver</Text>
             <Icon2
               name='bag-personal-outline'
-              color={userType == "tripver" ? Colors.WHITE : Colors.SECONDARY}
+              color={userType == "Tripver" ? Colors.WHITE : Colors.SECONDARY}
               size={28}
             />
           </TouchableOpacity>
@@ -147,8 +147,7 @@ export default function EditProfileScreen({ navigation, route }) {
                   style={styles.name_icon}
                 />
               </View>
-              <TouchableOpacity style={styles.description_container} onPress={() => navigation.navigate('EditLocation')
-              }>
+              <TouchableOpacity style={styles.description_container} onPress={() => navigation.navigate('EditLocation')}>
                 <Text style={styles.description_title}>
                   Location
                 </Text>

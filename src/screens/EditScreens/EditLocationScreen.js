@@ -7,12 +7,12 @@ import { Card } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 // Importing components
-import * as Colors from '../styles/colors';
-import GoogleInput from '../components/atoms/Google/GoogleInput';
-import GlobalStyles from '../styles/GlobalStyles';
+import * as Colors from '../../styles/colors';
+import GoogleInput from '../../components/atoms/Google/GoogleInput';
+import GlobalStyles from '../../styles/GlobalStyles';
 
 // Importing image paths
-import { images } from '../utils/images'
+import { images } from '../../utils/images'
 
 export default function SettingsScreen({ navigation }) {
     const [currentLocation, setCurrentLocation] = useState('');

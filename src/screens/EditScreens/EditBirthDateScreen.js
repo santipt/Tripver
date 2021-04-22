@@ -20,7 +20,7 @@ import ProgressLine from '../../components/atoms/ProgressLine'
 // Importing images paths
 import { images } from '../../utils/images'
 
-export default function GenderScreen({ route, navigation }) {
+export default function EditGenderScreen({ route, navigation }) {
 
   const [checked, setChecked] = React.useState('');
   const [gender, setGender] = React.useState('');

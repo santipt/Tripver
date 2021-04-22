@@ -13,6 +13,15 @@ const getAge = (dateString) => {
     return age;
 }
 
+export function convertTimestampToDate(timestamp) {
+    var a = new Date(timestamp * 1000);
+    var year = a.getFullYear();
+    var day = a.getDay();
+    var month = a.getMonth()
+    var date = day + '/' + month + '/' + year ;
+    return date;
+}
+
 async function uploadProfilePicture(uri, name) {
     const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();

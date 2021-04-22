@@ -1,23 +1,30 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, TextInput } from 'react-native';
 import { Card } from 'react-native-elements';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/Ionicons';
 
 // Importing components
 import * as Colors from '../styles/colors';
-import FormInput from '../components/atoms/FormInput'
-import Button from '../components/atoms/Button';
+import EditInput from '../components/atoms/EditInput'
+import EditButton from '../components/atoms/EditButton'
+import LongButton from '../components/atoms/LongButton';
 import { AuthContext } from '../navigation/AuthProvider';
+import { convertTimestampToDate } from '../firebase/Logic'
 
 
+export default function SettingsScreen({ navigation, route }) {
 
-export default function SettingsScreen({ navigation }) {
-  const [displayName, setDisplayName] = useState('');
-  const [email, setEmail] = useState('');
-  const { user, logout } = useContext(AuthContext);
+  var user = route.params;
+
+  var d = user.birth_date;
+
+  var date = convertTimestampToDate(d.seconds);
+
+  const { logout } = useContext(AuthContext);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,20 +39,34 @@ export default function SettingsScreen({ navigation }) {
       </View>
       <View style={styles.card_container}>
         <Card containerStyle={styles.card}>
-          <FormInput
-            labelName="Email"
-            value={email}
-            autoCapitalize="none"
-            onChangeText={(userEmail) => setEmail(userEmail)}
-          />
-          <Button
+          <EditInput labelName='Email' editText={user.email} icon='email'></EditInput>
+          <EditButton
+            labelName='Date of birth'
+            data={date}
+            icon='calendar'
+            showIcon={true}
+            iconSize={20}
+            onPress={() => { navigation.navigate('EditGender',user) }}
+          ></EditButton>
+          <EditButton
+            labelName='Gender'
+            data={user.gender}
+            icon='gender'
+            iconSize={20}
+            onPress={() => { navigation.navigate('EditGender',user) }}
+          ></EditButton>
+          <LongButton
             title="Logout"
+            style={styles.long_button}
+            onPress={() => logout()}
+          />
+          <LongButton
+            title="Delete account"
+            style={styles.long_button}
             onPress={() => logout()}
           />
         </Card>
-
       </View>
-
     </SafeAreaView>
   );
 }
@@ -77,6 +98,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignSelf: 'center'
-
   },
+
+  long_button: {
+    alignSelf: 'center',
+    marginTop: 20,
+  }
 });

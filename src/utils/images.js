@@ -11,6 +11,9 @@ const images = {
   tripverLogo: {
     uri: require('../assets/images/tripverLogo.png')
   },
+  chatkittyLogo: {
+    uri: require('../assets/images/chatkitty.png')
+  },
   hobbies: {
     uri: require('../assets/images/hobbies.png')
   },

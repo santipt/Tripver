@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, ImageBackground, SafeAreaView, Text } from 'react-native';
+import { StyleSheet, View, ImageBackground, SafeAreaView, Text, Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 // Importing icons
@@ -18,6 +18,8 @@ import { AuthContext } from '../../navigation/AuthProvider';
 
 // Importing image paths
 import { images } from '../../utils/images'
+
+const { width, height } = Dimensions.get('screen');
 
 export default function SignupScreen2({ route, navigation }) {
   const [currentLocation, setCurrentLocation] = useState('');
@@ -68,7 +70,7 @@ export default function SignupScreen2({ route, navigation }) {
 
   return (
     <SafeAreaView style={GlobalStyles.androidSafeArea}>
-    <KeyboardAwareScrollView
+      <KeyboardAwareScrollView
         style={{ backgroundColor: Colors.GRAY_LIGHT }}
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={styles.container}
@@ -86,6 +88,7 @@ export default function SignupScreen2({ route, navigation }) {
           <View style={styles.sing_up_container}>
             <Text style={styles.titleText}>Let's get started!</Text>
             <GoogleInput
+              style={googleInputStyle}
               focus={focus}
               showLabel={true}
               labelName="Location"
@@ -108,8 +111,8 @@ export default function SignupScreen2({ route, navigation }) {
                   }
                 },
               }}
-              
-              ></GoogleInput>
+
+            ></GoogleInput>
             <View>
               <DatePicker
                 date={date} // Initial date from state
@@ -158,12 +161,12 @@ const styles = StyleSheet.create({
   sing_up_container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   titleText: {
     fontSize: 30,
     marginBottom: 60,
-    marginTop:-10,
+    marginTop: -10,
   },
   icon_left: {
     marginLeft: 15,
@@ -179,4 +182,45 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignSelf: 'center',
   }
+});
+
+const googleInputStyle = StyleSheet.create({
+  container: {
+    flex: 0,
+    width: '83%',
+    borderRadius: 30,
+  },
+  textInputContainer: {
+    flexDirection: 'row',
+  },
+  textInput: {
+    backgroundColor: '#FFFFFF',
+    height: 44,
+    borderRadius: 30,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    fontSize: 15,
+    flex: 1,
+    width: width / 1.2,
+    marginBottom: 30,
+  },
+  listView: {
+  },
+  row: {
+    backgroundColor: '#FFFFFF',
+    padding: 13,
+    height: 44,
+    flexDirection: 'row',
+    borderRadius: 30,
+  },
+  separator: {
+    height: 0.5,
+    backgroundColor: '#c8c7cc',
+  },
+  description: {},
+  loader: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    height: 30,
+  },
 });

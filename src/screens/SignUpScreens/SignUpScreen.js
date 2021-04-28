@@ -61,18 +61,22 @@ export default function LoginScreen({ navigation }) {
               }}
               style={styles.google_button}
             />
-            <SocialIcon
+            {/* <SocialIcon
               title='Sign In With Facebook'
               button
               type='facebook'
               raise={false}
-            />
+            /> */}
             <Text style={styles.privacy_policy}>
               {"By typing Continue or Create Account, I agree to Tripver's "}
               <Text style={{ textDecorationLine: 'underline' }}
                 onPress={() => Linking.openURL('http://google.com')}>
                 {"Terms of Service, Privacy Policy and Nondicrimination Policy."}</Text>
             </Text>
+            <View style={styles.chatkitty_container}>
+              <Text style={styles.chatkitty_text}>In colaboration with</Text>
+              <Image source={images.chatkittyLogo.uri} resizeMode="contain" style={styles.chatkitty_logo}></Image>
+            </View>
           </View>
         </ImageBackground>
       </SafeAreaView>
@@ -119,5 +123,20 @@ const styles = StyleSheet.create({
     margin: 20,
     color: Colors.WHITE,
     fontSize: 12,
-  }
+    marginBottom:50,
+  },
+  chatkitty_container: {
+    flexDirection: 'row',
+    position: 'absolute', left: 0, right: 0, bottom: 0,
+    justifyContent:'center',
+    marginBottom:20,
+  },
+  chatkitty_text:{
+    color:Colors.WHITE
+  },
+  chatkitty_logo: {
+    alignSelf: 'center',
+    width: '28%',
+    height: '150%',
+  },
 });

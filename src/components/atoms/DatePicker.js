@@ -38,7 +38,7 @@ export default function DatePicker({ labelName, focus, ...props }) {
                 placeholder="Select date"
                 format="DD/MM/YYYY"
                 minDate="01/01/1920"
-                maxDate="11/10/2020"
+                maxDate="31/12/2020"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{

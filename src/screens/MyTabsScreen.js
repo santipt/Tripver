@@ -2,8 +2,7 @@
 import * as React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import { withInAppNotification } from '@chatkitty/react-native-in-app-notification';
 
 // Importing icons
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -13,14 +12,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 // Importing components
 import FindPeople from './FindPeople'
 import FindPlacesScreen from './FindPlacesScreen'
-import ChatScreen from './ChatScreens/ChatScreen'
+import ChatComponent from '../navigation/ChatComponent'
 import ProfileScreen from './ProfileScreen'
 import TopTabNavigator from '../components/molecules/TopTabNavigator.js'
 
 import * as Colors from '../styles/colors';
 
 const Tab = createBottomTabNavigator();
-
 
 export default function MyTabs() {
   return (
@@ -56,7 +54,7 @@ export default function MyTabs() {
       />
       <Tab.Screen
         name="Chat"
-        component={ChatScreen}
+        component={ChatComponent}
         options={{
           tabBarButton: CustomTabButton,
           tabBarBadge: '',

@@ -1,5 +1,5 @@
 // Importing react utilities
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect,useLayoutEffect } from 'react';
 import { StyleSheet, View, ImageBackground, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Avatar, Accessory } from 'react-native-elements';
@@ -29,12 +29,10 @@ export default function PictureScreen({ route, navigation }) {
     // Getting the data from the other screens
     var data = route.params;
 
-    // Running only the screen is loaded
-    useEffect(() => {
-        if (data.googleData != undefined && selectedImage == null) {
-            setSelectedImage(data.googleData.user.photoUrl)
-        }
-    }, []);
+    // If there is a google photo, change selectedImage
+    if (data.googleData != undefined && selectedImage == null) {
+        setSelectedImage(data.googleData.user.photoUrl.replace("s96", "s400"));
+    }
 
     if (loading) {
         return <Loading />;
@@ -49,7 +47,6 @@ export default function PictureScreen({ route, navigation }) {
             navigation.navigate('AboutMeScreen', data)
         }
     };
-
 
     return (
         <SafeAreaView style={GlobalStyles.androidSafeArea}>

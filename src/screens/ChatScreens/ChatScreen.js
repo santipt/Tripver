@@ -1,72 +1,167 @@
-import { useIsFocused } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { Divider, List } from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { Avatar, Bubble, GiftedChat } from 'react-native-gifted-chat';
 
 import { kitty } from '../../chatkitty';
 import Loading from '../../components/atoms/Loading';
+import { AuthContext } from '../../navigation/AuthProvider';
+import * as Colors from '../../styles/colors';
 
-export default function ChatScreen() {
-  const [channels, setChannels] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function ChatScreen({ route, navigation }) {
 
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    let isCancelled = false;
-
-    kitty.getChannels().then((result) => {
-      if (!isCancelled) {
-        setChannels(result.paginator.items);
-
-        if (loading) {
+    const { user } = useContext(AuthContext);
+    const { channel } = route.params;
+  
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [loadEarlier, setLoadEarlier] = useState(false);
+    const [isLoadingEarlier, setIsLoadingEarlier] = useState(false);
+    const [messagePaginator, setMessagePaginator] = useState(null);
+    const [typing, setTyping] = useState(null);
+  
+    useEffect(() => {
+      const startChatSessionResult = kitty.startChatSession({
+        channel: channel,
+        onReceivedMessage: (message) => {
+          setMessages((currentMessages) =>
+            GiftedChat.append(currentMessages, [mapMessage(message)])
+          );
+        },
+        onTypingStarted: (typingUser) => { /* Add this */
+          if (typingUser.id !== user.id) {
+            setTyping(typingUser);
+          }
+        },
+        onTypingStopped: (typingUser) => { /* Add this */
+          if (typingUser.id !== user.id) {
+            setTyping(null);
+          }
+        },
+      });
+  
+      kitty
+        .getMessages({
+          channel: channel,
+        })
+        .then((result) => {
+          setMessages(result.paginator.items.map(mapMessage));
+  
+          setMessagePaginator(result.paginator);
+          setLoadEarlier(result.paginator.hasNextPage);
+  
           setLoading(false);
-        }
+        });
+  
+      return startChatSessionResult.session.end;
+    }, [user, channel]);
+  
+    async function handleSend(pendingMessages) {
+      await kitty.sendMessage({
+        channel: channel,
+        body: pendingMessages[0].text,
+      });
+    }
+  
+    async function handleLoadEarlier() {
+      if (!messagePaginator.hasNextPage) {
+        setLoadEarlier(false);
+  
+        return;
       }
-    });
+  
+      setIsLoadingEarlier(true);
+  
+      const nextPaginator = await messagePaginator.nextPage();
+  
+      setMessagePaginator(nextPaginator);
+  
+      setMessages((currentMessages) =>
+        GiftedChat.prepend(currentMessages, nextPaginator.items.map(mapMessage))
+      );
+  
+      setIsLoadingEarlier(false);
+    }
 
-    return () => {
-      isCancelled = true;
-    };
-  }, [isFocused, loading]);
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  return (
-      <View style={styles.container}>
-        <FlatList
-            data={channels}
-            keyExtractor={(item) => item.id.toString()}
-            ItemSeparatorComponent={() => <Divider />}
-            renderItem={({ item }) => (
-                <List.Item
-                    title={item.name}
-                    description={item.type}
-                    titleNumberOfLines={1}
-                    titleStyle={styles.listTitle}
-                    descriptionStyle={styles.listDescription}
-                    descriptionNumberOfLines={1}
-                    onPress={() => {
-                      // TODO navigate to a chat screen.
-                    }}
-                />
-            )}
+    async function handleInputTextChanged(text) {
+      await kitty.sendKeystrokes({
+        channel: channel,
+        keys: text,
+      });
+    }
+  
+    function renderBubble(props) {
+      return (
+        <Bubble
+          {...props}
+          wrapperStyle={{
+            left: {
+              backgroundColor: Colors.WHITE,
+            },
+            right:{
+                backgroundColor: Colors.PRIMARY,
+            },
+          }}
         />
-      </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#f5f5f5',
-    flex: 1,
-  },
-  listTitle: {
-    fontSize: 22,
-  },
-  listDescription: {
-    fontSize: 16,
-  },
-});
+      );
+    }
+  
+    function renderAvatar(props) {
+      return (
+        <Avatar
+          {...props}
+          onPressAvatar={(clickedUser) => {
+            kitty
+              .createChannel({
+                type: 'DIRECT',
+                //name: 'Test', IT DOESN'T WORK
+                members: [{ id: clickedUser._id }],
+              })
+              .then((result) => {
+                // console.log(result.channel)
+                var displayName = result.channel.members[0].displayName;
+                if(displayName == user.displayName){
+                  displayName = result.channel.members[1].displayName;
+                }
+                // console.log(displayName)
+                navigation.navigate('Chat', { channel: result.channel, title: displayName });
+              });
+          }}
+        />
+      );
+    }
+  
+    if (loading) {
+      return <Loading />;
+    }
+  
+    return (
+      <GiftedChat
+        messages={messages}
+        onSend={handleSend}
+        user={mapUser(user)}
+        loadEarlier={loadEarlier}
+        isLoadingEarlier={isLoadingEarlier}
+        onLoadEarlier={handleLoadEarlier}
+        renderBubble={renderBubble}
+        renderAvatar={renderAvatar}
+        onInputTextChanged={handleInputTextChanged}
+        isTyping={typing != null} 
+      />
+    );
+  }
+  
+  function mapMessage(message) {
+    return {
+      _id: message.id,
+      text: message.body,
+      createdAt: new Date(message.createdTime),
+      user: mapUser(message.user),
+    };
+  }
+  
+  function mapUser(user) {
+    return {
+      _id: user.id,
+      name: user.name,
+      avatar: user.avatar,
+    };
+  }

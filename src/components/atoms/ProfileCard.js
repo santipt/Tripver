@@ -1,19 +1,42 @@
 // Importing react utilities
-import React, {useContext} from 'react';
+import React, { useContext, useState, } from 'react';
+import { NavigationActions, StackActions } from 'react-navigation';
 import { View } from 'react-native';
 import { Dimensions, StyleSheet, TouchableOpacity, Text, Platform } from 'react-native';
 import { Card, Avatar } from 'react-native-elements';
-
+import { useNavigation } from '@react-navigation/native';
 // Importing components
 import * as Colors from '../../styles/colors';
+import { kitty } from '../../chatkitty';
 import { AuthContext } from '../../navigation/AuthProvider';
 
 
-export default function ProfileCard({ title, age, location, profile_picture, onPress, ...props }) {
+export default function ProfileCard({ title, age, location, profile_picture, onPress, id, ...props }) {
 
-    const { user } = useContext(AuthContext);
+    const { user, userId } = useContext(AuthContext);
+    const [channelName, setChannelName] = useState(title);
+    const navigation = useNavigation();
+
+    //console.log("Chatkitty id", id)
+
     //console.log(user)
+    function handleButtonPress() {
 
+        // Getting both id in order to create the session
+        // console.log("Current user id:", userId)
+        // console.log("User id:", id);
+
+        if (channelName.length > 0) {
+            kitty
+                .createChannel({
+                    type: 'DIRECT',
+                    members: [{ id: id }],
+                })
+                .then((result) => {
+                    navigation.navigate('My connections', { channel: result.channel, redirect: true });
+                });
+        }
+    }
     return (
         <Card containerStyle={styles.card_container}>
             <View style={styles.container}>
@@ -22,7 +45,7 @@ export default function ProfileCard({ title, age, location, profile_picture, onP
                     width={styles.profile_picture.width}
                     height={styles.profile_picture.height}
                     rounded
-                    source={{uri: profile_picture}}
+                    source={{ uri: profile_picture }}
                     imageProps={{ resizeMode: 'cover' }} // Rescaling the image
                 />
                 <View style={styles.text_container}>
@@ -37,7 +60,7 @@ export default function ProfileCard({ title, age, location, profile_picture, onP
                     icon={{ name: 'chat', color: Colors.SECONDARY, size: 25, }}
                     imageProps={{ resizeMode: 'cover' }} // Rescaling the image
                     containerStyle={styles.open_chat}
-                    onPress={() => console.log("Open chat")}
+                    onPress={() => handleButtonPress()}
                 ></Avatar>
             </View>
         </Card>
@@ -81,9 +104,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         backgroundColor: 'white',
-        position:'absolute',
-        right:0
-        
+        position: 'absolute',
+        right: 0
+
     },
     chat: {
         ...Platform.select({

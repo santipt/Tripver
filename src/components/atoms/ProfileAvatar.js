@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar, Accessory } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
@@ -6,6 +6,9 @@ import * as ImagePicker from 'expo-image-picker';
 // Importing components
 import * as Colors from '../../styles/colors';
 import { useActionSheet } from '@expo/react-native-action-sheet'
+import { AuthContext } from '../../navigation/AuthProvider';
+import { kitty } from '../../chatkitty';
+
 
 // Importing icons
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,6 +19,11 @@ export default function ProfileAvatar({ ...props }) {
     const { showActionSheetWithOptions } = useActionSheet();
 
     const [selectedImage, setSelectedImage] = useState(props.selectedImage);
+
+    useEffect(() => {
+        setSelectedImage(props.selectedImage)
+    }, []);
+
 
     // Open options: Take photo or Choose from library
     let onOpenActionSheet = () => {

@@ -157,12 +157,14 @@ export function deleteUser() {
 export async function getListOfLocals(currentUser) {
 
     var users = [];
-    var data = await db.collection("users").where('user_type', 'in', ['local']).get();
+    var data = await db.collection("users").where('user_type', 'in', ['Local']).get();
 
     data.docs.forEach(item => {
 
         if (item.data().email != currentUser) {
-            users.push(item.data())
+            var userData = item.data();
+            userData.id = item.id
+            users.push(userData)
         }
     })
 
@@ -172,12 +174,13 @@ export async function getListOfLocals(currentUser) {
 export async function getListOfTripvers(currentUser) {
 
     var users = [];
-    var data = await db.collection("users").where('user_type', 'in', ['tripver']).get();
+    var data = await db.collection("users").where('user_type', 'in', ['Tripver']).get();
 
     data.docs.forEach(item => {
-
         if (item.data().email != currentUser) {
-            users.push(item.data())
+            var userData = item.data();
+            userData.id = item.id
+            users.push(userData)
         }
     })
 

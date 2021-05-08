@@ -1,5 +1,6 @@
 // Importing react utilities
 import React from 'react';
+import { InAppNotificationProvider } from '@chatkitty/react-native-in-app-notification';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
@@ -10,10 +11,12 @@ import Routes from './Routes';
 export default function Providers() {
   return (
     <PaperProvider theme={theme}>
-      <AuthProvider>
-        <Routes />
-      </AuthProvider>
-    </PaperProvider>
+        <AuthProvider>
+          <InAppNotificationProvider>
+            <Routes />
+          </InAppNotificationProvider>
+        </AuthProvider>
+      </PaperProvider>
   );
 }
 

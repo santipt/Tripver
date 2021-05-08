@@ -36,10 +36,10 @@ export default class ListOfPeople extends Component {
             // Passing the current user in order to not show itself in the lsit
             var users = await getListOfLocals(this.state.user.name);
             this.setState({ isFetching: false, listOfUsers: users })
-        }else{
-             // Passing the current user in order to not show itself in the lsit
-             var users = await getListOfTripvers(this.state.user.name);
-             this.setState({ isFetching: false, listOfUsers: users })
+        } else {
+            // Passing the current user in order to not show itself in the lsit
+            var users = await getListOfTripvers(this.state.user.name);
+            this.setState({ isFetching: false, listOfUsers: users })
         }
     }
 
@@ -47,14 +47,16 @@ export default class ListOfPeople extends Component {
         return (
             <FlatList
                 data={this.state.listOfUsers}
+                keyExtractor={(item) => item.email}
                 renderItem={({ item }) =>
                     <ProfileCard
                         title={item.name}
                         age={item.age}
                         profile_picture={item.profile_picture}
-                        location={item.current_location}>
+                        location={item.current_location}
+                        id={item.chatkitty_id}
+                        >
                     </ProfileCard>}
-                keyExtractor={(item) => item.email}
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.isFetching}

@@ -334,6 +334,13 @@ const hobbies = [
     ,
     { id: 167, name: 'Water sports' }
     ,
+    { id: 168, name: 'Basketball' }
+    ,
+    { id: 169, name: 'Football' }
+    ,
+    { id: 170, name: 'Soccer' }
+    ,
+    { id: 171, name: 'Netflix' }
 ];
 
 export default hobbies;

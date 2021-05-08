@@ -12,15 +12,20 @@ import Loading from '../components/atoms/Loading';
 export default function FindPeople({ ...props }) {
   const { user, loading, setLoading, userId } = useContext(AuthContext);
 
+
   //console.log("USER IS GUEST: ", user.isGuest)
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <View style={styles.container}>
-      { props.userType == 'local' ?
-        <ListOfPeople user={user} userType='local'></ListOfPeople>
-        : <ListOfPeople user={user} userType='tripver'></ListOfPeople>
+    < View style={styles.container} >
+      {
+        props.userType == 'local' ?
+          <ListOfPeople user={user} userType='local'></ListOfPeople>
+          : <ListOfPeople user={user} userType='tripver'></ListOfPeople>
       }
-    </View>
+    </View >
   );
 }
 

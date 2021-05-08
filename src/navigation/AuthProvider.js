@@ -89,6 +89,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [firebaseUser, setFirebaseUser] = useState(null);
 
   return (
     <AuthContext.Provider
@@ -99,6 +100,8 @@ export const AuthProvider = ({ children }) => {
         setUserId,
         loading,
         setLoading,
+        firebaseUser,
+        setFirebaseUser,
         // --------------------------------
         // --------- Email login ----------
         //---------------------------------
@@ -132,9 +135,9 @@ export const AuthProvider = ({ children }) => {
         //---------------------------------
         register: async (data) => {
 
-          setLoading(true);
-
           try {
+            
+            setLoading(true);
 
             // --------------------------------
             // ----- Register with Google -----
@@ -157,6 +160,8 @@ export const AuthProvider = ({ children }) => {
             // ----- Register with Email -----
             //---------------------------------
             else {
+              setLoading(true);
+
               // Creating the user from email
               console.log("EMAIL AUTH")
               await firebase
@@ -171,7 +176,6 @@ export const AuthProvider = ({ children }) => {
 
                       // Inserting all the user data to the cloud firestore and create user
                       await createUser(data);
-
                       // Starting session
                       const result = await kitty.startSession({
                         username: data.email,

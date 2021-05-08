@@ -4,6 +4,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 export default class Loading extends React.Component {
+
   componentDidMount() {
     this.animation.play();
     // Or set a specific startFrame and endFrame with:

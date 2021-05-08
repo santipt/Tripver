@@ -4,6 +4,8 @@ import React, { useContext, useEffect, useState } from 'react';
 
 // Importing components
 import { kitty } from '../chatkitty';
+
+
 import Loading from '../components/atoms/Loading';
 import { db } from '../firebase/index';
 
@@ -14,22 +16,48 @@ import MainStack from './MainStack';
 export default function Routes() {
   const { user, setUser } = useContext(AuthContext);
   const { userId, setUserId } = useContext(AuthContext);
+  const { firebaseUser, setFirebaseUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
     return kitty.onCurrentUserChanged(async (currentUser) => {
+
       setUser(currentUser);
 
       // Getting uid of firestore from email of chatkitty logged in
       if (currentUser != null) {
+
         var email = currentUser.name
+        var picture;
 
         var data = await db.collection("users").where('email', '==', email).get();
 
-        data.docs.forEach(item => {
+        data.docs.forEach(async item => {
+          // Saving all the data of the current user
+          //setFirebaseUser(item.data())
+
+          // Updating the chatkitty display picture
+          // picture = item.data().profile_picture;
+
+          // Saving firebase logged user id
           setUserId(item.id)
+          console.log("USER ID", item.id)
+
+          // TO DO: Not doing it always
+          // Saving chatkitty id        
+          if (item.chatkitty_id == undefined) {
+            await db.collection("users").doc(item.id).update({ chatkitty_id: currentUser.id });
+          }
+
         })
+
+
+        // I have to pass a file in order to change the chatkitty display picture
+        // var res = await kitty.updateCurrentUserDisplayPicture( file );
+        // console.log(res)
+        // console.log("CHATKITTY PICTURE", currentUser.displayPictureUrl)
+
       }
 
       if (initializing) {
@@ -38,7 +66,7 @@ export default function Routes() {
 
       setLoading(false);
     });
-  }, [initializing, setUserId, setUser]);
+  }, [initializing, setUserId, setUser, setFirebaseUser]);
 
   if (loading) {
     return <Loading />;

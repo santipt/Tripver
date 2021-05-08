@@ -16,7 +16,7 @@ export default function CreateChannelScreen({ navigation }) {
         type: 'PUBLIC',
         name: channelName,
       })
-      .then(() => navigation.navigate('Home'));
+      .then(() => navigation.navigate('Main'));
     }
   }
 

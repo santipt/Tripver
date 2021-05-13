@@ -12,9 +12,9 @@ export default function Providers() {
   return (
     <PaperProvider theme={theme}>
         <AuthProvider>
-          <InAppNotificationProvider>
+          {/* <InAppNotificationProvider> */}
             <Routes />
-          </InAppNotificationProvider>
+          {/* </InAppNotificationProvider> */}
         </AuthProvider>
       </PaperProvider>
   );

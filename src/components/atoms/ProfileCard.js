@@ -33,7 +33,9 @@ export default function ProfileCard({ title, age, location, profile_picture, onP
                     members: [{ id: id }],
                 })
                 .then((result) => {
-                    navigation.navigate('My connections', { channel: result.channel, redirect: true });
+                    // "Home chat" is the name of the navigation in TabsNavigator
+                    //console.log(result.channel.id)
+                    navigation.navigate('Home chat', { channel: result.channel, redirect: true });
                 });
         }
     }

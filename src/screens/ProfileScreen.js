@@ -106,15 +106,25 @@ export default function ProfileScreen({ navigation }) {
                             <View style={styles.scrollview_bottom}></View>
                         </ScrollView>
                     </Card>
+                    {/* User type */}
                     <View style={styles.user_type_container}>
                         <Text style={styles.user_type_text}>{user.user_type}</Text>
-                        <Icon2
-                            name='bag-personal-outline'
-                            color={Colors.SECONDARY}
-                            size={30}
-                            style={styles.user_type_icon}
-                        />
+                        {user.user_type == "Tripver" ?
+                            <Icon2
+                                name='bag-personal-outline'
+                                color={Colors.SECONDARY}
+                                size={30}
+                                style={styles.user_type_icon}
+                            /> :
+                            <Icon2
+                                name='city-variant-outline'
+                                color={Colors.SECONDARY}
+                                size={30}
+                                style={styles.user_type_icon}
+                            />}
+
                     </View>
+                    {/* Edit icon */}
                     <TouchableOpacity style={styles.edit_icon}>
                         <Icon2
                             name='pencil-circle'
@@ -199,7 +209,7 @@ const styles = StyleSheet.create({
     card_container: {
         alignSelf: 'center',
         width: '98%',
-        marginTop:40,
+        marginTop: 40,
     },
     card: {
         borderRadius: 14,
@@ -207,7 +217,7 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
         paddingTop: 5,
         paddingBottom: 5,
-        height:'82.5%',
+        height: '82.5%',
     },
     scrollview: {
     },

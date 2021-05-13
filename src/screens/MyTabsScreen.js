@@ -1,8 +1,7 @@
 // Importing react utilities
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { withInAppNotification } from '@chatkitty/react-native-in-app-notification';
 
 // Importing icons
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -10,7 +9,6 @@ import { faHeart, faCommentAlt, faCompass, faUser } from '@fortawesome/fontaweso
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // Importing components
-import FindPeople from './FindPeople'
 import FindPlacesScreen from './FindPlacesScreen'
 import ChatComponent from '../navigation/ChatComponent'
 import ProfileScreen from './ProfileScreen'
@@ -21,6 +19,7 @@ import * as Colors from '../styles/colors';
 const Tab = createBottomTabNavigator();
 
 export default function MyTabs() {
+
   return (
     <Tab.Navigator tabBarOptions={{
       initialRouteName: "Find people",
@@ -53,7 +52,7 @@ export default function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="Chat"
+        name="Home chat"
         component={ChatComponent}
         options={{
           tabBarButton: CustomTabButton,

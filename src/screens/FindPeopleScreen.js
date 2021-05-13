@@ -1,17 +1,16 @@
 // Importing react utilities
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
-import { kitty } from '../chatkitty';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 
 // Importing components
 import { AuthContext } from '../navigation/AuthProvider';
 import ListOfPeople from '../components/molecules/ListOfPeople'
 import Loading from '../components/atoms/Loading';
+import GlobalStyles from '../styles/GlobalStyles';
 
 
-export default function FindPeople({ ...props }) {
-  const { user, loading, setLoading, userId } = useContext(AuthContext);
-
+export default function FindPeopleScreen({ ...props }) {
+  const { user, loading } = useContext(AuthContext);
 
   //console.log("USER IS GUEST: ", user.isGuest)
   if (loading) {
@@ -19,13 +18,9 @@ export default function FindPeople({ ...props }) {
   }
 
   return (
-    < View style={styles.container} >
-      {
-        props.userType == 'local' ?
-          <ListOfPeople user={user} userType='local'></ListOfPeople>
-          : <ListOfPeople user={user} userType='tripver'></ListOfPeople>
-      }
-    </View >
+    <SafeAreaView style={GlobalStyles.androidSafeArea} >
+      <ListOfPeople user={user} userType={props.userType}></ListOfPeople>
+    </SafeAreaView >
   );
 }
 

@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/Feather';
 export default function HomeChatScreen({ navigation, route }) {
   const [channels, setChannels] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   // Swiping
   const [isSwiping, setIsSwiping] = useState(false);
@@ -25,7 +26,25 @@ export default function HomeChatScreen({ navigation, route }) {
 
   const isFocused = useIsFocused();
 
-  if (leftActionActivated && toggle == false) {
+  // ----- Option 1 -----
+  // if (leftActionActivated && toggle == false) {
+  //   Alert.alert(
+  //     "Are you sure to delete this chat?",
+  //     "You can find deleted chats in settings",
+  //     [
+  //       {
+  //         text: "Cancel",
+  //         onPress: () => console.log("Cancel Pressed"),
+  //         style: "cancel"
+  //       },
+  //       { text: "OK", onPress: () => console.log("OK Pressed") }
+  //     ],
+  //     { cancelable: false }
+  //   );
+  // }
+
+  // ----- Option 2 -----
+  const deleteChatUser = (channelId) => {
     Alert.alert(
       "Are you sure to delete this chat?",
       "You can find deleted chats in settings",
@@ -35,10 +54,32 @@ export default function HomeChatScreen({ navigation, route }) {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
+        {
+          text: "OK", onPress: () => {
+            setLoading(true);
+
+            var requestOptions = {
+              method: 'DELETE',
+              redirect: 'follow'
+            };
+
+            // Try to get the access_token everytime, it won't work next time
+            // Create a method called delete chat user
+            fetch("https://api.chatkitty.com/v1/applications/2552/channels/" + channelId + "\n?access_token=9fc8c189-7ee8-4174-9e72-d2f9ed3af562", requestOptions)
+              .then(response => response.text())
+              .then(result => {
+                //console.log(result)
+                setLoading(false);
+                setIsFetching(true)
+              })
+              .catch(error => console.log('error', error));
+          }
+        }
       ],
       { cancelable: false }
     );
+    setIsFetching(false)
+
   }
 
   useEffect(() => {
@@ -67,30 +108,48 @@ export default function HomeChatScreen({ navigation, route }) {
       <View style={styles.container}>
         <FlatList
           data={channels}
+          refreshing={isFetching}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <Divider />}
           scrollEnabled={!isSwiping}
           renderItem={({ item }) => (
-            <Swipeable
-              onSwipeStart={() => setIsSwiping(true)}
-              onSwipeRelease={() => setIsSwiping(false)}
-              rightContent={
-                <View style={styles.swipe_container}>
-                  <Icon
-                    name='trash-2'
-                    style={styles.swipe_icon}
-                    color={Colors.WHITE}
-                    size={30}
-                  />
-                </View>
-              }
-              rightActionActivationDistance={180}
-              onRightActionActivate={() => setLeftActionActivated(true)}
-              onRightActionDeactivate={() => setLeftActionActivated(false)}
-              onRightActionComplete={() => setToggle(!toggle)}
-            >
+            // ----- Option 1 -----
+            // <Swipeable
+            //   onSwipeStart={() => setIsSwiping(true)}
+            //   onSwipeRelease={() => setIsSwiping(false)}
+            //   rightContent={
+            //     <View style={styles.swipe_container}>
+            //       <Icon
+            //         name='trash-2'
+            //         style={styles.swipe_icon}
+            //         color={Colors.WHITE}
+            //         size={30}
+            //       />
+            //     </View>
+            //   }
+            //   rightActionActivationDistance={180}
+            //   onRightActionActivate={() => setLeftActionActivated(true)}
+            //   onRightActionDeactivate={() => setLeftActionActivated(false)}
+            //   onRightActionComplete={() => setToggle(!toggle)}
+            // >
+
+            // ----- Option 2 -----
+            // <Swipeable
+            //   onSwipeStart={() => setIsSwiping(true)}
+            //   onSwipeRelease={() => setIsSwiping(false)}
+            //   rightButtons={[
+            //     <TouchableOpacity style={styles.swipe_container} onPress={() => deleteChatUser(item.id)}>
+            //       <Icon
+            //         name='trash-2'
+            //         style={styles.swipe_icon}
+            //         color={Colors.WHITE}
+            //         size={30}
+            //       />
+            //     </TouchableOpacity>,
+            //   ]}
+            // >
               <UserComponent item={item} navigation={navigation}></UserComponent>
-            </Swipeable>
+            // </Swipeable>
           )}
         />
       </View>
@@ -175,9 +234,9 @@ const styles = StyleSheet.create({
   swipe_container: {
     backgroundColor: '#ec4646',
     flex: 1,
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   swipe_icon: {
-    marginLeft:20,
+    marginLeft:22,
   },
 });

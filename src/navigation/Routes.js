@@ -35,14 +35,14 @@ export default function Routes() {
 
         data.docs.forEach(async item => {
           // Saving all the data of the current user
-          //setFirebaseUser(item.data())
+          setFirebaseUser(item.data())
 
           // Updating the chatkitty display picture
           // picture = item.data().profile_picture;
 
           // Saving firebase logged user id
           setUserId(item.id)
-          console.log("USER ID", item.id)
+          //console.log("USER ID", item.id)
 
           // TO DO: Not doing it always
           // Saving chatkitty id        

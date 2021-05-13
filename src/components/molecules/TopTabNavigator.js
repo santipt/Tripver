@@ -1,35 +1,49 @@
 // Importing react utilities
-import * as React from 'react';
+import React, { useContext } from 'react';
+
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 // Importing components
-import FindPeople from '../../screens/FindPeople'
+import FindPeople from '../../screens/FindPeopleScreen'
 import * as Colors from '../../styles/colors';
+import { AuthContext } from '../../navigation/AuthProvider';
+import GlobalStyles from '../../styles/GlobalStyles';
+import { SafeAreaView } from 'react-native';
 
 const TopTab = createMaterialTopTabNavigator();
 
 export default function TopTabs() {
+  const { firebaseUser } = useContext(AuthContext);
+
+  var user_type = 'Local';
+
+  if (firebaseUser != undefined) {
+    user_type = firebaseUser.user_type;
+  }
+
   return (
-    <TopTab.Navigator
-      tabBarOptions={{
-        labelStyle: { fontSize: 12, fontWeight: 'bold' },
-        tabStyle: { borderTopRightRadius: 20, borderTopLeftRadius: 20, marginTop: 20, backgroundColor: Colors.WHITE, },
-        indicatorStyle:{ backgroundColor:Colors.PRIMARY,},
-        style: { backgroundColor:Colors.PRIMARY, },
-        showIcon: true,
-        activeTintColor: Colors.PRIMARY,
-        inactiveTintColor: Colors.GRAY_MEDIUM
-      }}
-      sceneContainerStyle={{backgroundColor:Colors.WHITE}}
+    <SafeAreaView style={GlobalStyles.androidSafeArea} >
+      <TopTab.Navigator
+        tabBarOptions={{
+          labelStyle: { fontSize: 12, fontWeight: 'bold' },
+          tabStyle: { borderTopRightRadius: 20, borderTopLeftRadius: 20, marginTop: 8, backgroundColor: Colors.WHITE, },
+          indicatorStyle: { backgroundColor: Colors.PRIMARY, },
+          style: { backgroundColor: Colors.PRIMARY, },
+          showIcon: true,
+          activeTintColor: Colors.PRIMARY,
+          inactiveTintColor: Colors.GRAY_MEDIUM
+        }}
+        sceneContainerStyle={{ backgroundColor: Colors.WHITE }}
       >
-      <TopTab.Screen
-        name="Locals"
-        children={() => <FindPeople userType='local'></FindPeople> }
-         />
-      <TopTab.Screen
-        name="Tripvers"
-        children={() => <FindPeople userType='tripver'></FindPeople> }
-         />
-    </TopTab.Navigator>
+        <TopTab.Screen
+          name={user_type == "Tripver" ? "Locals" : "Tripvers"}
+          children={() => <FindPeople userType={user_type == "Tripver" ? 'local' : 'tripver'}></FindPeople>}
+        />
+        <TopTab.Screen
+          name={user_type == "Tripver" ? "Tripvers" : "Locals"}
+          children={() => <FindPeople userType={user_type == "Local" ? 'tripver' : 'local'}></FindPeople>}
+        />
+      </TopTab.Navigator>
+    </SafeAreaView>
   );
 }

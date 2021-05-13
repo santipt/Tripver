@@ -32,7 +32,7 @@ export default function EditProfileScreen({ navigation, route }) {
   const [name, setName] = useState(user.name);
   // TO DO: cuando selecciono una ciudad la guardo y luego no selecciono ninguna, 
   // no se muestra la última ciudad guardada.
-  const [currentLocation, setCurrentLocation] = useState(user.current_location);
+  const [currentLocation, setCurrentLocation] = useState(user.current_location); // Es por esto
   const [profilePicture, setProfilePicture] = useState(user.profile_picture);
   const [description, setDescription] = useState(user.about_me);
   const [userType, setUserType] = useState(user.user_type);

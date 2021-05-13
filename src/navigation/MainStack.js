@@ -1,7 +1,12 @@
 // Importing react utilities
+import React, { useEffect, useContext } from 'react';
+
 import { createStackNavigator } from '@react-navigation/stack';
-import { withInAppNotification } from '@chatkitty/react-native-in-app-notification';
-import React from 'react';
+
+import { getChannelDisplayName, kitty } from '../chatkitty';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 
 // Importing screens
 import MyTabsScreen from '../screens/MyTabsScreen';
@@ -17,11 +22,26 @@ import CreateChannelScreen from '../screens/ChatScreens/CreateChannelScreen';
 import ChatScreen from '../screens/ChatScreens/ChatScreen';
 import HomeChatScreen from '../screens/ChatScreens/ChatScreen';
 import BrowseChannelsScreen from '../screens/ChatScreens/BrowseChannelsScreen';
+import ChatComponent from '../navigation/ChatComponent';
 
 
 const Main = createStackNavigator();
 
 export default function MainStack() {
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      kitty.updateCurrentUser((user) => {
+        user.properties = {
+          ...user.properties,
+          'expo-push-token': token,
+        };
+
+        return user;
+      });
+    });
+  }, []);
+
   return (
     // headerMode="none"
     <Main.Navigator headerMode="none" mode="modal">
@@ -53,4 +73,39 @@ const horizontalAnimation = {
   },
 };
 
+
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Constants.isDevice && Platform.OS !== 'web') {
+    const {
+      status: existingStatus,
+    } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      console.log('Failed to get push token for push notification!');
+      return;
+    }
+
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+  } else {
+    console.log('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
 

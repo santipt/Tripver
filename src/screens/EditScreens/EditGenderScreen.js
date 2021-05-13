@@ -25,7 +25,7 @@ export default function EditGenderScreen({ route, navigation }) {
     var user = route.params;
 
     console.log(user.gender)
-    
+
     const [checked, setChecked] = React.useState(user.gender);
     const [gender, setGender] = React.useState(user.gender);
 
@@ -38,16 +38,15 @@ export default function EditGenderScreen({ route, navigation }) {
         return <Loading />;
     }
 
-    const checkTextInput = () => {
-        if (checked != '') {
-            if (checked == "Other") {
-                data.gender = gender;
-            } else {
-                data.gender = checked
-            }
-            //Checked Successfully
-            navigation.navigate('PictureScreen', data)
+    const checkBeforeNavigate = () => {
+
+        if (checked == "Other") {
+            data.gender = gender;
+        } else {
+            data.gender = checked
         }
+        navigation.navigate('Settings', data)
+
     };
 
 
@@ -60,13 +59,20 @@ export default function EditGenderScreen({ route, navigation }) {
         >
             <SafeAreaView style={GlobalStyles.androidSafeArea}>
                 <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
-                    <Icon
-                        name='arrowleft'
-                        color={Colors.WHITE}
-                        style={styles.icon_left}
-                        size={30}
-                        onPress={() => navigation.goBack()}
-                    />
+                    <View style={styles.header}>
+                        <Icon
+                            name='closecircleo'
+                            color={Colors.WHITE}
+                            size={30}
+                            onPress={() => navigation.goBack()}
+                        />
+                        <Icon
+                            name='checkcircleo'
+                            color={Colors.WHITE}
+                            size={30}
+                            onPress={() => checkBeforeNavigate()}
+                        />
+                    </View>
                     <View style={styles.content}>
                         <Text style={styles.title_text}>How do you identify?</Text>
                         <Card style={styles.card_container} containerStyle={styles.card}>
@@ -89,6 +95,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        margin: 20,
+    },
     content: {
         flex: 1,
         justifyContent: 'center',
@@ -100,7 +112,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         textAlign: 'center',
         marginBottom: 60,
-        marginTop: -20,
+        marginTop: -80,
     },
 
     icon_left: {

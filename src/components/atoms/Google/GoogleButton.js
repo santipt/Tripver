@@ -1,9 +1,6 @@
 // Importing react utilities
-import { useLinkProps } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-
-// Importing icons
 
 // Importing components
 import * as Colors from '../../../styles/colors';

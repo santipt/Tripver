@@ -1,15 +1,12 @@
 // Importing react utilities
-import { useLinkProps } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-// Importing icons
-import Icon from 'react-native-vector-icons/AntDesign';
-
 // Importing components
 import * as Colors from '../../../styles/colors';
 
+// This component uses GooglePlacesAutocomplete from Google places API
 export default function GoogleInput({ labelName, focus, ...props }) {
     return (
         <View>

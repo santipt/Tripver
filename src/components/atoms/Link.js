@@ -1,5 +1,4 @@
 // Importing react utilities
-import { useLinkProps } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
@@ -21,6 +20,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 18,
         fontWeight: 'bold',
-        color: 'black',
+        color: Colors.BLACK,
     },
 }); 

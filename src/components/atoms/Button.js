@@ -1,7 +1,6 @@
 // Importing react utilities
-import { useLinkProps } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, useState } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/AntDesign';

@@ -26,6 +26,7 @@ export default function FormInput({ labelName, ...props }) {
         keyboardType={props.keyboardType}
         autoCapitalize={props.autoCapitalize}
         onChangeText={props.onChangeText}
+        maxLength={props.maxLength}
       />
     </View>
   );

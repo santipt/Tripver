@@ -1,8 +1,10 @@
 // Importing react utilities
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 
+// TO DO: Pass a parameter in order to know if it's the creation profile loading
+//        or normal loading
 export default class Loading extends React.Component {
 
   componentDidMount() {
@@ -19,7 +21,6 @@ export default class Loading extends React.Component {
   render() {
     return (
       <View style={styles.animationContainer}>
-        {/* <Image source={require('../../assets/animations/bird.png')} resizeMode="contain" style={styles.logo}></Image> */}
         <LottieView
           ref={animation => {
             this.animation = animation;

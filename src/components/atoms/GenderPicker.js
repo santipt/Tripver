@@ -1,11 +1,9 @@
 // Importing react utilities
 import React from 'react';
 
-import { RadioButton } from 'react-native-paper';
-
 // Importing components
+import { RadioButton } from 'react-native-paper';
 import * as Colors from '../../styles/colors';
-
 
 export default function RadioButtonComponent({ ...props }) {
     return (

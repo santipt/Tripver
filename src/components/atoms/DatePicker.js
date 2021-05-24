@@ -1,26 +1,16 @@
-
-// import React in our code
+// Importing react utilities
 import React, { useState } from 'react';
-
-// import all the components we are going to use
-import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions
-} from 'react-native';
+import {StyleSheet, Text, View, Dimensions} from 'react-native';
 
 // Importing components
 import * as Colors from '../../styles/colors';
 
+// Getting dimensions of the screens
 const { width, height } = Dimensions.get('screen');
 
-
-//import DatePicker from the package we installed
+// Importing DatePicker
 import DateInput from 'react-native-datepicker';
 import RNDatePicker from '@react-native-community/datetimepicker';
-
 
 export default function DatePicker({ labelName, focus, ...props }) {
 

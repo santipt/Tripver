@@ -1,10 +1,9 @@
 // Importing react utilities
 import React from 'react';
-import { Dimensions, StyleSheet, TextInput, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 // Importing components
 import * as Colors from '../../styles/colors';
-
 
 export default function ProgressLine({ labelName, ...props }) {
     return (

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar, Accessory } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
@@ -6,9 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 // Importing components
 import * as Colors from '../../styles/colors';
 import { useActionSheet } from '@expo/react-native-action-sheet'
-import { AuthContext } from '../../navigation/AuthProvider';
-import { kitty } from '../../chatkitty';
-
+import { UserPermissions } from '../../utils/UserPersmissions'
 
 // Importing icons
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -23,7 +21,6 @@ export default function ProfileAvatar({ ...props }) {
     useEffect(() => {
         setSelectedImage(props.selectedImage)
     }, []);
-
 
     // Open options: Take photo or Choose from library
     let onOpenActionSheet = () => {
@@ -52,15 +49,11 @@ export default function ProfileAvatar({ ...props }) {
 
     // Open photo library from the phone and save the uri in order to show the image
     let openImageLibrary = async () => {
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-        if (permissionResult.granted === false) {
-            alert("Permission to access camera roll is required!");
-            return;
-        }
+        // Checking permissions
+        UserPermissions.getImageLibraryPermission();
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        //console.log(pickerResult.uri);
 
         if (pickerResult.cancelled === true) {
             return;
@@ -71,15 +64,11 @@ export default function ProfileAvatar({ ...props }) {
 
     // Open camera from the phone and save the uri in order to show the image
     let openCamera = async () => {
-        let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-
-        if (permissionResult.granted === false) {
-            alert("Permission to access camera is required!");
-            return;
-        }
+        
+        // Checking permissions
+        UserPermissions.getCameraPermission();
 
         let pickerResult = await ImagePicker.launchCameraAsync();
-        //console.log(pickerResult);
 
         if (pickerResult.cancelled === true) {
             return;
@@ -108,7 +97,7 @@ export default function ProfileAvatar({ ...props }) {
                             iconStyle={{ ...styles.edit_icon }, { ...props.iconStyle }} />
                         : null
                     }
-                    {/* Show camera in the middle of the picture */}
+                    {/* Show camera icon in the middle of the picture */}
                     {props.showCameraIcon == true ?
                         <Icon
                             name='camera-plus-outline'
@@ -130,7 +119,6 @@ export default function ProfileAvatar({ ...props }) {
                 </Avatar>}
         </TouchableOpacity>
     );
-
 }
 
 const styles = StyleSheet.create({

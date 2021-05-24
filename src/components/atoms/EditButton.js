@@ -1,20 +1,14 @@
 // Importing react utilities
-import React, { useContext, useState, useEffect } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity, Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
 
 // Importing components
 import * as Colors from '../../styles/colors';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-
-// Getting screen dimensions
-const { width, height } = Dimensions.get('screen');
 
 export default function EditButton({ labelName, showIcon, data, ...props }) {
-
-    const [text, setText] = useState('');
 
     return (
         <View>

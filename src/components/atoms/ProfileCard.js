@@ -1,71 +1,65 @@
 // Importing react utilities
-import React, { useContext, useState, } from 'react';
-import { NavigationActions, StackActions } from 'react-navigation';
+import React, { useState, } from 'react';
 import { View } from 'react-native';
-import { Dimensions, StyleSheet, TouchableOpacity, Text, Platform } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, Platform } from 'react-native';
 import { Card, Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 // Importing components
 import * as Colors from '../../styles/colors';
 import { kitty } from '../../chatkitty';
-import { AuthContext } from '../../navigation/AuthProvider';
 
 
-export default function ProfileCard({ title, age, location, profile_picture, onPress, id, ...props }) {
 
-    const { user, userId } = useContext(AuthContext);
+export default function ProfileCard({ title, age, location, profilePicture, onPress, chatkittyId, profileUserId, ...props }) {
+
     const [channelName, setChannelName] = useState(title);
     const navigation = useNavigation();
 
-    //console.log("Chatkitty id", id)
-
-    //console.log(user)
-    function handleButtonPress() {
-
-        // Getting both id in order to create the session
-        // console.log("Current user id:", userId)
-        // console.log("User id:", id);
+    function goToChat() {
 
         if (channelName.length > 0) {
             kitty
                 .createChannel({
                     type: 'DIRECT',
-                    members: [{ id: id }],
+                    members: [{ id: chatkittyId }],
                 })
                 .then((result) => {
-                    // "Home chat" is the name of the navigation in TabsNavigator
+                    // "Home chat" is the name of the navigation screen in TabsNavigator
                     //console.log(result.channel.id)
+                    // TO DO: Close the chat screen everytime the user leaves de chat
                     navigation.navigate('Home chat', { channel: result.channel, redirect: true });
                 });
         }
     }
     return (
-        <Card containerStyle={styles.card_container}>
-            <View style={styles.container}>
-                <Avatar
-                    size="xlarge"
-                    width={styles.profile_picture.width}
-                    height={styles.profile_picture.height}
-                    rounded
-                    source={{ uri: profile_picture }}
-                    imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                />
-                <View style={styles.text_container}>
-                    <Text style={styles.title}>{title}, {age}</Text>
-                    <Text style={styles.location}>{location}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('ShowProfile', { userId: profileUserId, chatkittyId: chatkittyId})}>
+            <Card containerStyle={styles.card_container}>
+                <View style={styles.container}>
+                    <Avatar
+                        size="xlarge"
+                        width={styles.profile_picture.width}
+                        height={styles.profile_picture.height}
+                        rounded
+                        source={{ uri: profilePicture }}
+                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                    />
+                    <View style={styles.text_container}>
+                        <Text style={styles.title}>{title}, {age}</Text>
+                        <Text style={styles.location}>{location}</Text>
+                    </View>
+                    <Avatar
+                        size="medium"
+                        width={styles.profile_picture.width}
+                        height={styles.profile_picture.height}
+                        rounded
+                        icon={{ name: 'chat', color: Colors.SECONDARY, size: 25, }}
+                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                        containerStyle={styles.open_chat}
+                        onPress={() => goToChat()}
+                    ></Avatar>
                 </View>
-                <Avatar
-                    size="medium"
-                    width={styles.profile_picture.width}
-                    height={styles.profile_picture.height}
-                    rounded
-                    icon={{ name: 'chat', color: Colors.SECONDARY, size: 25, }}
-                    imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                    containerStyle={styles.open_chat}
-                    onPress={() => handleButtonPress()}
-                ></Avatar>
-            </View>
-        </Card>
+            </Card>
+        </TouchableOpacity>
     );
 }
 
@@ -95,7 +89,6 @@ const styles = StyleSheet.create({
     },
     location: {
         marginLeft: 20,
-        alignSelf: 'center',
     },
     open_chat: {
         alignSelf: 'center',
@@ -119,7 +112,7 @@ const styles = StyleSheet.create({
                 shadowRadius: 2,
             },
             android: {
-                //It doesn't work
+                // It doesn't work
                 elevation: 5,
             },
         })

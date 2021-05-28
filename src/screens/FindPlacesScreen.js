@@ -1,19 +1,24 @@
 // Importing react utilities
 import React, { useContext, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 
 // Importing components
+import ListOfPlaces from '../components/molecules/ListOfPlaces'
+import GlobalStyles from '../styles/GlobalStyles';
 import { AuthContext } from '../navigation/AuthProvider';
+import Loading from '../components/atoms/Loading';
 
 export default function FindPlacesScreen() {
-  const { user } = useContext(AuthContext);
+  const { loading } = useContext(AuthContext);
 
-  console.log("USER IS GUEST: ", user.isGuest)
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <View style={styles.container}>
-      <Text>{user.displayName}</Text>
-    </View>
+    <SafeAreaView style={GlobalStyles.androidSafeArea} >
+      <ListOfPlaces></ListOfPlaces>
+    </SafeAreaView >
   );
 }
 

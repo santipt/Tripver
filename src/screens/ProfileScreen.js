@@ -2,11 +2,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
+import { kitty } from '../chatkitty';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-
 
 // Importing components
 import LongButton from '../components/atoms/LongButton'
@@ -25,26 +25,48 @@ import listOfHobbies from '../utils/hobbies'
 import listOfLanguages from '../utils/languages'
 import listOfCountries from '../utils/countries'
 
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen({ route, navigation }) {
 
     const [user, setUser] = useState([])
     const { userId } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
 
+    // TO DO:
+    const [imageLoaded, setImageLoaded] = useState(true);
+
+
     useEffect(() => {
 
-        console.log("USER ID: ", userId)
+        // The profile screen in order to show the information from other user
+        if (route.params != undefined) {
+            //console.log("Show profile of: ", route.params.userId)
 
-        const subscriber = firebase.firestore()
-            .collection('users').doc(userId)
-            .onSnapshot(doc => {
-                setUser(doc.data())
-                //console.log(documentSnapshot.data())
-                setLoading(false)
-            });
+            const subscriber = firebase.firestore()
+                .collection('users').doc(route.params.userId)
+                .onSnapshot(doc => {
+                    setUser(doc.data())
+                    //console.log(documentSnapshot.data())
+                    setLoading(false)
+                });
 
-        // Stop listening for updates when no longer required
-        return () => subscriber();
+            // Stop listening for updates when no longer required
+            return () => subscriber();
+        }
+        // The profile screen from the user
+        else {
+            //console.log("USER ID: ", userId)
+
+            const subscriber = firebase.firestore()
+                .collection('users').doc(userId)
+                .onSnapshot(doc => {
+                    setUser(doc.data())
+                    //console.log(documentSnapshot.data())
+                    setLoading(false)
+                });
+
+            // Stop listening for updates when no longer required
+            return () => subscriber();
+        }
 
     }, [loading]);
 
@@ -52,30 +74,65 @@ export default function ProfileScreen({ navigation }) {
         return <Loading />;
     }
 
+    function goToChat() {
+
+        // Getting both id in order to create the session
+        kitty
+            .createChannel({
+                type: 'DIRECT',
+                members: [{ id: route.params.chatkittyId }],
+            })
+            .then((result) => {
+                // "Home chat" is the name of the navigation in TabsNavigator
+                //console.log(result.channel.id)
+                navigation.navigate('Home chat', { channel: result.channel, redirect: true });
+            });
+
+    }
+
     return (
         <SafeAreaView style={GlobalStyles.androidSafeArea}>
             <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
                 <View style={styles.settings_icon}>
-                    <Icon
-                        name='settings-outline'
-                        color='white'
-                        size={30}
-                        onPress={() => navigation.navigate('Settings', user)}
-                    />
+                    {route.params != undefined ?
+                        <Icon
+                            name='close'
+                            color='white'
+                            size={30}
+                            onPress={() => navigation.goBack()}
+                        /> : <Icon
+                            name='settings-outline'
+                            color='white'
+                            size={30}
+                            onPress={() => navigation.navigate('Settings', user)}
+                        />}
                 </View>
                 <View style={styles.header}>
-                    <Avatar
-                        size="medium" // If I want a circle xlarge
-                        width={styles.profile_picture.width}
-                        height={styles.profile_picture.height}
-                        rounded
-                        source={{ uri: user.profile_picture }}
-                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                    />
+                    <TouchableOpacity onPress={()=> navigation.navigate('ShowProfilePicture', user.profile_picture)}>
+                        <Avatar
+                            size="medium" // If I want a circle xlarge
+                            width={styles.profile_picture.width}
+                            height={styles.profile_picture.height}
+                            rounded
+                            source={{ uri: user.profile_picture }}
+                            imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                        />
+                    </TouchableOpacity>
                     <View>
                         <Text style={styles.profile_name}>{user.name}, {user.age}</Text>
                         <Text style={styles.city}>{user.current_location}</Text>
                     </View>
+                    {route.params != undefined ?
+                        <Avatar
+                            size="medium"
+                            width={styles.profile_picture.width}
+                            height={styles.profile_picture.height}
+                            rounded
+                            icon={{ name: 'chat', color: Colors.SECONDARY, size: 25, }}
+                            imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                            containerStyle={styles.open_chat}
+                            onPress={() => goToChat()}
+                        ></Avatar> : null}
                 </View>
                 <View style={styles.card_container}>
                     <Card containerStyle={styles.card}>
@@ -125,18 +182,19 @@ export default function ProfileScreen({ navigation }) {
 
                     </View>
                     {/* Edit icon */}
-                    <TouchableOpacity style={styles.edit_icon}>
-                        <Icon2
-                            name='pencil-circle'
-                            color={Colors.SECONDARY}
-                            size={27}
-                            onPress={() => {
-                                // Because a warning
-                                user.birth_date = "";
-                                navigation.navigate('EditProfile', user)
-                            }}
-                        />
-                    </TouchableOpacity>
+                    {route.params != undefined ? null
+                        : <TouchableOpacity style={styles.edit_icon}>
+                            <Icon2
+                                name='pencil-circle'
+                                color={Colors.SECONDARY}
+                                size={27}
+                                onPress={() => {
+                                    // Because a warning
+                                    user.birth_date = "";
+                                    navigation.navigate('EditProfile', user)
+                                }}
+                            />
+                        </TouchableOpacity>}
                 </View>
             </ImageBackground>
         </SafeAreaView>
@@ -243,5 +301,30 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap-reverse',
         marginTop: 15,
         marginRight: 15,
-    }
+    },
+    open_chat: {
+        alignSelf: 'center',
+        width: 50,
+        height: 50,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        backgroundColor: 'white',
+        marginLeft: 50,
+    },
+    chat: {
+        ...Platform.select({
+            ios: {
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
+            },
+            android: {
+                //It doesn't work
+                elevation: 5,
+            },
+        })
+    },
 });

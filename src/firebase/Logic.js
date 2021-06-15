@@ -1,4 +1,6 @@
 import { db, firebase, GOOGLE_API_KEY } from './index';
+import * as Location from 'expo-location';
+import UserPermissions from '../utils/UserPersmissions';
 
 // Calculating age from date of birth
 const getAge = (dateString) => {
@@ -158,11 +160,10 @@ export function deleteUser() {
 
 export async function getListOfPlaces(currentLocation, type) {
     console.log("Getting list of places nearby...")
-    console.log("Type: ", type)
 
-    // Getting current location
-    var currentLocation = '54.354755007573054, 18.65669404988337'
-    var radius = 5000;
+    // Formatting the location
+    var currentLocation = currentLocation.coords.latitude + ',' + currentLocation.coords.longitude;
+    var radius = 10000;
 
     var requestOptions = {
         method: 'GET',
@@ -258,21 +259,21 @@ export async function getProfilePicture(chatkittyId) {
 }
 
 export function calculateDistance(lat1, lon1, lat2, lon2) {
-    Number.prototype.toRad = function() {
+    Number.prototype.toRad = function () {
         return this * Math.PI / 180;
-     }
+    }
     // If is less than 1km return in meters
-     var R = 6371; // km 
-     //has a problem with the .toRad() method below.
-     var x1 = lat2-lat1;
-     var dLat = x1.toRad();  
-     var x2 = lon2-lon1;
-     var dLon = x2.toRad();  
-     var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-                     Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
-                     Math.sin(dLon/2) * Math.sin(dLon/2);  
-     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-     var d = R * c; 
+    var R = 6371; // km 
+    //has a problem with the .toRad() method below.
+    var x1 = lat2 - lat1;
+    var dLat = x1.toRad();
+    var x2 = lon2 - lon1;
+    var dLon = x2.toRad();
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
 
     // Converting to meters 
     //  if(d < 1){
@@ -280,7 +281,19 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
     //     d = d * 1000;
     //     console.log('After', d)
     //  }
-     
+
     return Number((d).toFixed(1));;
+}
+
+export async function getCurrentLocation() {
+
+    await UserPermissions.getLocationAsync();
+
+    let location = await Location.getCurrentPositionAsync({
+        maximumAge: 60000, // only for Android
+        accuracy: Platform.OS == 'Android' ? Location.Accuracy.Low : Location.Accuracy.Lowest,
+    });
+
+return location;
 }
 

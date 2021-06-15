@@ -93,6 +93,7 @@ export default function SignupScreen1({ navigation }) {
               keyboardType='default'
               style={styles.input_form}
               showLabel={true}
+              maxLength = {16}
             />
             <FormInput
               labelName="Email"

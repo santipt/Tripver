@@ -26,8 +26,8 @@ export default function SettingsScreen({ navigation, route }) {
   var user = route.params;
 
   // Converting date to string
-  var d = user.birth_date;
-  var date = convertTimestampToDate(d.seconds);
+  // var d = user.birth_date;
+  // var date = convertTimestampToDate(d.seconds);
 
   useEffect(() => {
     if (route.params.gender != '' && route.params.gender != undefined) {
@@ -52,7 +52,7 @@ export default function SettingsScreen({ navigation, route }) {
             <EditInput labelName='Email' editText={user.email} icon='email'></EditInput>
             <EditButton
               labelName='Date of birth'
-              data={date}
+              data={user.birth_date}
               icon='calendar'
               showIcon={true}
               iconSize={20}

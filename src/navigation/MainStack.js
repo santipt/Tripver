@@ -1,16 +1,20 @@
 // Importing react utilities
 import React, { useEffect, useContext } from 'react';
-
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { getChannelDisplayName, kitty } from '../chatkitty';
+// expo
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 
+// Imnporting components
+import { kitty } from '../chatkitty';
+import { AuthContext } from './AuthProvider';
+
 // Importing screens
 import MyTabsScreen from '../screens/MyTabsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ShowProfilePicture from '../screens/ShowProfilePicture';
 
 // Edit screens
 import EditProfileScreen from '../screens/EditScreens/EditProfileScreen';
@@ -19,17 +23,26 @@ import EditBirthDateScreen from '../screens/EditScreens/EditBirthDateScreen';
 import EditGenderScreen from '../screens/EditScreens/EditGenderScreen';
 
 import CreateChannelScreen from '../screens/ChatScreens/CreateChannelScreen';
-import ChatScreen from '../screens/ChatScreens/ChatScreen';
-import HomeChatScreen from '../screens/ChatScreens/ChatScreen';
-import BrowseChannelsScreen from '../screens/ChatScreens/BrowseChannelsScreen';
-import ChatComponent from '../navigation/ChatComponent';
 
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Main = createStackNavigator();
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 export default function MainStack() {
 
+  const { user } = useContext(AuthContext);
+
+  // When is enable it bugs the chat , not always works
   useEffect(() => {
+    // In order to get notificaton from expo
     registerForPushNotificationsAsync().then((token) => {
       kitty.updateCurrentUser((user) => {
         user.properties = {
@@ -46,6 +59,8 @@ export default function MainStack() {
     // headerMode="none"
     <Main.Navigator headerMode="none" mode="modal">
       <Main.Screen name="Main" component={MyTabsScreen} />
+      <Main.Screen name="ShowProfile" component={ProfileScreen} />
+      <Main.Screen name="ShowProfilePicture" component={ShowProfilePicture} />
       <Main.Screen name="CreateChannel" component={CreateChannelScreen} />
       <Main.Screen name="Settings" component={SettingsScreen} options={horizontalAnimation} />
       <Main.Screen name="EditProfile" component={EditProfileScreen} />
@@ -72,8 +87,6 @@ const horizontalAnimation = {
     };
   },
 };
-
-
 
 async function registerForPushNotificationsAsync() {
   let token;
@@ -108,4 +121,7 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
+
+
+
 

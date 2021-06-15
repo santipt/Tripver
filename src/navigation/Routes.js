@@ -37,6 +37,20 @@ export default function Routes() {
           // Saving all the data of the current user
           setFirebaseUser(item.data())
 
+          // // Adding a property to the current user for the profile_picture
+
+          // IT CREATES A BUG IN THE CHAT
+          if (currentUser.properties.profile_picture == undefined) {
+            // await kitty.updateCurrentUser((user) => {
+            //   user.properties = {
+            //     ...user.properties,
+            //     "profile_picture": item.data().profile_picture,
+            //   };
+          }
+
+          //   return user;
+          // });
+
           // Updating the chatkitty display picture
           // picture = item.data().profile_picture;
 
@@ -57,6 +71,7 @@ export default function Routes() {
         // var res = await kitty.updateCurrentUserDisplayPicture( file );
         // console.log(res)
         // console.log("CHATKITTY PICTURE", currentUser.displayPictureUrl)
+
 
       }
 

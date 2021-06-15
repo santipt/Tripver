@@ -23,6 +23,9 @@ const images = {
   countries: {
     uri: require('../assets/images/countries.png')
   },
+  people_empty_list: {
+    uri: require('../assets/images/sad_face.png')
+  },
 }
 
 export { images };

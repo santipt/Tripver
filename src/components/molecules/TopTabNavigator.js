@@ -24,14 +24,15 @@ export default function TopTabs() {
   return (
     <SafeAreaView style={GlobalStyles.androidSafeArea} >
       <TopTab.Navigator
+        initialRouteName={user_type == "Tripver" ? "Tripvers" : "Locals"}
         tabBarOptions={{
           labelStyle: { fontSize: 12, fontWeight: 'bold' },
           tabStyle: { borderTopRightRadius: 20, borderTopLeftRadius: 20, marginTop: 8, backgroundColor: Colors.WHITE, },
-          indicatorStyle: { backgroundColor: Colors.PRIMARY, },
+          indicatorStyle: { backgroundColor: Colors.WHITE, },
           style: { backgroundColor: Colors.PRIMARY, },
           showIcon: true,
           activeTintColor: Colors.PRIMARY,
-          inactiveTintColor: Colors.GRAY_MEDIUM
+          inactiveTintColor: Colors.GRAY_MEDIUM,
         }}
         sceneContainerStyle={{ backgroundColor: Colors.WHITE }}
       >
@@ -41,7 +42,7 @@ export default function TopTabs() {
         />
         <TopTab.Screen
           name={user_type == "Tripver" ? "Tripvers" : "Locals"}
-          children={() => <FindPeople userType={user_type == "Local" ? 'tripver' : 'local'}></FindPeople>}
+          children={() => <FindPeople userType={user_type == "Tripver" ? 'tripver' : 'local'}></FindPeople>}
         />
       </TopTab.Navigator>
     </SafeAreaView>

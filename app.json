@@ -17,6 +17,15 @@
       "**/*"
     ],
     "ios": {
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+           "comgooglemaps",
+           "citymapper",
+           "uber",
+           "lyft",
+           "waze"
+        ]
+     },
       "supportsTablet": true,
       "config":{
         "googleSignIn": {

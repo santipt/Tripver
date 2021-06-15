@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 // Importing components
 import * as Colors from '../../styles/colors';
 import { useActionSheet } from '@expo/react-native-action-sheet'
-import { UserPermissions } from '../../utils/UserPersmissions'
+import UserPermissions from '../../utils/UserPersmissions'
 
 // Importing icons
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

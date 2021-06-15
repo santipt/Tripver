@@ -139,6 +139,7 @@ export default function EditProfileScreen({ navigation, route }) {
                   onChangeText={txt => setName(txt)}
                   value={name}
                   blurOnSubmit={true}
+                  maxLength = {16}
                 />
                 <Icon
                   name='ios-person'

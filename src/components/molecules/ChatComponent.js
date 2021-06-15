@@ -3,14 +3,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
 import { useIsFocused } from "@react-navigation/native";
 
-import { getChannelDisplayName, kitty } from '../chatkitty';
+import { getChannelDisplayName, kitty } from '../../chatkitty';
 
-import * as Colors from '../styles/colors';
+import * as Colors from '../../styles/colors';
 
-import BrowseChannelsScreen from '../screens/ChatScreens/BrowseChannelsScreen';
-import HomeChatScreen from '../screens/ChatScreens/HomeChatScreen';
-import ChatScreen from '../screens/ChatScreens/ChatScreen';
-import { AuthContext } from '../navigation/AuthProvider';
+import BrowseChannelsScreen from '../../screens/ChatScreens/BrowseChannelsScreen';
+import HomeChatScreen from '../../screens/ChatScreens/HomeChatScreen';
+import ChatScreen from '../../screens/ChatScreens/ChatScreen';
+import { AuthContext } from '../../navigation/AuthProvider';
 
 const ChatStack = createStackNavigator();
 
@@ -78,7 +78,15 @@ export default function ChatComponent({ route, navigation, showNotification }) {
         options={({ route }) => ({
           title: getChannelDisplayName(route.params.channel, user),
           headerBackTitleVisible: false,
-          headerLeftContainerStyle: { margin: 10, }
+          headerLeftContainerStyle: { margin: 10, },
+          // headerRight: () => (
+          //   <IconButton
+          //     icon="plus"
+          //     size={28}
+          //     color="#ffffff"
+          //     onPress={() => navigation.navigate('BrowseChannels')}
+          //   />
+          // ),
         })}
       />
     </ChatStack.Navigator>

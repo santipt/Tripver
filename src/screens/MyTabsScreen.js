@@ -1,5 +1,5 @@
 // Importing react utilities
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -8,9 +8,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faHeart, faCommentAlt, faCompass, faUser } from '@fortawesome/fontawesome-free-regular';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+import { checkForUnreadChannel, kitty } from '../chatkitty';
+
 // Importing components
 import FindPlacesScreen from './FindPlacesScreen'
-import ChatComponent from '../navigation/ChatComponent'
+import ChatComponent from '../components/molecules/ChatComponent'
 import ProfileScreen from './ProfileScreen'
 import TopTabNavigator from '../components/molecules/TopTabNavigator.js'
 
@@ -19,6 +25,17 @@ import * as Colors from '../styles/colors';
 const Tab = createBottomTabNavigator();
 
 export default function MyTabs() {
+
+  // TO DO: Necesito refrescar esta pantalla para que se actualice el badge, hay que hacer que se refresque sola
+  
+  const [unReadChannel, setUnReadChannel] = useState(false);
+
+  useEffect(() => {
+    checkForUnreadChannel().then((res) => {
+      setUnReadChannel(res);
+    });
+  }, [unReadChannel]);
+
 
   return (
     <Tab.Navigator tabBarOptions={{
@@ -54,10 +71,16 @@ export default function MyTabs() {
       <Tab.Screen
         name="Home chat"
         component={ChatComponent}
-        options={{
+        options={unReadChannel ? {
           tabBarButton: CustomTabButton,
           tabBarBadge: '',
           tabBarBadgeStyle: [{ backgroundColor: Colors.SECONDARY, top: 5, left: -1 }, { transform: [{ scale: 0.6 }] }],
+          tabBarIcon: ({ color }) => (
+            <FontAwesomeIcon icon={faCommentAlt} color={color} size={22} />),
+        } : {
+          tabBarButton: CustomTabButton,
+          //tabBarBadge: '',
+          //tabBarBadgeStyle: [{ backgroundColor: Colors.SECONDARY, top: 5, left: -1 }, { transform: [{ scale: 0.6 }] }],
           tabBarIcon: ({ color }) => (
             <FontAwesomeIcon icon={faCommentAlt} color={color} size={22} />),
         }}
@@ -85,6 +108,8 @@ const CustomTabButton = (props) => (
     }
   />
 );
+
+
 
 
 

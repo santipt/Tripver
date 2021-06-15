@@ -12,7 +12,6 @@ import GlobalStyles from '../styles/GlobalStyles';
 export default function FindPeopleScreen({ ...props }) {
   const { user, loading } = useContext(AuthContext);
 
-  //console.log("USER IS GUEST: ", user.isGuest)
   if (loading) {
     return <Loading />;
   }

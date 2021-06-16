@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useContext, useState, useEffect } from 'react';
-import { Dimensions, StyleSheet, View, SafeAreaView, Text, ImageBackground, Modal, Pressable } from 'react-native';
+import { Dimensions, StyleSheet, View, SafeAreaView, Text, ImageBackground, Modal, Switch } from 'react-native';
 import { Card } from 'react-native-elements';
 
 // Importing icons
@@ -13,6 +13,7 @@ import FormInput from '../components/atoms/FormInput'
 import EditButton from '../components/atoms/EditButton'
 import LongButton from '../components/atoms/LongButton';
 import { AuthContext } from '../navigation/AuthProvider';
+import Loading from '../components/atoms/Loading';
 import { convertTimestampToDate, reauthenticate } from '../firebase/Logic'
 import GlobalStyles from '../styles/GlobalStyles';
 
@@ -28,10 +29,11 @@ export default function SettingsScreen({ navigation, route }) {
   const [password, setPassword] = useState('');
   const [gender, setGender] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const { logout } = useContext(AuthContext);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const { setLoading, loading, logout } = useContext(AuthContext);
 
   var user = route.params;
-
+  
   // Converting date to string
   // var d = user.birth_date;
   // var date = convertTimestampToDate(d.seconds);
@@ -45,19 +47,26 @@ export default function SettingsScreen({ navigation, route }) {
     }
   });
 
+  // For the state of the switch
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
   const verifyPassword = async () => {
 
     try {
-      
+      setLoading(true);
+
       await reauthenticate(user.email, password);
 
       // Hidding modal
       setModalVisible(false);
 
+      setLoading(false);
+
       // Going to the edit email screen
       navigation.navigate('EditEmail', { user: user, password: password })
 
     } catch (err) {
+      setLoading(false);
       console.log(err)
       alert('Error the password is incorrect')
     }
@@ -67,6 +76,9 @@ export default function SettingsScreen({ navigation, route }) {
 
   }
 
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <SafeAreaView style={GlobalStyles.androidSafeArea}>
@@ -114,14 +126,25 @@ export default function SettingsScreen({ navigation, route }) {
               iconSize={20}
               onPress={() => { navigation.navigate('EditGender', user) }}
             ></EditButton>
+            <View style={styles.notifications_container}>
+              <Text style={styles.title_notifications}>Notifications</Text>
+              <Switch
+                trackColor={{ false: Colors.WHITE, true: Colors.SECONDARY }}
+                thumbColor={isEnabled ? Colors.WHITE : Colors.WHITE}
+                ios_backgroundColor={Colors.WHITE}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                style={styles.switch_notifications}
+              />
+            </View>
             <LongButton
               title="Logout"
               style={styles.long_button}
               onPress={() => logout()}
             />
-            <Text 
-            style={styles.text_delete_account} 
-            onPress={() => setModalVisible(true)}>Delete account</Text>
+            <Text
+              style={styles.text_delete_account}
+              onPress={() => setModalVisible(true)}>Delete account</Text>
           </Card>
 
           {/* MODAL VERIFY PASSWORD */}
@@ -210,10 +233,25 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
   },
-  text_delete_account:{
-    color:'#E63E15',
-    alignSelf:'center',
-    marginTop:30,
+  text_delete_account: {
+    color: '#E63E15',
+    alignSelf: 'center',
+    marginTop: 30,
+  },
+  notifications_container: {
+    borderRadius: 15,
+    borderColor: Colors.GRAY_MEDIUM,
+    borderWidth: 2,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center'
+  },
+  title_notifications: {
+    fontSize: 15,
+  },
+  switch_notifications: {
+    marginLeft: 10,
   },
 
   // ---- MODAL STYLE ----

@@ -16,11 +16,17 @@ import MyTabsScreen from '../screens/MyTabsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ShowProfilePicture from '../screens/ShowProfilePicture';
 
-// Edit screens
+// Edit screens in Edit Profile Screen
 import EditProfileScreen from '../screens/EditScreens/EditProfileScreen';
 import EditLocationScreen from '../screens/EditScreens/EditLocationScreen';
-import EditBirthDateScreen from '../screens/EditScreens/EditBirthDateScreen';
+
+// Edit screens in Settings Screen
+import EditEmailScreen from '../screens/EditScreens/EditEmailScreen';
+import ChangePasswordScreen from '../screens/EditScreens/ChangePasswordScreen';
 import EditGenderScreen from '../screens/EditScreens/EditGenderScreen';
+import EditBirthDateScreen from '../screens/EditScreens/EditBirthDateScreen';
+
+
 
 import CreateChannelScreen from '../screens/ChatScreens/CreateChannelScreen';
 
@@ -65,6 +71,9 @@ export default function MainStack() {
       <Main.Screen name="Settings" component={SettingsScreen} options={horizontalAnimation} />
       <Main.Screen name="EditProfile" component={EditProfileScreen} />
       <Main.Screen name="EditLocation" component={EditLocationScreen} options={horizontalAnimation} />
+      <Main.Screen name="EditEmail" component={EditEmailScreen} options={horizontalAnimation} />
+      <Main.Screen name="ChangePassword" component={ChangePasswordScreen} options={horizontalAnimation} />
+      <Main.Screen name="EditBirthDate" component={EditBirthDateScreen} options={horizontalAnimation} />
       <Main.Screen name="EditGender" component={EditGenderScreen} options={horizontalAnimation} />
     </Main.Navigator>
   );

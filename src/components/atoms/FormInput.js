@@ -19,7 +19,7 @@ export default function FormInput({ labelName, ...props }) {
       <TextInput
         label={labelName}
         style={{ ...styles.input, ...props.style }}
-        placeholder={labelName}
+        placeholder={props.placeholder != undefined ? props.placeholder : labelName }
         textContentType={props.textContentType}
         secureTextEntry={props.secureTextEntry}
         autoCompleteType={props.autoCompleteType}

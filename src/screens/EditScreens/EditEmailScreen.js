@@ -2,7 +2,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View, ImageBackground, SafeAreaView, Text, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Card } from 'react-native-elements';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -12,24 +11,20 @@ import * as Colors from '../../styles/colors';
 import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
-import RadioButton from '../../components/atoms/GenderPicker'
 import GlobalStyles from '../../styles/GlobalStyles';
+import { changeEmail, editUser } from '../../firebase/Logic';
 
 // Importing images paths
 import { images } from '../../utils/images'
 
 export default function EditGenderScreen({ route, navigation }) {
 
-    // Getting the data from the other screens
-    var user = route.params;
+    var user = route.params.user;
+    var password = route.params.password;
 
-    console.log(user.gender)
+    const [newEmail, setNewEmail] = React.useState('');
 
-    const [checked, setChecked] = React.useState(user.gender);
-    const [gender, setGender] = React.useState(user.gender);
-
-    const { loading } = useContext(AuthContext);
-
+    const { loading, setLoading, userId } = useContext(AuthContext);
 
     if (loading) {
         return <Loading />;
@@ -37,15 +32,29 @@ export default function EditGenderScreen({ route, navigation }) {
 
     const checkBeforeNavigate = () => {
 
-        if (checked == "Other") {
-            user.gender = gender;
+        // Checking if the email pass the requirements
+        console.log(newEmail)
+        if (!newEmail.includes('@') && newEmail == '') {
+            alert('The email format is not valid');
+            return;
         } else {
-            user.gender = checked
+            //setLoading(true);
+            // Changing password
+            changeEmail(newEmail, user.email, password).then(async () => {
+                user.email = newEmail;
+
+                // Editing email in the database
+                await editUser({email: newEmail}, userId);
+
+                //setLoading(false);
+
+                navigation.navigate('Settings', user)
+
+            }).catch((err) => {
+                console.log(err)
+                alert('Something went wrong :(')
+            })
         }
-
-        // TO DO: Edit user gender
-
-        navigation.navigate('Settings', user)
 
     };
 
@@ -74,11 +83,22 @@ export default function EditGenderScreen({ route, navigation }) {
                         />
                     </View>
                     <View style={styles.content}>
-                        <Text style={styles.title_text}>How do you identify?</Text>
-                        <Card style={styles.card_container} containerStyle={styles.card}>
-                            <RadioButton value={checked} onValueChange={checked => setChecked(checked)} />
-                            {checked == 'Other' ? <FormInput style={styles.form_input} value={gender} onChangeText={(text) => setGender(text)} labelName="Enter preferred gender"></FormInput> : null}
-                        </Card>
+                        <Text style={styles.title_text}>Change email</Text>
+                        <Text style={styles.description1_text}>Your current email is: {user.email}</Text>
+                        <Text style={styles.description2_text}>
+                            What would you like to update it to? Your email is not displayed
+                            in your public profile on Tripver.
+                        </Text>
+                        <FormInput
+                            labelName="Email"
+                            value={newEmail}
+                            autoCapitalize="none"
+                            onChangeText={(userEmail) => setNewEmail(userEmail)}
+                            autoCompleteType='email'
+                            keyboardType='email-address'
+                            style={styles.input_form}
+                            showLabel={false}
+                        />
                     </View>
                 </ImageBackground>
             </SafeAreaView>
@@ -111,8 +131,27 @@ const styles = StyleSheet.create({
         fontSize: 30,
         position: 'relative',
         textAlign: 'center',
-        marginBottom: 60,
-        marginTop: -80,
+        marginBottom: 30,
+        marginTop: -100,
+    },
+
+    description1_text: {
+        fontSize: 18,
+        position: 'relative',
+        textAlign: 'center',
+        marginHorizontal: 20,
+        marginBottom: 10,
+    },
+
+    description2_text: {
+        fontSize: 18,
+        position: 'relative',
+        textAlign: 'center',
+        marginHorizontal: 20,
+    },
+
+    input_form: {
+        marginTop: 20,
     },
 
     icon_left: {
@@ -120,21 +159,4 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
 
-    card: {
-        borderRadius: 30,
-        width: '90%',
-    },
-
-    form_input: {
-        borderColor: Colors.GRAY_MEDIUM,
-        borderWidth: 2,
-        width: '95%',
-        marginLeft: 10,
-    },
-
-    next_button: {
-        marginTop: 100,
-        marginBottom: -20,
-        position: 'relative',
-    }
 });

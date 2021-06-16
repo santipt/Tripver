@@ -7,8 +7,28 @@ import * as Colors from '../../styles/colors';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/MaterialIcons';
+
 
 export default function EditButton({ labelName, showIcon, data, ...props }) {
+
+    var icon;
+    // In order to show the email icon that it doesn't exist in Ionicons
+    if (props.emailIcon) {
+        icon = <Icon2
+            name={props.icon}
+            color={Colors.GRAY_MEDIUM}
+            size={props.iconSize != null ? props.iconSize : 25}
+            style={styles.icon}
+        />;
+    }else{
+        icon = <Icon
+            name={props.icon}
+            color={Colors.GRAY_MEDIUM}
+            size={props.iconSize != null ? props.iconSize : 25}
+            style={styles.icon}
+        />;
+    }
 
     return (
         <View>
@@ -16,16 +36,11 @@ export default function EditButton({ labelName, showIcon, data, ...props }) {
                 <Text style={styles.description_title}>
                     {labelName}
                 </Text>
-                <Text style={styles.text_input}>
+                <Text style={{ ...styles.text_input, ...props.style }}>
                     {data}
                 </Text>
                 {showIcon ?
-                    <Icon
-                        name={props.icon}
-                        color={Colors.GRAY_MEDIUM}
-                        size={props.iconSize != null ? props.iconSize : 25}
-                        style={styles.icon}
-                    /> : null}
+                    icon : null}
             </TouchableOpacity>
         </View>
     );

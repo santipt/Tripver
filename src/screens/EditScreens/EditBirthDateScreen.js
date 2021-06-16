@@ -9,21 +9,20 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 // Importing components
 import * as Colors from '../../styles/colors';
-import Button from '../../components/atoms/Button';
-import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
-import RadioButton from '../../components/atoms/GenderPicker'
 import GlobalStyles from '../../styles/GlobalStyles';
-import ProgressLine from '../../components/atoms/ProgressLine'
+import DatePicker from '../../components/atoms/DatePicker';
 
 // Importing images paths
 import { images } from '../../utils/images'
 
 export default function EditGenderScreen({ route, navigation }) {
 
-  const [checked, setChecked] = React.useState('');
-  const [gender, setGender] = React.useState('');
+  var user = route.params;
+
+  const [date, setDate] = useState('');
+
 
   const { loading } = useContext(AuthContext);
 
@@ -34,16 +33,15 @@ export default function EditGenderScreen({ route, navigation }) {
     return <Loading />;
   }
 
-  const checkTextInput = () => {
-    if (checked != '') {
-      if (checked == "Other") {
-        data.gender = gender;
-      } else {
-        data.gender = checked
-      }
-      //Checked Successfully
-      navigation.navigate('PictureScreen', data)
+  const checkBeforeNavigate = () => {
+
+    if (checked == "Other") {
+      data.gender = gender;
+    } else {
+      data.gender = checked
     }
+    navigation.navigate('Settings', data)
+
   };
 
 
@@ -56,29 +54,30 @@ export default function EditGenderScreen({ route, navigation }) {
     >
       <SafeAreaView style={GlobalStyles.androidSafeArea}>
         <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
-          <Icon
-            name='arrowleft'
-            color={Colors.WHITE}
-            style={styles.icon_left}
-            size={30}
-            onPress={() => navigation.goBack()}
-          />
-          <View style={styles.content}>
-            <Text style={styles.title_text}>How do you identify?</Text>
-            <Card style={styles.card_container} containerStyle={styles.card}>
-              <RadioButton value={checked} onValueChange={checked => setChecked(checked)} />
-              {checked == 'Other' ? <FormInput style={styles.form_input} value={gender} onChangeText={(text) => setGender(text)} labelName="Enter preferred gender"></FormInput> : null}
-            </Card>
-            { }
-            <Button
-              title="Next"
-              labelStyle={styles.loginButtonLabel}
-              style={styles.next_button}
-              onPress={() => checkTextInput()}
-              showIcon={true}
+          <View style={styles.header}>
+            <Icon
+              name='closecircleo'
+              color={Colors.WHITE}
+              size={30}
+              onPress={() => navigation.goBack()}
+            />
+            <Icon
+              name='checkcircleo'
+              color={Colors.WHITE}
+              size={30}
+              onPress={() => checkBeforeNavigate()}
             />
           </View>
-          <ProgressLine value='28%'></ProgressLine>
+          <View style={styles.content}>
+            <Text style={styles.title_text}>How do you identify?</Text>
+            <DatePicker
+              date={date} // Initial date from state
+              labelName='Date of birth'
+              showLabel={true}
+              onDateChange={(date) => {
+                setDate(date);
+              }}></DatePicker>
+          </View>
         </ImageBackground>
       </SafeAreaView>
     </KeyboardAwareScrollView>
@@ -94,6 +93,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: 20,
+  },
   content: {
     flex: 1,
     justifyContent: 'center',
@@ -104,8 +109,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     position: 'relative',
     textAlign: 'center',
-    marginBottom:60,
-    marginTop:-20,
+    marginBottom: 60,
+    marginTop: -80,
   },
 
   icon_left: {
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
 
   next_button: {
     marginTop: 100,
-    marginBottom:-20,
+    marginBottom: -20,
     position: 'relative',
   }
 });

@@ -129,19 +129,22 @@ export async function createUser(data) {
 
 export async function editUser(data, userId) {
 
+    // First checking if the profile picture is updated
     // Checking if the profile picture is local
     // If it's not local then we don't update anything
     // If it's local we delete the old one and change it for the new one
-    if (String(data.profile_picture).includes('googleusercontent') || String(data.profile_picture).includes('firebasestorage')) {
-        delete data.profile_picture;
-    } else {
+    if (data.profile_picture != undefined) {
+        if (String(data.profile_picture).includes('googleusercontent') || String(data.profile_picture).includes('firebasestorage')) {
+            delete data.profile_picture;
+        } else {
 
-        // Delete old image in firestore storage
-        await deleteProfilePicture(userId);
+            // Delete old image in firestore storage
+            await deleteProfilePicture(userId);
 
-        // Upload new image in firestore storage
-        var profile_picture = await uploadProfilePicture(data.profile_picture, userId);
-        data.profile_picture = profile_picture;
+            // Upload new image in firestore storage
+            var profile_picture = await uploadProfilePicture(data.profile_picture, userId);
+            data.profile_picture = profile_picture;
+        }
     }
 
     console.log(data)
@@ -157,6 +160,42 @@ export async function editUser(data, userId) {
 export function deleteUser() {
 
 };
+
+export async function reauthenticate(email, password) {
+    console.log("Reauthentication...")
+    return firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+        var user = firebase.auth().currentUser;
+        return user;
+    }).catch((err) => {
+        // Throwing error because the password was incorrect
+        throw err;
+    })
+
+}
+
+export async function changeEmail(newEmail, currentEmail, currentPassword) {
+    // We need to reauthenticate in order to get the firebase user
+    return reauthenticate(currentEmail, currentPassword).then((user) => {
+        return user.updateEmail(newEmail);
+    })
+        .catch((err) => {
+            throw err;
+        });
+
+}
+
+
+export async function changePassword(email, currentPassword, newPassword) {
+    // We need to reauthenticate in order to get the firebase user
+    return reauthenticate(email, currentPassword).then((user) => {
+        return user.updatePassword(newPassword);
+    })
+        .catch((err) => {
+            throw err;
+        });
+}
+
+
 
 export async function getListOfPlaces(currentLocation, type) {
     console.log("Getting list of places nearby...")
@@ -294,6 +333,6 @@ export async function getCurrentLocation() {
         accuracy: Platform.OS == 'Android' ? Location.Accuracy.Low : Location.Accuracy.Lowest,
     });
 
-return location;
+    return location;
 }
 

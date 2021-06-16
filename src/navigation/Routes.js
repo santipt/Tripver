@@ -7,7 +7,7 @@ import { kitty } from '../chatkitty';
 
 
 import Loading from '../components/atoms/Loading';
-import { db } from '../firebase/index';
+import { db, firebase } from '../firebase/index';
 
 import { AuthContext } from './AuthProvider';
 import AuthStack from './AuthStack';
@@ -21,6 +21,7 @@ export default function Routes() {
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
+
     return kitty.onCurrentUserChanged(async (currentUser) => {
 
       setUser(currentUser);
@@ -65,13 +66,6 @@ export default function Routes() {
           }
 
         })
-
-
-        // I have to pass a file in order to change the chatkitty display picture
-        // var res = await kitty.updateCurrentUserDisplayPicture( file );
-        // console.log(res)
-        // console.log("CHATKITTY PICTURE", currentUser.displayPictureUrl)
-
 
       }
 

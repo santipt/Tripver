@@ -176,6 +176,7 @@ export const AuthProvider = ({ children }) => {
 
                       // Inserting all the user data to the cloud firestore and create user
                       await createUser(data);
+                  
                       // Starting session
                       const result = await kitty.startSession({
                         username: data.email,

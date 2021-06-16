@@ -26,10 +26,6 @@ export default function EditGenderScreen({ route, navigation }) {
 
     const { loading, setLoading, userId } = useContext(AuthContext);
 
-    if (loading) {
-        return <Loading />;
-    }
-
     const checkBeforeNavigate = () => {
 
         // Checking if the email pass the requirements
@@ -38,7 +34,7 @@ export default function EditGenderScreen({ route, navigation }) {
             alert('The email format is not valid');
             return;
         } else {
-            //setLoading(true);
+            setLoading(true);
             // Changing password
             changeEmail(newEmail, user.email, password).then(async () => {
                 user.email = newEmail;
@@ -46,7 +42,7 @@ export default function EditGenderScreen({ route, navigation }) {
                 // Editing email in the database
                 await editUser({email: newEmail}, userId);
 
-                //setLoading(false);
+                setLoading(false);
 
                 navigation.navigate('Settings', user)
 
@@ -58,6 +54,9 @@ export default function EditGenderScreen({ route, navigation }) {
 
     };
 
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <KeyboardAwareScrollView

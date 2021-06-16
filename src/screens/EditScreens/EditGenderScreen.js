@@ -14,6 +14,7 @@ import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 import RadioButton from '../../components/atoms/GenderPicker'
 import GlobalStyles from '../../styles/GlobalStyles';
+import { editUser } from '../../firebase/Logic';
 
 // Importing images paths
 import { images } from '../../utils/images'
@@ -28,14 +29,11 @@ export default function EditGenderScreen({ route, navigation }) {
     const [checked, setChecked] = React.useState(user.gender);
     const [gender, setGender] = React.useState(user.gender);
 
-    const { loading } = useContext(AuthContext);
+    const { setLoading, loading, userId } = useContext(AuthContext);
 
+    const checkBeforeNavigate = async () => {
 
-    if (loading) {
-        return <Loading />;
-    }
-
-    const checkBeforeNavigate = () => {
+        setLoading(true);
 
         if (checked == "Other") {
             user.gender = gender;
@@ -43,12 +41,18 @@ export default function EditGenderScreen({ route, navigation }) {
             user.gender = checked
         }
 
-        // TO DO: Edit user gender
+        // Editing email in the database
+        await editUser({gender: gender}, userId);
+
+        setLoading(false);
 
         navigation.navigate('Settings', user)
 
     };
 
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <KeyboardAwareScrollView

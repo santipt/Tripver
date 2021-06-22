@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground, TouchableOpacity, Platform } from 'react-native';
 import { Avatar, Card } from 'react-native-elements';
 import { kitty } from '../chatkitty';
 

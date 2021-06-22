@@ -3,7 +3,7 @@ import * as Location from 'expo-location';
 import UserPermissions from '../utils/UserPersmissions';
 
 // Calculating age from date of birth
-const getAge = (dateString) => {
+export const getAge = (dateString) => {
 
     // Converting dd/mm/yyyy to mm/dd/yyyy for new Date method
     var datearray = dateString.split("/");
@@ -94,10 +94,11 @@ export async function createUser(data) {
         } else {
             name = data.name;
             email = data.email;
-            //profile_picture = await uploadProfilePicture(data.profile_picture, data.uid);
-            profile_picture = "https://lh3.googleusercontent.com/a-/AOh14Gj32recPlk45teYg20KnAt3WZX8i8kql9LcUJiSdcg=s400-c";
+            profile_picture = await uploadProfilePicture(data.profile_picture, data.uid);
+            //profile_picture = "https://lh3.googleusercontent.com/a-/AOh14Gj32recPlk45teYg20KnAt3WZX8i8kql9LcUJiSdcg=s400-c";
         }
 
+        // Preparing the data from the user for firebase
         var userData = {
             name: name,
             email: email,
@@ -201,7 +202,7 @@ export async function getListOfPlaces(currentLocation, type) {
     console.log("Getting list of places nearby...")
 
     // Formatting the location
-    var currentLocation = currentLocation.coords.latitude + ',' + currentLocation.coords.longitude;
+    var location = currentLocation.coords.latitude + ',' + currentLocation.coords.longitude;
     var radius = 10000;
 
     var requestOptions = {
@@ -210,7 +211,7 @@ export async function getListOfPlaces(currentLocation, type) {
     };
 
     // Doing request to google api in order to get places nearby
-    var res = fetch("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + currentLocation + "&radius=" + radius + "&opennow=true&type=" + type + "&keyword=tourism&key=" + GOOGLE_API_KEY, requestOptions)
+    var res = fetch("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location + "&radius=" + radius + "&opennow=true&type=" + type + "&keyword=tourism&key=" + GOOGLE_API_KEY, requestOptions)
         .then(response => response.json())
         .then(result => {
             return result.results;
@@ -276,15 +277,6 @@ export async function userExists(email) {
     return exists;
 }
 
-export function getUserData(user) {
-    /* In order to know which user is logged in
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-              console.log('User uid: ', user.uid);
-            }
-          });*/
-};
-
 export async function getProfilePicture(chatkittyId) {
 
     var data = await db.collection("users").where('chatkitty_id', 'in', [chatkittyId]).get();
@@ -326,8 +318,10 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
 
 export async function getCurrentLocation() {
 
+    //Checking if the user has the correcg permissions
     await UserPermissions.getLocationAsync();
 
+    // Adding the option low accuracy location in order to get the current position faster
     let location = await Location.getCurrentPositionAsync({
         maximumAge: 60000, // only for Android
         accuracy: Platform.OS == 'Android' ? Location.Accuracy.Low : Location.Accuracy.Lowest,

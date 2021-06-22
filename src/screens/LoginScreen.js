@@ -19,8 +19,8 @@ import GlobalStyles from '../styles/GlobalStyles';
 import { images } from '../utils/images'
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   const { loginWithEmail, loginWithGoogle, loading } = useContext(AuthContext);
 

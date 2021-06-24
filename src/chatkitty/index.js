@@ -38,20 +38,40 @@ export function getChatkittyToken() {
 
 }
 
-export function deleteChat(channelId) {
+export function deleteChat(channel) {
     var requestOptions = {
         method: 'DELETE',
         redirect: 'follow'
     };
 
-    fetch("https://api.chatkitty.com/v1/applications/2552/channels/" + channelId + "\n?access_token=be5317b9-8fb4-4a98-840b-bad0629c1056", requestOptions)
+    return fetch("https://api.chatkitty.com/v1/applications/2552/channels/" + channel.id + "\n?access_token=f23fb4d2-b164-4156-bbae-46a94a8c1eb6", requestOptions)
         .then(response => response.text())
         .then(result => {
-            //console.log(result)
-            setLoading(false);
-            setIsFetching(true)
+            console.log(result)
+            return;
         })
-        .catch(error => console.log('error', error));
+        .catch((error) => {
+            console.log('error', error)
+            throw error;
+        });
+}
+
+export function deleteUserChatkitty(userId) {
+    var requestOptions = {
+        method: 'DELETE',
+        redirect: 'follow'
+    };
+
+    return fetch("https://api.chatkitty.com/v1/applications/2552/users/" + userId, "\n?access_token=f23fb4d2-b164-4156-bbae-46a94a8c1eb6", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            console.log(result)
+            return;
+        })
+        .catch((error) => {
+            console.log('error', error)
+            throw error;
+        });
 }
 
 export function clearChat() {

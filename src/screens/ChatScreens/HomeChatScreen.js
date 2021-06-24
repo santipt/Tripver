@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState, useContext } from 'react';
-import { FlatList, StyleSheet, View, TouchableOpacity, SafeAreaView, Alert, Text } from 'react-native';
+import { FlatList, StyleSheet, View, TouchableOpacity, SafeAreaView, Alert, Text, Image } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 import { Avatar, Badge } from 'react-native-elements';
 import Swipeable from 'react-native-swipeable';
@@ -10,6 +10,9 @@ import Loading from '../../components/atoms/Loading';
 import GlobalStyles from '../../styles/GlobalStyles';
 import { AuthContext } from '../../navigation/AuthProvider';
 import * as Colors from '../../styles/colors';
+
+// Importing image paths
+import { images } from '../../utils/images'
 
 import Base64 from '../../utils/Base64'
 
@@ -43,31 +46,31 @@ export default function HomeChatScreen({ navigation, route }) {
           text: "OK", onPress: () => {
             setLoading(true);
 
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Basic OWJmMzMxZGUtZmMwMi00Zjk3LWJiYmEtMGEzMjkwNTE4NDFhOmU4NmQ3M2NmLWQyYTQtNDBhMi1iNGRlLTA0YjU5Y2RiNmIwNw==");
-            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-            myHeaders.append("Cookie", "SESSION=7406c8b9-4e13-4969-8250-86da494523d9");
+            // var myHeaders = new Headers();
+            // myHeaders.append("Authorization", "Basic OWJmMzMxZGUtZmMwMi00Zjk3LWJiYmEtMGEzMjkwNTE4NDFhOmU4NmQ3M2NmLWQyYTQtNDBhMi1iNGRlLTA0YjU5Y2RiNmIwNw==");
+            // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+            // myHeaders.append("Cookie", "SESSION=7406c8b9-4e13-4969-8250-86da494523d9");
 
-            var urlencoded = new URLSearchParams();
-            urlencoded.append("grant_type", "client_credentials");
-            urlencoded.append("client_id", "9bf331de-fc02-4f97-bbba-0a329051841a");
-            urlencoded.append("client_secret", "e86d73cf-d2a4-40a2-b4de-04b59cdb6b07");
+            // var urlencoded = new URLSearchParams();
+            // urlencoded.append("grant_type", "client_credentials");
+            // urlencoded.append("client_id", "9bf331de-fc02-4f97-bbba-0a329051841a");
+            // urlencoded.append("client_secret", "e86d73cf-d2a4-40a2-b4de-04b59cdb6b07");
 
-            var requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: urlencoded,
-              redirect: 'follow',
-              crossdomain: true,
-            };
+            // var requestOptions = {
+            //   method: 'POST',
+            //   headers: myHeaders,
+            //   body: urlencoded,
+            //   redirect: 'follow',
+            //   crossdomain: true,
+            // };
 
-            fetch("https://authorization.chatkitty.com/oauth/token", requestOptions)
-              .then(response => response.text())
-              .then(result => console.log(result))
-              .catch(error => console.log('error', error));
+            // fetch("https://authorization.chatkitty.com/oauth/token", requestOptions)
+            //   .then(response => response.text())
+            //   .then(result => console.log(result))
+            //   .catch(error => console.log('error', error));
 
             // Try to get the access_token everytime, it won't work next time
-            // deleteChat(channelId)
+            deleteChat(channelId)
 
           }
         }
@@ -105,32 +108,37 @@ export default function HomeChatScreen({ navigation, route }) {
   return (
     <SafeAreaView style={GlobalStyles.androidSafeArea}>
       <View style={styles.container}>
-        <FlatList
-          data={channels}
-          refreshing={isFetching}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => <Divider />}
-          scrollEnabled={!isSwiping}
-          renderItem={({ item }) => (
-            // ----- Swipe delete chat ----s-
-            <Swipeable
-              onSwipeStart={() => setIsSwiping(true)}
-              onSwipeRelease={() => setIsSwiping(false)}
-              rightButtons={[
-                <TouchableOpacity style={styles.swipe_container} onPress={() => deleteChatUser(item)}>
-                  <Icon
-                    name='trash-2'
-                    style={styles.swipe_icon}
-                    color={Colors.WHITE}
-                    size={30}
-                  />
-                </TouchableOpacity>,
-              ]}
-            >
-              <UserComponent item={item} navigation={navigation}></UserComponent>
-            </Swipeable>
-          )}
-        />
+        {channels.length > 1 ?
+          <FlatList
+            data={channels}
+            refreshing={isFetching}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <Divider />}
+            scrollEnabled={!isSwiping}
+            renderItem={({ item }) => (
+              // ----- Swipe delete chat ----s-
+              <Swipeable
+                onSwipeStart={() => setIsSwiping(true)}
+                onSwipeRelease={() => setIsSwiping(false)}
+                rightButtons={[
+                  <TouchableOpacity style={styles.swipe_container} onPress={() => deleteChatUser(item)}>
+                    <Icon
+                      name='trash-2'
+                      style={styles.swipe_icon}
+                      color={Colors.WHITE}
+                      size={30}
+                    />
+                  </TouchableOpacity>,
+                ]}
+              >
+                <UserComponent item={item} navigation={navigation}></UserComponent>
+              </Swipeable>
+            )}
+          />
+          : <View style={styles.container_empty_lisg}>
+            <Image source={images.people_empty_list.uri} resizeMode="contain" style={styles.sad_face}></Image>
+            <Text style={styles.text_empty_list}>There are no chats</Text>
+          </View>}
       </View>
     </SafeAreaView>
   );
@@ -221,7 +229,7 @@ function UserComponent({ item, navigation, ...props }) {
         descriptionNumberOfLines={1}
         style={styles.list_style}
       />
-      { unRead ? <Badge badgeStyle={styles.badge} containerStyle={styles.badge_container} value={unReadMessages} textStyle={styles.badge_text} /> : null}
+      {unRead ? <Badge badgeStyle={styles.badge} containerStyle={styles.badge_container} value={unReadMessages} textStyle={styles.badge_text} /> : null}
     </TouchableOpacity>
   );
 }
@@ -279,5 +287,20 @@ const styles = StyleSheet.create({
   },
   badge_text: {
     fontSize: 13
-  }
+  },
+
+  // Empty list style
+  container_empty_lisg: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sad_face: {
+    width: '55%',
+    height: '55%',
+    marginTop: 80,
+  },
+  text_empty_list: {
+    fontSize: 20,
+    color: Colors.GRAY_MEDIUM
+  },
 });

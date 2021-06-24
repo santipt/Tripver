@@ -40,6 +40,8 @@ export default class ListOfPlaces extends Component {
     }
 
     async getPlaces(type) {
+        console.log("Getting users from Google places api")
+
         this.setState({ isFetching: true })
         // Getting current location
         var currentLocation = await getCurrentLocation();

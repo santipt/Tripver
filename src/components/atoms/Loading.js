@@ -1,11 +1,20 @@
 // Importing react utilities
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import LottieView from 'lottie-react-native';
 
-// TO DO: Pass a parameter in order to know if it's the creation profile loading
-//        or normal loading
+import * as Colors from '../../styles/colors';
+
+
 export default class Loading extends React.Component {
+
+  constructor(props) {
+    super(props);
+ 
+    this.state = {
+      showText: props.showText,
+    };
+  }
 
   componentDidMount() {
     this.animation.play();
@@ -21,6 +30,7 @@ export default class Loading extends React.Component {
   render() {
     return (
       <View style={styles.animationContainer}>
+        {this.state.showText ? <Text style={styles.text}>Setting up your profile...</Text> : null}
         <LottieView
           ref={animation => {
             this.animation = animation;
@@ -52,5 +62,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '50%',
     height: '50%',
+  },
+  text:{
+    fontSize:25,
+    marginBottom:90,
+    marginTop:-80,
+    color:Colors.PRIMARY,
   },
 });

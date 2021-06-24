@@ -32,7 +32,7 @@ export default function CountriesScreen({ route, navigation }) {
   var data = route.params;
 
   if (loading) {
-    return <Loading />;
+    return <Loading showText={true}/>;
   }
 
   const checkTextInput = () => {

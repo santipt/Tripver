@@ -47,6 +47,7 @@ export default function EditGenderScreen({ route, navigation }) {
                 navigation.navigate('Settings', user)
 
             }).catch((err) => {
+                setLoading(false);
                 console.log(err)
                 alert('Something went wrong :(')
             })

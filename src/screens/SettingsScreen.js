@@ -12,9 +12,10 @@ import * as Colors from '../styles/colors';
 import FormInput from '../components/atoms/FormInput'
 import EditButton from '../components/atoms/EditButton'
 import LongButton from '../components/atoms/LongButton';
+import ModalVerifyPassword from '../components/atoms/ModalVerifyPassword';
 import { AuthContext } from '../navigation/AuthProvider';
 import Loading from '../components/atoms/Loading';
-import { convertTimestampToDate, reauthenticate } from '../firebase/Logic'
+import { convertTimestampToDate, deleteUser, reauthenticate } from '../firebase/Logic'
 import GlobalStyles from '../styles/GlobalStyles';
 
 // Importing images paths
@@ -28,12 +29,13 @@ export default function SettingsScreen({ navigation, route }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [gender, setGender] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const { setLoading, loading, logout } = useContext(AuthContext);
+  const [action, setAction] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   var user = route.params;
-  
+
   // Converting date to string
   // var d = user.birth_date;
   // var date = convertTimestampToDate(d.seconds);
@@ -50,8 +52,27 @@ export default function SettingsScreen({ navigation, route }) {
   // For the state of the switch
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  const verifyPassword = async () => {
+  const verifyPasswordForDeletingUser = async () => {
 
+    // VerifyPassword for deleting account
+    setLoading(true);
+    await deleteUser(user.email, password).then(() => {
+      setModalVisible(false);
+      setLoading(false);
+      logout()
+    }).catch((err) => {
+      console.log(err);
+      setLoading(false);
+      setModalVisible(false);
+      // Reset password parameter for security
+      setPassword('');
+      alert('Error deleting user')
+    });
+  }
+
+  const verifyPasswordForEmail = async () => {
+
+    // VerifyPassword for changing email
     try {
       setLoading(true);
 
@@ -101,7 +122,11 @@ export default function SettingsScreen({ navigation, route }) {
               emailIcon={true}
               showIcon={true}
               iconSize={20}
-              onPress={() => { setModalVisible(true) }}
+              onPress={() => {
+                //setShowModal(true)
+                setAction('changeEmail')
+                setModalVisible(true);
+              }}
             ></EditButton>
             <EditButton
               labelName='Password'
@@ -144,9 +169,18 @@ export default function SettingsScreen({ navigation, route }) {
             />
             <Text
               style={styles.text_delete_account}
-              onPress={() => setModalVisible(true)}>Delete account</Text>
+              onPress={() => {
+                setAction('deleteUser')
+                setModalVisible(true);
+              }}>Delete account</Text>
           </Card>
-
+          {/* <ModalVerifyPassword
+            action={action}
+            onModalClose={(res) => {
+              console.log(res)
+              setShowModal(false)
+            }}
+          ></ModalVerifyPassword> */}
           {/* MODAL VERIFY PASSWORD */}
           <Modal
             animationType="slide"
@@ -183,7 +217,14 @@ export default function SettingsScreen({ navigation, route }) {
                 <LongButton
                   title="Next"
                   style={styles.long_button_modal}
-                  onPress={() => verifyPassword()}
+                  onPress={() => {
+                    if (action == 'changeEmail') {
+                      verifyPasswordForEmail()
+                    }
+                    if (action == 'deleteUser') {
+                      verifyPasswordForDeletingUser()
+                    }
+                  }}
                 />
               </View>
             </View>

@@ -23,7 +23,7 @@ export default function EditGenderScreen({ route, navigation }) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const { loading } = useContext(AuthContext);
+  const { loading, setLoading } = useContext(AuthContext);
 
   // Getting the data from the other screens
   var user = route.params;
@@ -41,10 +41,13 @@ export default function EditGenderScreen({ route, navigation }) {
       else if (newPassword.length < 8) {
         alert('The password has to be at least 8 characters')
       } else {
+        setLoading(true)
         // Changing password
         changePassword(user.email, currentPassword, newPassword).then(() => {
-            navigation.navigate('Settings', user)
-        }).catch((err)=>{
+          setLoading(false);
+          navigation.navigate('Settings', user)
+        }).catch((err) => {
+          setLoading(false);
           alert('The current password is not correct')
         })
       }

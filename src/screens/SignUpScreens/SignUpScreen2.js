@@ -36,6 +36,7 @@ export default function SignupScreen2({ route, navigation }) {
     return <Loading />;
   }
 
+
   const checkTextInput = () => {
     //Check for the Current Location TextInput
     /*if (!currentLocation.trim()) {
@@ -47,16 +48,16 @@ export default function SignupScreen2({ route, navigation }) {
       alert('Please enter Gender');
       return;
     }
-    //Check for the Date TextInput
-    if (!date.trim()) {
-      alert('Please enter Email');
-      return;
-    }
     //Check for the Phone TextInput
     if (!phone.trim()) {
       alert('Please enter password');
       return;
     }*/
+    //Check for the Date TextInput
+    if (!date.trim() && date.includes('/')) {
+      alert('Please enter the date in the correct format');
+      return;
+    }
     //Checked Successfully
 
     // Adding data to the json
@@ -115,10 +116,10 @@ export default function SignupScreen2({ route, navigation }) {
             ></GoogleInput>
             <View>
               <DatePicker
-                date={date} // Initial date from state
+                value={date} // Initial date from state
                 labelName='Date of birth'
                 showLabel={true}
-                onDateChange={(date) => {
+                onChangeText={(date) => {
                   setDate(date);
                 }}></DatePicker>
               <FormInput

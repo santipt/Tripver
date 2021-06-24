@@ -1,6 +1,6 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, ImageBackground, Image, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Title } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -54,14 +54,21 @@ export default function LoginScreen({ navigation }) {
               keyboardType='email-address'
               placeholder='Email'
             />
-            <FormInput
-              labelName="Password"
-              value={password}
-              secureTextEntry={true}
-              onChangeText={(userPassword) => setPassword(userPassword)}
-              textContentType='password'
-              placeholder='Password'
-            />
+            <View>
+              <FormInput
+                labelName="Password"
+                value={password}
+                secureTextEntry={true}
+                onChangeText={(userPassword) => setPassword(userPassword)}
+                textContentType='password'
+                placeholder='Password'
+              />
+              <Link
+                title="Forgot password?"
+                onPress={() => navigation.navigate('ForgotPassword')}
+                style={styles.forgot_password_text}
+              />
+            </View>
             <LongButton
               title="Log In"
               onPress={() => loginWithEmail(email, password)}
@@ -103,18 +110,24 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 30,
     fontWeight: 'bold',
-    marginTop:20,
+    marginTop: 20,
   },
   sing_up: {
     alignSelf: 'flex-end',
     marginRight: 15,
     marginTop: 15,
   },
+  forgot_password_text: {
+    alignSelf: 'flex-start',
+    marginLeft: 10,
+    fontSize:15,
+    fontWeight:'normal'
+  },
   login_button: {
     marginTop: 30,
   },
   divider: {
-    marginTop:30,
+    marginTop: 30,
   }
 
 });

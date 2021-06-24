@@ -6,6 +6,7 @@ import React from 'react';
 
 // Login screen
 import LoginScreen from '../screens/LoginScreen';
+import ForgotPasswordScreen from '../screens/ForgotPaswordScreen';
 
 // Sign Up Screens
 import SignUpScreen from '../screens/SignUpScreens/SignUpScreen';
@@ -27,6 +28,7 @@ export default function AuthStack() {
   return (
       <Stack.Navigator initialRouteName="Login" headerMode="none">
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Signup" component={SignUpScreen} />
         <Stack.Screen name="Signup1" component={SignUpScreen1} />
         <Stack.Screen name="Signup2" component={SignUpScreen2} />

@@ -1,6 +1,7 @@
 import { db, firebase, GOOGLE_API_KEY } from './index';
 import * as Location from 'expo-location';
 import UserPermissions from '../utils/UserPersmissions';
+import { deleteUserChatkitty, kitty } from '../chatkitty';
 
 // Calculating age from date of birth
 export const getAge = (dateString) => {
@@ -158,9 +159,48 @@ export async function editUser(data, userId) {
     });
 };
 
-export function deleteUser() {
+export async function deleteUserData(userId) {
 
-};
+    // Deleting profile picture from firebase storage
+    await deleteProfilePicture(userId);
+
+    // Deleting the data from the user in firestore
+    return db.collection("users").doc(userId).delete().then(() => {
+        console.log("User information successfully deleted!");
+        return;
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+        throw error;
+    });
+    
+}
+
+export async function deleteUser(email, currentPassword) {
+
+    // Getting chatkitty id of the current user
+    let chatkittyId = kitty.currentUser.id;
+
+    // We need to reauthenticate in order to get the firebase user
+    return reauthenticate(email, currentPassword).then(async (user) => {
+
+        console.log('Deleting user --> id: ' + user.id + ' email: ' + email)        
+
+        // Deleting the user from chatkitty
+        await deleteUserChatkitty(chatkittyId);
+
+        // Deleting the user from firebase
+        await user.delete();
+
+        // Deleting user information from the database
+        await deleteUserData(user.id)
+
+        return;
+
+    })
+        .catch((err) => {
+            throw err;
+        });
+}
 
 export async function reauthenticate(email, password) {
     console.log("Reauthentication...")
@@ -177,6 +217,7 @@ export async function reauthenticate(email, password) {
 export async function changeEmail(newEmail, currentEmail, currentPassword) {
     // We need to reauthenticate in order to get the firebase user
     return reauthenticate(currentEmail, currentPassword).then((user) => {
+        //Update user email chatkitty
         return user.updateEmail(newEmail);
     })
         .catch((err) => {
@@ -184,7 +225,6 @@ export async function changeEmail(newEmail, currentEmail, currentPassword) {
         });
 
 }
-
 
 export async function changePassword(email, currentPassword, newPassword) {
     // We need to reauthenticate in order to get the firebase user
@@ -196,7 +236,15 @@ export async function changePassword(email, currentPassword, newPassword) {
         });
 }
 
-
+export async function resetPassword(email) {
+    try {
+        await firebase.auth().sendPasswordResetEmail(email)
+        console.log('Password reset email sent successfully')
+        return;
+    } catch (error) {
+        throw error;
+    }
+}
 
 export async function getListOfPlaces(currentLocation, type) {
     console.log("Getting list of places nearby...")
@@ -248,6 +296,8 @@ export async function getListOfLocals(currentUser) {
 };
 
 export async function getListOfTripvers(currentUser) {
+
+    console.log(currentUser)
 
     var users = [];
     var data = await db.collection("users").where('user_type', 'in', ['Tripver']).get();

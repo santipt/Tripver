@@ -34,7 +34,7 @@ export default function MyTabs() {
     checkForUnreadChannel().then((res) => {
       setUnReadChannel(res);
     });
-  }, [unReadChannel]);
+  });
 
 
   return (

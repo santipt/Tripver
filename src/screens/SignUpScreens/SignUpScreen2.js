@@ -92,7 +92,7 @@ export default function SignupScreen2({ route, navigation }) {
               style={googleInputStyle}
               focus={focus}
               showLabel={true}
-              labelName="Location"
+              labelName="Home location"
               onPress={(data, details = null) => {
                 setCurrentLocation(data.description)
               }}

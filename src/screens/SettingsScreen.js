@@ -35,10 +35,11 @@ export default function SettingsScreen({ navigation, route }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   var user = route.params;
+  //console.log("Birth dateee", user.birth_date)
 
   // Converting date to string
   // var d = user.birth_date;
-  // var date = convertTimestampToDate(d.seconds);
+  //var date = convertTimestampToDate(d.seconds);
 
   useEffect(() => {
     if (route.params.gender != '' && route.params.gender != undefined) {

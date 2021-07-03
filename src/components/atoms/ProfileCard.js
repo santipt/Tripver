@@ -1,19 +1,30 @@
 // Importing react utilities
-import React, { useState, } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { StyleSheet, TouchableOpacity, Text, Platform } from 'react-native';
 import { Card, Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+
 // Importing components
 import * as Colors from '../../styles/colors';
 import { kitty } from '../../chatkitty';
+import { calculateDistance, getCurrentLocation } from '../../firebase/Logic';
 
 
 
-export default function ProfileCard({ title, age, location, profilePicture, onPress, chatkittyId, profileUserId, ...props }) {
+export default function ProfileCard({ title, age, location, lastLocation, profilePicture, onPress, chatkittyId, profileUserId, ...props }) {
 
     const [channelName, setChannelName] = useState(title);
+    const [distance, setDistance] = useState('');
+
     const navigation = useNavigation();
+
+    useEffect(() => {
+        getCurrentLocation().then(res => {
+            var dis = calculateDistance(res.coords.latitude, res.coords.longitude, lastLocation.latitude, lastLocation.longitude)
+            setDistance(dis);
+        });
+    }, []);
 
     function goToChat() {
 
@@ -32,17 +43,20 @@ export default function ProfileCard({ title, age, location, profilePicture, onPr
         }
     }
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('ShowProfile', { userId: profileUserId, chatkittyId: chatkittyId})}>
+        <TouchableOpacity onPress={() => navigation.navigate('ShowProfile', { userId: profileUserId, chatkittyId: chatkittyId })}>
             <Card containerStyle={styles.card_container}>
                 <View style={styles.container}>
-                    <Avatar
-                        size="xlarge"
-                        width={styles.profile_picture.width}
-                        height={styles.profile_picture.height}
-                        rounded
-                        source={{ uri: profilePicture }}
-                        imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                    />
+                    <View>
+                        <Avatar
+                            size="xlarge"
+                            width={styles.profile_picture.width}
+                            height={styles.profile_picture.height}
+                            rounded
+                            source={{ uri: profilePicture }}
+                            imageProps={{ resizeMode: 'cover' }} // Rescaling the image
+                        />
+                        <Text style={styles.distance}>{distance} Km</Text>
+                    </View>
                     <View style={styles.text_container}>
                         <Text style={styles.title}>{title}, {age}</Text>
                         <Text style={styles.location}>{location}</Text>
@@ -89,6 +103,13 @@ const styles = StyleSheet.create({
     },
     location: {
         marginLeft: 20,
+    },
+    distance: {
+        alignSelf: 'center',
+        marginTop: 5,
+        marginBottom: -10,
+        color: Colors.GRAY_DARK,
+        fontSize: 12,
     },
     open_chat: {
         alignSelf: 'center',

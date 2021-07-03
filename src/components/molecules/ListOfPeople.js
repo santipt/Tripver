@@ -66,6 +66,7 @@ export default class ListOfPeople extends Component {
                             age={item.age}
                             profilePicture={item.profile_picture}
                             location={item.current_location}
+                            lastLocation={item.last_location}
                             chatkittyId={item.chatkitty_id}
                             profileUserId={item.id}
                         >

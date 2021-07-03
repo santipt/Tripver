@@ -104,7 +104,7 @@ export default function HomeChatScreen({ navigation, route }) {
   if (loading) {
     return <Loading />;
   }
-
+  //console.log(channels.length)
   return (
     <SafeAreaView style={GlobalStyles.androidSafeArea}>
       <View style={styles.container}>

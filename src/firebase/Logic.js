@@ -340,6 +340,7 @@ export async function getProfilePicture(chatkittyId) {
 }
 
 export function calculateDistance(lat1, lon1, lat2, lon2) {
+
     Number.prototype.toRad = function () {
         return this * Math.PI / 180;
     }
@@ -380,3 +381,7 @@ export async function getCurrentLocation() {
     return location;
 }
 
+export async function setLastLocation() {
+
+   // IMPORTANT!!! Remember to insert last location as a number not as a string
+}

@@ -48,7 +48,7 @@ export default function PlaceCard({ title, picture, rating, location, id, onPres
 
     useEffect(() => {
         // Calculate distance
-        var dis = calculateDistance(location.lat, location.lng, 54.354755007573054, 18.65669404988337,)
+        var dis = calculateDistance(location.lat, location.lng, 54.354755007573054, 18.65669404988337)
         setDistance(dis)
     }, [])
 

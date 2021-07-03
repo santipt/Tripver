@@ -44,7 +44,7 @@ export function deleteChat(channel) {
         redirect: 'follow'
     };
 
-    return fetch("https://api.chatkitty.com/v1/applications/2552/channels/" + channel.id + "\n?access_token=f23fb4d2-b164-4156-bbae-46a94a8c1eb6", requestOptions)
+    return fetch("https://api.chatkitty.com/v1/applications/2552/channels/" + channel.id + "\n?access_token=" + chatkittyToken, requestOptions)
         .then(response => response.text())
         .then(result => {
             console.log(result)
@@ -62,7 +62,7 @@ export function deleteUserChatkitty(userId) {
         redirect: 'follow'
     };
 
-    return fetch("https://api.chatkitty.com/v1/applications/2552/users/" + userId, "\n?access_token=f23fb4d2-b164-4156-bbae-46a94a8c1eb6", requestOptions)
+    return fetch("https://api.chatkitty.com/v1/applications/2552/users/" + userId, "\n?access_token=" + chatkittyToken, requestOptions)
         .then(response => response.text())
         .then(result => {
             console.log(result)

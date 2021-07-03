@@ -6,16 +6,18 @@ import { Card } from 'react-native-elements';
 
 // Importing components
 import * as Colors from '../../styles/colors';
-import Button from '../../components/atoms/Button'
+import LongButton from '../../components/atoms/LongButton'
 import Selector from '../../components/molecules/Selector'
 import { editUser } from '../../firebase/Logic'
 import ProfileAvatar from '../../components/atoms/ProfileAvatar';
 import { AuthContext } from '../../navigation/AuthProvider';
 import GlobalStyles from '../../styles/GlobalStyles';
+import Loading from '../../components/atoms/Loading';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon3 from 'react-native-vector-icons/AntDesign';
 
 // Importing image paths
 import { images } from '../../utils/images'
@@ -41,7 +43,7 @@ export default function EditProfileScreen({ navigation, route }) {
   const [selectedLanguages, onChangeLanguages] = useState(user.languages)
   const [selectedCountries, onChangeCountries] = useState(user.countries)
 
-  const { setLoading, userId } = useContext(AuthContext);
+  const { setLoading, userId, loading } = useContext(AuthContext);
 
   useEffect(() => {
     if (route.params.newLocation != '' && route.params.newLocation != undefined) {
@@ -72,9 +74,22 @@ export default function EditProfileScreen({ navigation, route }) {
 
   }
 
+  if (loading) {
+    return <Loading />;
+  }
+
+
   return (
     <SafeAreaView style={GlobalStyles.androidSafeArea}>
       <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
+        <View style={styles.close_icon}>
+          <Icon3
+            name='closecircleo'
+            color={Colors.WHITE}
+            size={30}
+            onPress={() => navigation.goBack()}
+          />
+        </View>
         <View style={styles.header}>
           <ProfileAvatar
             size="medium"
@@ -139,7 +154,7 @@ export default function EditProfileScreen({ navigation, route }) {
                   onChangeText={txt => setName(txt)}
                   value={name}
                   blurOnSubmit={true}
-                  maxLength = {16}
+                  maxLength={16}
                 />
                 <Icon
                   name='ios-person'
@@ -184,21 +199,21 @@ export default function EditProfileScreen({ navigation, route }) {
                 <Selector listName="countries" list={listOfCountries} selectedItems={selectedCountries} onSelectedItemObjectsChange={(selectedItems) => onChangeCountries(selectedItems)}></Selector>
               </View>
               <View style={styles.buttons_container}>
-                <Button
+                <LongButton
                   style={styles.save_button}
                   title="Save"
-                  onPress={() => { updateUserData() }}></Button>
-                <Button
+                  onPress={() => { updateUserData() }}></LongButton>
+                {/* <Button
                   style={styles.cancel_button}
                   title="Cancel"
-                  onPress={() => navigation.goBack()}></Button>
+                  onPress={() => navigation.goBack()}></Button> */}
               </View>
               <View style={styles.scrollview_bottom}></View>
             </ScrollView>
           </Card>
         </View>
       </ImageBackground>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 
@@ -216,9 +231,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'space-around',
-    margin: 20,
     marginLeft: 20,
-    marginTop: 40,
+    marginBottom: 20,
   },
   profile_picture: {
     width: 90,
@@ -246,7 +260,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: 20,
   },
-
+  close_icon: {
+    flexWrap: 'wrap-reverse',
+    marginTop: 15,
+    marginRight: 15,
+  },
   local_or_tripver: {
     flexDirection: 'row',
     alignItems: 'center',

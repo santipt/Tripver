@@ -42,11 +42,12 @@ export default function Routes() {
 
           // IT CREATES A BUG IN THE CHAT
           if (currentUser.properties.profile_picture == undefined) {
-            // await kitty.updateCurrentUser((user) => {
-            //   user.properties = {
-            //     ...user.properties,
-            //     "profile_picture": item.data().profile_picture,
-            //   };
+            await kitty.updateCurrentUser((user) => {
+              user.properties = {
+                ...user.properties,
+                "profile_picture": item.data().profile_picture,
+              };
+            });
           }
 
           //   return user;
@@ -56,7 +57,7 @@ export default function Routes() {
           // picture = item.data().profile_picture;
 
           // Saving firebase logged user id
-          setUserId(item.id)
+          setUserId(item.id);
           //console.log("USER ID", item.id)
 
           // TO DO: Not doing it always

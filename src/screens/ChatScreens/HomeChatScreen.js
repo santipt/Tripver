@@ -154,6 +154,7 @@ function UserComponent({ item, navigation, ...props }) {
   const [lastMessage, setLastMessage] = useState('');
   const [messageDate, setMessageDate] = useState('');
 
+
   const isFocused = useIsFocused();
 
   if (isFocused) {
@@ -188,7 +189,15 @@ function UserComponent({ item, navigation, ...props }) {
         if (result.succeeded) {
           var messages = result.paginator.items;
           var lastMessage = messages[0].body;
-          setLastMessage(lastMessage)
+          // If the text is too long I will cut it and show ... in order to show 
+          // the date of the message too
+          if(lastMessage.length > 15 ){
+            lastMessage = lastMessage.slice(0, -45);
+            lastMessage = lastMessage + '...'
+            setLastMessage(lastMessage)
+          }else{
+            setLastMessage(lastMessage)
+          }
 
           // Formating date to show: 'Tue May 25 2021'
           var date = new Date(messages[0].createdTime)
@@ -281,8 +290,8 @@ const styles = StyleSheet.create({
   badge: {
     backgroundColor: Colors.SECONDARY,
     fontSize: 20,
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
     borderRadius: 30,
   },
   badge_text: {

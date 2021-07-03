@@ -172,7 +172,7 @@ export async function deleteUserData(userId) {
         console.error("Error removing document: ", error);
         throw error;
     });
-    
+
 }
 
 export async function deleteUser(email, currentPassword) {
@@ -183,7 +183,7 @@ export async function deleteUser(email, currentPassword) {
     // We need to reauthenticate in order to get the firebase user
     return reauthenticate(email, currentPassword).then(async (user) => {
 
-        console.log('Deleting user --> id: ' + user.id + ' email: ' + email)        
+        console.log('Deleting user --> id: ' + user.id + ' email: ' + email)
 
         // Deleting the user from chatkitty
         await deleteUserChatkitty(chatkittyId);
@@ -381,7 +381,16 @@ export async function getCurrentLocation() {
     return location;
 }
 
-export async function setLastLocation() {
+export async function setLastLocation(userId) {
 
-   // IMPORTANT!!! Remember to insert last location as a number not as a string
+    // First we get the current location from the phone
+    // Secondly we inserted the coordinates in firebase
+    getCurrentLocation().then(res => {
+        var coordinates = {
+            last_location: { latitude: res.coords.latitude, longitude: res.coords.longitude }
+        }
+        db.collection('users').doc(userId).update(coordinates);
+    });
+
+
 }

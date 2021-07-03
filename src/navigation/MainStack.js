@@ -26,8 +26,6 @@ import ChangePasswordScreen from '../screens/EditScreens/ChangePasswordScreen';
 import EditGenderScreen from '../screens/EditScreens/EditGenderScreen';
 import EditBirthDateScreen from '../screens/EditScreens/EditBirthDateScreen';
 
-
-
 import CreateChannelScreen from '../screens/ChatScreens/CreateChannelScreen';
 
 import ProfileScreen from '../screens/ProfileScreen';
@@ -58,7 +56,12 @@ export default function MainStack() {
 
         return user;
       });
+
     });
+
+    // Getting location from the user each 30 min
+    
+
   }, []);
 
   return (

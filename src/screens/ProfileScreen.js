@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Importing components
-import LongButton from '../components/atoms/LongButton'
 import SelectedItems from '../components/molecules/SelectedItems'
 import * as Colors from '../styles/colors';
 import { firebase } from '../firebase/index'

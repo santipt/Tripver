@@ -16,15 +16,6 @@ export default function PlaceCard({ title, picture, rating, location, id, onPres
     const [distance, setDistance] = useState(0);
     const NUM_OF_LINES = 1;
 
-    const [showMore, setShowMore] = useState(false);
-
-    const onTextLayout = useCallback(e => {
-        setShowMore(e.nativeEvent.lines.length > NUM_OF_LINES);
-    }, []);
-
-
-    //console.log(location)
-
     function openGoogleMaps() {
 
         showLocation({
@@ -58,7 +49,7 @@ export default function PlaceCard({ title, picture, rating, location, id, onPres
                 <Image style={styles.image} source={{ uri: picture }} />
                 <View style={styles.info_container}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.text} numberOfLines={NUM_OF_LINES} onTextLayout={onTextLayout}>
+                        <Text style={styles.text} numberOfLines={NUM_OF_LINES}>
                             {title}
                         </Text>
                         <Star

@@ -1,5 +1,5 @@
 // Importing react utilities
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View } from 'react-native';
 import { StyleSheet, TouchableOpacity, Text, Platform } from 'react-native';
 import { Card, Avatar } from 'react-native-elements';
@@ -18,6 +18,8 @@ export default function ProfileCard({ title, age, location, lastLocation, profil
     const [distance, setDistance] = useState('');
 
     const navigation = useNavigation();
+
+    const NUM_OF_LINES = 1;
 
     useEffect(() => {
         getCurrentLocation().then(res => {
@@ -58,8 +60,8 @@ export default function ProfileCard({ title, age, location, lastLocation, profil
                         <Text style={styles.distance}>{distance} Km</Text>
                     </View>
                     <View style={styles.text_container}>
-                        <Text style={styles.title}>{title}, {age}</Text>
-                        <Text style={styles.location}>{location}</Text>
+                        <Text style={styles.title} numberOfLines={NUM_OF_LINES} >{title}, {age}</Text>
+                        <Text style={styles.location} numberOfLines={NUM_OF_LINES} >{location}</Text>
                     </View>
                     <Avatar
                         size="medium"
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
     },
     location: {
         marginLeft: 20,
+        width:180
     },
     distance: {
         alignSelf: 'center',

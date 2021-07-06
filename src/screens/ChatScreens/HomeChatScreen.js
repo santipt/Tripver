@@ -104,11 +104,11 @@ export default function HomeChatScreen({ navigation, route }) {
   if (loading) {
     return <Loading />;
   }
-  //console.log(channels.length)
+
   return (
     <SafeAreaView style={GlobalStyles.androidSafeArea}>
       <View style={styles.container}>
-        {channels.length > 1 ?
+        {channels.length > 0 ?
           <FlatList
             data={channels}
             refreshing={isFetching}
@@ -153,7 +153,6 @@ function UserComponent({ item, navigation, ...props }) {
   const [unReadMessages, setUnreadMessages] = useState(false);
   const [lastMessage, setLastMessage] = useState('');
   const [messageDate, setMessageDate] = useState('');
-
 
   const isFocused = useIsFocused();
 

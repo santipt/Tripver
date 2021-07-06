@@ -22,7 +22,7 @@ export default function TopTabs() {
   }
 
   return (
-    <SafeAreaView style={GlobalStyles.androidSafeArea} >
+    <SafeAreaView style={[GlobalStyles.androidSafeArea, {backgroundColor:Colors.PRIMARY}]} >
       <TopTab.Navigator
         initialRouteName={user_type == "Tripver" ? "Tripvers" : "Locals"}
         tabBarOptions={{

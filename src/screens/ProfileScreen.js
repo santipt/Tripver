@@ -33,6 +33,7 @@ export default function ProfileScreen({ route, navigation }) {
     // TO DO:
     const [imageLoaded, setImageLoaded] = useState(true);
 
+    const NUM_OF_LINES = 2;
 
     useEffect(() => {
 
@@ -90,7 +91,7 @@ export default function ProfileScreen({ route, navigation }) {
     }
 
     return (
-        <SafeAreaView style={GlobalStyles.androidSafeArea}>
+        <SafeAreaView style={[GlobalStyles.androidSafeArea, {backgroundColor: Colors.THIRD}]}>
             <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
                 <View style={styles.settings_icon}>
                     {route.params != undefined ?
@@ -118,8 +119,8 @@ export default function ProfileScreen({ route, navigation }) {
                         />
                     </TouchableOpacity>
                     <View>
-                        <Text style={styles.profile_name}>{user.name}, {user.age}</Text>
-                        <Text style={styles.city}>{user.current_location}</Text>
+                        <Text style={styles.profile_name} numberOfLines={NUM_OF_LINES}>{user.name}, {user.age}</Text>
+                        <Text style={styles.city} numberOfLines={NUM_OF_LINES}>{user.current_location}</Text>
                     </View>
                     {route.params != undefined ?
                         <Avatar
@@ -226,11 +227,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginLeft: 20,
         marginBottom: 5,
+        width:'65%'
     },
     city: {
         color: 'white',
         fontSize: 15,
         marginLeft: 20,
+        width:140
     },
     edit_icon: {
         position: 'absolute',
@@ -310,7 +313,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         backgroundColor: 'white',
-        marginLeft: 50,
+        marginLeft: 20,
     },
     chat: {
         ...Platform.select({

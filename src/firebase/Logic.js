@@ -185,14 +185,14 @@ export async function deleteUser(email, currentPassword) {
 
         console.log('Deleting user --> id: ' + user.id + ' email: ' + email)
 
-        // Deleting the user from chatkitty
-        await deleteUserChatkitty(chatkittyId);
-
         // Deleting the user from firebase
         await user.delete();
 
         // Deleting user information from the database
         await deleteUserData(user.id)
+
+        // Deleting the user from chatkitty
+        await deleteUserChatkitty(chatkittyId);
 
         return;
 
@@ -219,7 +219,7 @@ export async function changeEmail(newEmail, currentEmail, currentPassword) {
     return reauthenticate(currentEmail, currentPassword).then((user) => {
         //Update user email chatkitty
         return user.updateEmail(newEmail);
-    })
+    })  // Change email in chatkitty too
         .catch((err) => {
             throw err;
         });
@@ -230,6 +230,7 @@ export async function changePassword(email, currentPassword, newPassword) {
     // We need to reauthenticate in order to get the firebase user
     return reauthenticate(email, currentPassword).then((user) => {
         return user.updatePassword(newPassword);
+        // Change password in chatkitty too
     })
         .catch((err) => {
             throw err;

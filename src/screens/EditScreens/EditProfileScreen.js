@@ -1,5 +1,5 @@
 // Importing react utilities
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 
 import { StyleSheet, View, SafeAreaView, Text, TextInput, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-elements';
@@ -13,11 +13,11 @@ import ProfileAvatar from '../../components/atoms/ProfileAvatar';
 import { AuthContext } from '../../navigation/AuthProvider';
 import GlobalStyles from '../../styles/GlobalStyles';
 import Loading from '../../components/atoms/Loading';
+import { kitty } from '../../chatkitty';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon3 from 'react-native-vector-icons/AntDesign';
 
 // Importing image paths
 import { images } from '../../utils/images'
@@ -45,6 +45,8 @@ export default function EditProfileScreen({ navigation, route }) {
 
   const { setLoading, userId, loading } = useContext(AuthContext);
 
+  const NUM_OF_LINES = 1;
+
   useEffect(() => {
     if (route.params.newLocation != '' && route.params.newLocation != undefined) {
       setCurrentLocation(route.params.newLocation);
@@ -68,6 +70,15 @@ export default function EditProfileScreen({ navigation, route }) {
 
     await editUser(userData, userId)
 
+    // If the name is modified update it in chatkitty
+    if (user.name != name) {
+      console.log("Updating name in chatkitty")
+      await kitty.updateCurrentUser((user) => {
+        user.displayName = name;
+        return user;
+      });
+    }
+
     setLoading(false);
 
     navigation.goBack()
@@ -80,12 +91,12 @@ export default function EditProfileScreen({ navigation, route }) {
 
 
   return (
-    <SafeAreaView style={GlobalStyles.androidSafeArea}>
+    <SafeAreaView style={[GlobalStyles.androidSafeArea, {backgroundColor: Colors.THIRD}]}>
       <ImageBackground source={images.signUpBackground.uri} style={styles.background}>
         <View style={styles.close_icon}>
-          <Icon3
-            name='closecircleo'
-            color={Colors.WHITE}
+          <Icon
+            name='close'
+            color='white'
             size={30}
             onPress={() => navigation.goBack()}
           />
@@ -112,7 +123,7 @@ export default function EditProfileScreen({ navigation, route }) {
               autoCapitalize="words"
               inlineImageLeft='search_icon'
             ></TextInput>
-            <Text style={styles.city}>{currentLocation}</Text>
+            <Text style={styles.city} numberOfLines={NUM_OF_LINES}>{currentLocation}</Text>
           </View>
         </View>
         <View style={styles.local_or_tripver}>

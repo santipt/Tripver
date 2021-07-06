@@ -8,6 +8,7 @@ import { kitty } from '../chatkitty';
 
 import Loading from '../components/atoms/Loading';
 import { db, firebase } from '../firebase/index';
+import { setLastLocation } from '../firebase/Logic'
 
 import { AuthContext } from './AuthProvider';
 import AuthStack from './AuthStack';
@@ -38,9 +39,7 @@ export default function Routes() {
           // Saving all the data of the current user
           setFirebaseUser(item.data())
 
-          // // Adding a property to the current user for the profile_picture
-
-          // IT CREATES A BUG IN THE CHAT
+          // Adding a property to the current user for the profile_picture
           if (currentUser.properties.profile_picture == undefined) {
             await kitty.updateCurrentUser((user) => {
               user.properties = {
@@ -50,17 +49,12 @@ export default function Routes() {
             });
           }
 
-          //   return user;
-          // });
-
-          // Updating the chatkitty display picture
-          // picture = item.data().profile_picture;
+          // When login save the last location from the user 
+          setLastLocation(item.id);
 
           // Saving firebase logged user id
           setUserId(item.id);
-          //console.log("USER ID", item.id)
 
-          // TO DO: Not doing it always
           // Saving chatkitty id        
           if (item.chatkitty_id == undefined) {
             await db.collection("users").doc(item.id).update({ chatkitty_id: currentUser.id });

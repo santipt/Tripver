@@ -13,6 +13,7 @@ import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 import GlobalStyles from '../../styles/GlobalStyles';
 import DatePicker from '../../components/atoms/DatePicker';
+import { editUser } from '../../firebase/Logic';
 
 // Importing images paths
 import { images } from '../../utils/images'
@@ -24,26 +25,36 @@ export default function EditGenderScreen({ route, navigation }) {
   const [date, setDate] = useState('');
 
 
-  const { loading } = useContext(AuthContext);
+  const { loading, setLoading, userId } = useContext(AuthContext);
 
   // Getting the data from the other screens
   var data = route.params;
 
-  if (loading) {
-    return <Loading />;
-  }
+  const checkBeforeNavigate = async () => {
 
-  const checkBeforeNavigate = () => {
+    if (date != "") {
+      
+      setLoading(true)
 
-    if (checked == "Other") {
-      data.gender = gender;
+      data.birth_date = date;
+      data.age = getAge(date);
+
+      // Editing birth_date and age in the database
+      await editUser({birth_date: data.birth_date, age: data.age}, userId);
+
+      setLoading(false)
+
     } else {
-      data.gender = checked
+      alert("Date field is empty")
     }
+
     navigation.navigate('Settings', data)
 
   };
 
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <KeyboardAwareScrollView

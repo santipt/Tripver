@@ -41,7 +41,7 @@ export default function EditGenderScreen({ route, navigation }) {
             user.gender = checked
         }
 
-        // Editing email in the database
+        // Editing gender in the database
         await editUser({gender: gender}, userId);
 
         setLoading(false);

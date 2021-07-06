@@ -1,20 +1,18 @@
 // Importing react utilities
 import React, { useRef, Component } from 'react';
-import { StyleSheet, View, FlatList, Text, RefreshControl, Image, Animated } from 'react-native';
+import { StyleSheet, View, FlatList, Text, RefreshControl, Image, SafeAreaView } from 'react-native';
 import { Avatar } from 'react-native-elements';
 
 // Importing components
 import PlaceCard from '../atoms/PlaceCard';
 import { getListOfPlaces, getPlacePicture, getCurrentLocation } from '../../firebase/Logic';
-
+import GlobalStyles from '../../styles/GlobalStyles';
+import * as Colors from '../../styles/colors';
 import { AuthContext } from '../../navigation/AuthProvider';
 import Loading from '../../components/atoms/Loading';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-// Importing components
-import * as Colors from '../../styles/colors';
 
 // Importing image paths
 import { images } from '../../utils/images'
@@ -78,7 +76,7 @@ export default class ListOfPlaces extends Component {
 
         if (this.state.isFetching == false) {
             return (
-                <View>
+                <SafeAreaView style={GlobalStyles.androidSafeArea} >
                     <View style={styles.filter_container}>
                         <Avatar
                             size="medium"
@@ -149,7 +147,7 @@ export default class ListOfPlaces extends Component {
                             />
                         }
                     />
-                </View>
+                </SafeAreaView>
             );
         } else {
             return (

@@ -379,20 +379,21 @@ export async function getCurrentLocation() {
         accuracy: Platform.OS == 'Android' ? Location.Accuracy.Low : Location.Accuracy.Lowest,
     });
 
-    let location2 = {
-        "coords": {
-          "accuracy": 65,
-          "altitude": 15.575302124023438,
-          "altitudeAccuracy": 20.078706741333008,
-          "heading": -1,
-          "latitude": 39.484485,
-          "longitude": -0.374623,
-          "speed": -1,
-        },
-        "timestamp": 1626646984393.7612,
-      }
+    // Just for presentation
+    // let location2 = {
+    //     "coords": {
+    //       "accuracy": 65,
+    //       "altitude": 15.575302124023438,
+    //       "altitudeAccuracy": 20.078706741333008,
+    //       "heading": -1,
+    //       "latitude": 39.484485,
+    //       "longitude": -0.374623,
+    //       "speed": -1,
+    //     },
+    //     "timestamp": 1626646984393.7612,
+    //   }
 
-    return location2;
+    return location;
 }
 
 export async function setLastLocation(userId) {

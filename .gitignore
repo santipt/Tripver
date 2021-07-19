@@ -122,3 +122,8 @@ package-lock.json
 # Android memory profiler files
 *.hprof
 API_KEYS.js
+
+# Expo
+.expo
+__generated__
+web-build

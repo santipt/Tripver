@@ -4,9 +4,9 @@
     "slug": "Tripver",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/tripverIcon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/tripverAppSplash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -31,15 +31,18 @@
         "googleSignIn": {
           "reservedClientId":"com.googleusercontent.apps.258735134861-ofh5l2autr27ds68hukkp823l44un220"
         }
-      }
+      },
+      "bundleIdentifier": "com.app.tripver",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.tripver",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.app.tripver",
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png",

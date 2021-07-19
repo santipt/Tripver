@@ -37,7 +37,7 @@ export default function HobbiesScreen({ route, navigation }) {
 
   const checkTextInput = () => {
 
-    if (selectedHobbies.length >= 0) {
+    if (selectedHobbies.length >= 3) {
       data.hobbies = selectedHobbies;
 
       //Checked Successfully
@@ -68,7 +68,7 @@ export default function HobbiesScreen({ route, navigation }) {
           />
           <View style={styles.content}>
             <Text style={styles.title_text}>Select at least 3 hobbies</Text>
-            <TouchableOpacity style={maxNumberOfItems > 8 ? styles.selector_container_max : styles.selector_container}>
+            <View style={maxNumberOfItems > 8 ? styles.selector_container_max : styles.selector_container}>
               <ImageBackground resizeMode="contain" source={images.hobbies.uri} style={maxNumberOfItems > 8 ? styles.hobbies_background_max : styles.hobbies_background} imageStyle={maxNumberOfItems > 8 ? styles.image_style_max : styles.image_style}>
                 <Selector
                   listName="hobbies"
@@ -79,7 +79,7 @@ export default function HobbiesScreen({ route, navigation }) {
                   }}
                 ></Selector>
               </ImageBackground>
-            </TouchableOpacity>
+            </View>
 
             <Button
               title="Next"

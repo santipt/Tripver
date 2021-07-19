@@ -175,13 +175,6 @@ export default function SettingsScreen({ navigation, route }) {
                 setModalVisible(true);
               }}>Delete account</Text>
           </Card>
-          {/* <ModalVerifyPassword
-            action={action}
-            onModalClose={(res) => {
-              console.log(res)
-              setShowModal(false)
-            }}
-          ></ModalVerifyPassword> */}
           {/* MODAL VERIFY PASSWORD */}
           <Modal
             animationType="slide"

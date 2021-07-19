@@ -37,7 +37,7 @@ export default function CountriesScreen({ route, navigation }) {
 
   const checkTextInput = () => {
 
-    if (selectedCountries.length >= 0) {
+    if (selectedCountries.length >= 1) {
 
       data.countries = selectedCountries;
 

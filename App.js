@@ -4,6 +4,10 @@ import { images } from './src/utils/images'
 import Providers from './src/navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs();//Ignore all log notifications
+
+
 // Preloading the backgrounds or logos
 async function loadResourcesAsync() {
   await Promise.all([

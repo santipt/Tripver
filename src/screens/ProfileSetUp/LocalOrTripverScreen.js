@@ -1,11 +1,13 @@
 // Importing react utilities
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View, ImageBackground, SafeAreaView, Text, TextInput } from 'react-native';
+import { StyleSheet, View, ImageBackground, SafeAreaView, Text, Dimensions, Modal } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Avatar } from 'react-native-elements';
 
 // Importing icons
 import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/Ionicons';
+import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Importing components
 import * as Colors from '../../styles/colors';
@@ -19,9 +21,12 @@ import ProgressLine from '../../components/atoms/ProgressLine'
 // Importing images paths
 import { images } from '../../utils/images'
 
+const { width, height } = Dimensions.get('screen');
+
 export default function LocalOrTripverScreen({ route, navigation }) {
 
   const [userType, setUserType] = React.useState(null)
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { loading } = useContext(AuthContext);
 
@@ -43,7 +48,7 @@ export default function LocalOrTripverScreen({ route, navigation }) {
       navigation.navigate('GenderScreen', data)
     } else {
       // Alert you have to choose one of them
-
+      alert('Choose one option')
     }
   };
 
@@ -76,23 +81,13 @@ export default function LocalOrTripverScreen({ route, navigation }) {
               rounded
               icon={{ name: 'info', color: Colors.PRIMARY, size: 30, }}
               containerStyle={styles.info_button}
-              onPress={() => console.log("Open info modal")}
+              onPress={() => setModalVisible(true)}
             ></Avatar>
           </View>
           <View style={styles.content}>
             <Text style={styles.title_text}>Tripver or Local?</Text>
             <View>
               {/* Local */}
-              {/* <Avatar
-                size="xlarge"
-                width={styles.profile_picture.width}
-                height={styles.profile_picture.height}
-                rounded
-                icon={userType == 0 ? { name: 'apartment', color: Colors.WHITE, size: 60, } : { name: 'apartment', color: Colors.SECONDARY, size: 60, }}
-                imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                containerStyle={userType == 0 ? styles.avatar_local_selected : styles.avatar_local}
-                onPress={() => onSelected(0)}
-              ></Avatar> */}
               <CircleButton
                 showText={true}
                 title="Local"
@@ -107,16 +102,6 @@ export default function LocalOrTripverScreen({ route, navigation }) {
             </View>
             <View>
               {/* Tripver */}
-              {/* <Avatar
-                size="xlarge"
-                width={styles.profile_picture.width}
-                height={styles.profile_picture.height}
-                rounded
-                icon={userType ? { name: 'flight', color: Colors.WHITE, size: 60, } : { name: 'flight', color: Colors.SECONDARY, size: 60, }}
-                imageProps={{ resizeMode: 'cover' }} // Rescaling the image
-                containerStyle={userType == 1 ? styles.avatar_tripver_selected : styles.avatar_tripver}
-                onPress={() => onSelected(1)}
-              ></Avatar> */}
               <CircleButton
                 showText={true}
                 title="Tripver"
@@ -137,6 +122,55 @@ export default function LocalOrTripverScreen({ route, navigation }) {
               showIcon={true}
             />
           </View>
+          {/* MODAL INFORMATION */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centered_view}>
+              <View style={styles.modal_view}>
+                <View style={styles.close_icon}>
+                  <Icon2
+                    name='close'
+                    color='black'
+                    size={30}
+                    onPress={() => setModalVisible(false)}
+                  />
+                </View>
+                <View style={styles.modal_content}>
+                  <View style={styles.local_container}>
+                    <Text style={styles.modal_title}>What is to be a Local?</Text>
+                    
+                  </View>
+                  <Text style={styles.modal_text}>Local is the person who wants to meet travellers in their home city.</Text>
+                  <Icon3
+                      name='city-variant-outline'
+                      color={Colors.SECONDARY}
+                      size={30}
+                      style={styles.user_type_icon}
+                    />
+
+                  <View style={styles.tripver_container}>
+                    <Text style={styles.modal_title}>What is to be a Tripver?</Text>
+                   
+                  </View>
+                  <Text style={styles.modal_text}>Tripver is the person who is travelling and wants to meet local people.</Text>
+                  <Icon3
+                      name='bag-personal-outline'
+                      color={Colors.SECONDARY}
+                      size={30}
+                      style={styles.user_type_icon}
+                    />
+
+                  <Text style={styles.modal_text2}>You will be able to change this parameter in your profile information.</Text>
+                </View>
+              </View>
+            </View>
+          </Modal>
           <ProgressLine value='14%'></ProgressLine>
         </ImageBackground>
       </SafeAreaView>
@@ -166,7 +200,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 60,
     textAlign: 'center',
-    alignSelf:'center',
+    alignSelf: 'center',
   },
   icon_left: {
     marginLeft: 15,
@@ -218,6 +252,68 @@ const styles = StyleSheet.create({
     marginTop: 20,
     position: 'absolute',
     bottom: 60,
+    alignSelf: 'center'
+  },
+  // ---- MODAL STYLE ----
+  centered_view: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  close_icon: {
+    marginLeft: -20,
+    marginTop: -20,
+  },
+  modal_view: {
+    height: '60%',
+    width: '80%',
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modal_content: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: -30,
+  },
+  local_container: {
+    flexDirection: 'row',
+    margin: 5,
+    marginTop: 60,
+  },
+  tripver_container: {
+    flexDirection: 'row',
+    margin: 5,
+    marginTop: 10,
+  },
+  modal_title: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 20,
+    marginRight:10,
+  },
+  modal_text: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  modal_text2: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 12,
+    color: Colors.GRAY_DARK,
+    marginTop:10,    
+  },
+  user_type_icon:{
     alignSelf:'center'
   }
 });

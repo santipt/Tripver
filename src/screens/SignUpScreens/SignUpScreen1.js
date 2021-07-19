@@ -3,7 +3,6 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View, ImageBackground, SafeAreaView, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-
 // Importing icons
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -14,6 +13,7 @@ import FormInput from '../../components/atoms/FormInput';
 import Loading from '../../components/atoms/Loading';
 import { AuthContext } from '../../navigation/AuthProvider';
 import GlobalStyles from '../../styles/GlobalStyles';
+import { userExists } from '../../firebase/Logic'
 
 // Importing image paths
 import { images } from '../../utils/images'
@@ -29,21 +29,21 @@ export default function SignupScreen1({ navigation }) {
     return <Loading />;
   }
 
-  const checkTextInput = () => {
-    /*
+  const checkTextInput = async () => {
+    
     //Check for the Name TextInput
     if (!name.trim()) {
-      alert('Please enter Name');
+      alert('Please enter a Name');
       return;
     }
     //Check for the Email TextInput
     if (!email.trim()) {
-      alert('Please enter Email');
+      alert('Please enter an Email');
       return;
     }
     //Check for the Password TextInput
     if (!password.trim()) {
-      alert('Please enter password');
+      alert('Please enter a password');
       return;
     }
      // Check if the email contains @
@@ -52,19 +52,27 @@ export default function SignupScreen1({ navigation }) {
       return;
     }
     // Check if the passwords match
-    if(password != repeatPassword){
-      alert('The passwords does not match');
+    if(password.length < 8){
+      alert('The password needs to have at least 8 characters');
       return;
-    }*/
-
-    var data = {
-      name: name,
-      email: email,
-      password: password
     }
-    
-    //Checked Successfully
-    navigation.navigate('Signup2', data)
+
+    // Checking if the email already exists
+    var emailExist = await userExists(email);
+
+    if(emailExist){
+      alert('This email is already in use')
+    }else{
+      var data = {
+        name: name,
+        email: email,
+        password: password
+      }
+      
+      //Checked Successfully
+      navigation.navigate('Signup2', data)
+    }
+
   };
 
   return (
@@ -119,7 +127,6 @@ export default function SignupScreen1({ navigation }) {
               title="Next"
               labelStyle={styles.loginButtonLabel}
               style={styles.next_button}
-              //onPress={() => register(displayName, email, password)}
               onPress={() => checkTextInput()}
               showIcon={true}
             />

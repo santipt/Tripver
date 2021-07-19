@@ -24,6 +24,26 @@ export default function LoginScreen({ navigation }) {
 
   const { loginWithEmail, loginWithGoogle, loading } = useContext(AuthContext);
 
+  const checkLoginWithEmailInput = async () => {
+
+    if (email=="" || password=="") {
+      alert('Please fill all the paremeters')
+    } else {
+      var res = await loginWithEmail(email, password)
+
+      if (res == false) {
+        alert('Wrong email or password')
+        setEmail('')
+        setPassword('')
+      }
+    }
+
+  }
+
+  const checkLoginWithGooglelInput = () => {
+    loginWithGoogle()
+  }
+
   if (loading) {
     return <Loading />;
   }
@@ -71,14 +91,14 @@ export default function LoginScreen({ navigation }) {
             </View>
             <LongButton
               title="Log In"
-              onPress={() => loginWithEmail(email, password)}
+              onPress={() => checkLoginWithEmailInput()}
               style={styles.login_button}
             />
             <Divider style={styles.divider}></Divider>
             <GoogleButton
               title="Google"
               showIcon={true}
-              onPress={() => loginWithGoogle()}
+              onPress={() => checkLoginWithGooglelInput()}
               style={styles.login_button}
             />
           </View>
@@ -120,8 +140,8 @@ const styles = StyleSheet.create({
   forgot_password_text: {
     alignSelf: 'flex-start',
     marginLeft: 10,
-    fontSize:15,
-    fontWeight:'normal'
+    fontSize: 15,
+    fontWeight: 'normal'
   },
   login_button: {
     marginTop: 30,

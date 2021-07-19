@@ -37,7 +37,7 @@ export default function LanguagesScreen({ route, navigation }) {
 
   const checkTextInput = () => {
 
-    if (selectedLanguages.length >= 0) {
+    if (selectedLanguages.length >= 1) {
       data.languages = selectedLanguages;
 
       //Checked Successfully

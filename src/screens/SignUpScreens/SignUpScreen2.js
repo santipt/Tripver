@@ -39,20 +39,16 @@ export default function SignupScreen2({ route, navigation }) {
 
   const checkTextInput = () => {
     //Check for the Current Location TextInput
-    /*if (!currentLocation.trim()) {
-      alert('Please enter repeat password');
+    if (!currentLocation.trim()) {
+      alert('Please enter your home location');
       return;
     }
-    //Check for the Gender TextInput
-    if (!gender.trim()) {
-      alert('Please enter Gender');
+    //Check for the Date of birth
+    if (!date.trim()) {
+      alert('Please enter a date of birth');
       return;
     }
-    //Check for the Phone TextInput
-    if (!phone.trim()) {
-      alert('Please enter password');
-      return;
-    }*/
+
     //Check for the Date TextInput
     if (!date.trim() && date.includes('/')) {
       alert('Please enter the date in the correct format');

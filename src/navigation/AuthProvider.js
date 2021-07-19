@@ -120,6 +120,7 @@ export const AuthProvider = ({ children }) => {
 
           if (result.failed) {
             console.log('Could not login');
+            return false;
           }
         },
         // --------------------------------
